@@ -1,15 +1,6 @@
 - git:
-    local-name: src/romea
-    uri: git@gitlab-ssh.irstea.fr:romea/romea.git
+    local-name: src/romea_common
+    uri: git@gitlab-ssh.irstea.fr:romea_v2/core/romea_common.git
 - git:
-    local-name: src/four_wheel_steering_msgs
-    uri: https://github.com/ros-drivers/four_wheel_steering_msgs.git
-- git:
-    local-name: src/romea_odo
-    uri: git@gitlab-ssh.irstea.fr:romea/ros-sensors/romea_odo.git
-- git:
-    local-name: src/romea_localisation_msgs
-    uri: git@gitlab-ssh.irstea.fr:romea/ros-localisation/romea_localisation_msgs.git
-- git:
-    local-name: src/romea_cmd_mux
-    uri: git@gitlab-ssh.irstea.fr:romea/romea_cmd_mux.git
+    local-name: src/romea_common
+    uri: git@gitlab-ssh.irstea.fr:romea_v2/core/romea_odo.git
