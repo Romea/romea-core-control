@@ -27,8 +27,8 @@ kinetic_catkin_build:
   stage: build
   script:
     - (cd /usr/src/gtest; cmake . && make && cp *.a /usr/lib/)
-    - catkin build romea_gps --cmake-args -DBUILD_TESTS=ON
-    - cd build/romea_gps
+    - catkin build romea_control --cmake-args -DBUILD_TESTS=ON
+    - cd build/romea_control
     - GTEST_COLOR=1 ctest --output-on-failure
 
 # melodic
