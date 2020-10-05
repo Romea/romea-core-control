@@ -17,30 +17,35 @@ before_script:
  # you will overwrite your user's SSH config.
  - mkdir -p ~/.ssh
  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-
  - git clone https://gitlab.com/VictorLamoine/ros_gitlab_ci.git
  - source ros_gitlab_ci/gitlab-ci.bash >/dev/null
+ - apt-get install -y -qq libgtest-dev
 
 # kinetic
 kinetic_catkin_build:
   image: ros:kinetic-robot
   stage: build
   script:
-    - catkin build --summarize --no-status --force-color
-    - catkin run_tests romea_control --no-status --force-color --no-deps
+    - (cd /usr/src/gtest; cmake . && make && cp *.a /usr/lib/)
+    - catkin build romea_gps --cmake-args -DBUILD_TESTS=ON
+    - cd build/romea_gps
+    - GTEST_COLOR=1 ctest --output-on-failure
 
 # melodic
 melodic_catkin_build:
   image: ros:melodic-robot
   stage: build
   script:
-    - catkin build --summarize --no-status --force-color
-    - catkin run_tests romea_control --no-status --force-color --no-deps
+    - (cd /usr/src/gtest; cmake . && make && cp *.a /usr/lib/)
+    - catkin build romea_gps --cmake-args -DBUILD_TESTS=ON
+    - cd build/romea_gps
+    - GTEST_COLOR=1 ctest --output-on-failure
 
 # noetic
 noetic_catkin_build:
   image: ros:noetic-robot
   stage: build
   script:
-    - catkin build --summarize --no-status --force-color
-    - catkin run_tests romea_control --no-status --force-color --no-deps
+    - catkin build romea_gps --cmake-args -DBUILD_TESTS=ON
+    - cd build/romea_gps
+    - GTEST_COLOR=1 ctest --output-on-failure
