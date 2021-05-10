@@ -34,7 +34,8 @@ FrontRearData FollowTrajectoryClassicSliding::computeSteeringAngles(const double
                                                                     const double & front_sliding_angle,
                                                                     const double & rear_sliding_angle,
                                                                     const double & rear_steering_angle,
-                                                                    const double & maximal_steering_angle,
+                                                                    const double & front_maximal_steering_angle,
+                                                                    const double & rear_maximal_steering_angle,
                                                                     const double & desired_lateral_deviation,
                                                                     const double & /*desired_course_deviation*/)
 {
@@ -47,8 +48,8 @@ FrontRearData FollowTrajectoryClassicSliding::computeSteeringAngles(const double
                                                             desired_lateral_deviation);
 
   front_steering_angle_ = clamp(front_steering_angle_,
-                                -maximal_steering_angle,
-                                maximal_steering_angle);
+                                -front_maximal_steering_angle,
+                                front_maximal_steering_angle);
 
   //compute rear steering angle
   double rear_steering_angle_ = computeRearSteeringAngle_(lateral_deviation-desired_lateral_deviation,
@@ -58,8 +59,8 @@ FrontRearData FollowTrajectoryClassicSliding::computeSteeringAngles(const double
 
 
   rear_steering_angle_ = clamp(rear_steering_angle_,
-                               -maximal_steering_angle,
-                               maximal_steering_angle);
+                               -rear_maximal_steering_angle,
+                               rear_maximal_steering_angle);
 
   return {front_steering_angle_,rear_steering_angle_};
 }

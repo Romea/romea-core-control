@@ -51,7 +51,8 @@ FrontRearData FollowTrajectoryPredictiveSliding::computeSteeringAngles(const dou
                                                                        const double& rear_steering_angle,
                                                                        const double& front_sliding_angle,
                                                                        const double& rear_sliding_angle,
-                                                                       const double& maximal_steering_angle,
+                                                                       const double& front_maximal_steering_angle,
+                                                                       const double& rear_maximal_steering_angle,
                                                                        const double& desired_lateral_deviation,
                                                                        const double& /*desired_course_deviation*/,
                                                                        const double& future_desired_lateral_deviation)
@@ -71,8 +72,8 @@ FrontRearData FollowTrajectoryPredictiveSliding::computeSteeringAngles(const dou
 
 
   front_steering_angle_command= clamp(front_steering_angle_command,
-                                      -maximal_steering_angle,
-                                      maximal_steering_angle);
+                                      -front_maximal_steering_angle,
+                                      front_maximal_steering_angle);
 
   double rear_steering_angle_command = computeRearSteeringAngle_(lateral_deviation-desired_lateral_deviation,
                                                                  course_deviation,
@@ -80,8 +81,8 @@ FrontRearData FollowTrajectoryPredictiveSliding::computeSteeringAngles(const dou
                                                                  rear_sliding_angle);
 
   rear_steering_angle_command= clamp(rear_steering_angle_command,
-                                     -maximal_steering_angle,
-                                     maximal_steering_angle);
+                                     -rear_maximal_steering_angle,
+                                     rear_maximal_steering_angle);
 
   return {front_steering_angle_command,rear_steering_angle_command};
 }

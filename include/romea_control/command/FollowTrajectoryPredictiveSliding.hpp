@@ -41,7 +41,8 @@ public:
                                       const double& rear_steering_angle,
                                       const double& front_sliding_angle,
                                       const double& rear_sliding_angle,
-                                      const double & maximal_steering_angle,
+                                      const double & front_maximal_steering_angle,
+                                      const double & rear_maximal_steering_angle,
                                       const double& desired_lateral_deviation,
                                       const double & desired_course_deviation,
                                       const double& future_desired_lateral_deviation);
