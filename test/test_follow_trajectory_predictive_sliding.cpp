@@ -82,6 +82,7 @@ public :
                                        observer->getFrontSlidingAngle(),
                                        observer->getRearSlidingAngle(),
                                        M_PI_2,
+                                       M_PI_2,
                                        0,
                                        0,
                                        0);

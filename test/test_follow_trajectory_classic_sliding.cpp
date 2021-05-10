@@ -76,6 +76,7 @@ public :
                                        observer->getRearSlidingAngle(),
                                        input_rear_steering,
                                        M_PI_2,
+                                       M_PI_2,
                                        0,
                                        0);
   }
