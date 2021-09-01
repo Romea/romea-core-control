@@ -1,5 +1,5 @@
-#ifndef _romea_CommandFollowMe2_hpp
-#define _romea_CommandFollowMe2_hpp
+#ifndef _romea_CommandFollowMe_hpp
+#define _romea_CommandFollowMe_hpp
 
 //std
 #include <utility>

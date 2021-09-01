@@ -1,6 +1,9 @@
 #ifndef _romea_SlidingObserverCinematic_hpp__
 #define _romea_SlidingObserverCinematic_hpp__
 
+//std
+#include <iostream>
+
 //romea
 #include "../FrontRearData.hpp"
 

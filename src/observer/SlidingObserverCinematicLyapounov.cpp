@@ -58,6 +58,7 @@ void SlidingObserverCinematicLyapounov::initObserverHandbooks_(double X,
   ThetaObs=Theta;
   BetaFHand=BetaRHand=0;
   counter_hand_ =0;
+
 }
 
 //-----------------------------------------------------------------------------
@@ -84,10 +85,29 @@ void SlidingObserverCinematicLyapounov::updateObserverHandbooks_(double X,
   const double &wheelbase_= wheelBase_;
   const double &sampling_period_ = samplingPeriod_;
 
-  if((ThetaObs-Theta)>M_PI/2) ThetaObs-=M_PI;
-  if((ThetaObs-Theta)<-M_PI/2) ThetaObs+=M_PI;
+  if((ThetaObs-Theta)>M_PI/2) ThetaObs-=2*M_PI;
+  if((ThetaObs-Theta)<-M_PI/2) ThetaObs+=2*M_PI;
 
   int N=10;
+
+  double alpha_v=1;
+
+  double vbas=0.1;
+  double vhaut=1.2;
+  double alpha_max=10;
+  double alpha_min=1;
+  if (fabs(vitesse)<vhaut){
+      double a=(alpha_max-alpha_min)/(vbas-vhaut);
+      double b=(alpha_max*vhaut - alpha_min*vbas)/(vhaut-vbas);
+      if (fabs(vitesse)>vbas){
+          alpha_v=a*vitesse+b;
+      }
+      else
+          alpha_v=10;
+  }
+
+  std::cout << " * ***************** * vitesse =  " << vitesse << std::endl;
+  std::cout << " * ***************** * Alpha =  " << alpha_v << std::endl;
   // Definition gin observation
   //~ double Kone1=-7;
   //~ double Kone2=-7;
@@ -137,8 +157,8 @@ void SlidingObserverCinematicLyapounov::updateObserverHandbooks_(double X,
     //~ if (fabs(B12*(XObs-X)+B22*(YObs-Y)+B32*(ThetaObs-Theta))<0.001) {Ktwo1=Ktwo2=-40;}
     //~ else {Ktwo1=Ktwo2=-4;}
     //~
-    dotBetaF=Ktwo1_*(B11*(XObs-X)+B21*(YObs-Y)+B31*(ThetaObs-Theta));
-    dotBetaR=Ktwo2_*(B12*(XObs-X)+B22*(YObs-Y)+B32*(ThetaObs-Theta));
+    dotBetaF=alpha_v*Ktwo1_*(B11*(XObs-X)+B21*(YObs-Y)+B31*(ThetaObs-Theta));
+    dotBetaR=alpha_v*Ktwo2_*(B12*(XObs-X)+B22*(YObs-Y)+B32*(ThetaObs-Theta));
 
     //~ if (fabs(B12)>fabs(B22))
     //~ {dotBetaR=Ktwo2*(B12*(XObs-X)+B22*(YObs-Y)+B32*(ThetaObs-Theta));}
@@ -148,6 +168,7 @@ void SlidingObserverCinematicLyapounov::updateObserverHandbooks_(double X,
 
     BetaFHand+=sampling_period_/N*dotBetaF;
     BetaRHand+=sampling_period_/N*dotBetaR;
+
   }
   if(counter_hand_<10)
   {
@@ -155,6 +176,7 @@ void SlidingObserverCinematicLyapounov::updateObserverHandbooks_(double X,
     YObs=Y;
     ThetaObs=Theta;
     BetaFHand=BetaRHand=0;
+    std::cout << "INIT Obs ***************** " << counter_hand_ << std::endl;
   }
   counter_hand_++;
 }

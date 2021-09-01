@@ -3,7 +3,6 @@
 
 //std
 #include <cmath>
-#include <iostream>
 
 
 namespace romea {

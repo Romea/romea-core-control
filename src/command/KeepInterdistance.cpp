@@ -67,12 +67,13 @@ double KeepInterdistance::computeFollowerSpeed(const double & desired_interdista
 {
   static romea::FirstOrderButterworth f(0.25);
 
-  double offset_free_leader_linear_speed = offsetFreeLinearSpeed_(leader_linear_speed);
+  double offset_free_leader_linear_speed = (leader_linear_speed);
 
   double interdistance_error= interdistance-desired_interdistance;
 
   double follower_linear_speed_command = 0;
-  if(std::abs(interdistance_error) > 0.1)
+//  if(std::abs(interdistance_error) > 0.1)
+  if(1==1)
   {
     double linear_speed_gain = 0.5;
     follower_linear_speed_command = f.update(offset_free_leader_linear_speed+linear_speed_gain *interdistance_error);
@@ -85,6 +86,36 @@ double KeepInterdistance::computeFollowerSpeed(const double & desired_interdista
   return clamp(follower_linear_speed_command,0.,follower_maximal_linear_speed);
 
 }
+
+double KeepInterdistance::computeFollowerSpeed(const double & desired_interdistance,
+                                               const double & interdistance,
+                                               const double & leader_linear_speed,
+                                               const double & follower_maximal_linear_speed,
+                                               const double & follower_lat_dev,
+                                               const double & follower_ang_dev,
+                                               const double & courbure,
+                                               const double & follower_linear_speed)
+{
+  static romea::FirstOrderButterworth f(0.25);
+  double interdistance_error= interdistance-desired_interdistance;
+  if (fabs(interdistance_error)<1.0)
+    updateLongitudinalDeviation_(interdistance,desired_interdistance,follower_linear_speed);
+  else
+    integrated_longitudinal_deviation_=0;
+
+  double offset_free_leader_linear_speed = (leader_linear_speed);
+  double ecart_ang= clamp(follower_ang_dev,-M_PI/4,M_PI/4);
+
+  double follower_linear_speed_command = 0;
+
+    double linear_speed_gain = 0.5;
+    integrated_longitudinal_deviation_=0; // En attente de faire passer la vitesse
+    follower_linear_speed_command = f.update((offset_free_leader_linear_speed+linear_speed_gain *interdistance_error)*(1-courbure*follower_lat_dev)/cos(ecart_ang)+KI_*integrated_longitudinal_deviation_);
+
+  return clamp(follower_linear_speed_command,0.,follower_maximal_linear_speed);
+
+}
+
 
 //-----------------------------------------------------------------------------
 double KeepInterdistance::computeFollowerSpeed(const double & desired_interdistance,
@@ -231,7 +262,7 @@ double KeepInterdistance::offsetFreeLinearSpeed_(const double & linear_speed)
   if(std::abs(linear_speed) > 0.1)
   {
     double offset = copysign(0.1, linear_speed);
-    return linear_speed - offset;
+    return linear_speed - 0*offset;
   }
   else
   {

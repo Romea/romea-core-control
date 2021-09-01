@@ -198,6 +198,8 @@ bool SlidingObserverCinematicLinearTangent::computeSliding2_(const double& ElatM
   const double & wheelbase_ =wheelBase_;
   const double & sampling_period_ = samplingPeriod_;
 
+
+
   //  Eigen::Matrix2d G,B;
   //  Eigen::Vector2d Y,X;
 

@@ -47,11 +47,13 @@ public:
 
   const double & getTheta() const;
 
-private :
-
   void initObserverHandbooks_(double X,
                               double Y,
                               double Theta);
+
+private :
+
+
 
   void updateObserverHandbooks_(double X,
                                 double Y,

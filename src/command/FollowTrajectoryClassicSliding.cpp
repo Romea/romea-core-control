@@ -28,6 +28,12 @@ FollowTrajectoryClassicSliding::FollowTrajectoryClassicSliding(const double & wh
 }
 
 //-----------------------------------------------------------------------------
+void FollowTrajectoryClassicSliding::setFrontKP(const double & kp)
+{
+  KD_=kp;
+  KP_=(KD_*KD_/4.);
+}
+//-----------------------------------------------------------------------------
 FrontRearData FollowTrajectoryClassicSliding::computeSteeringAngles(const double&  lateral_deviation,
                                                                     const double & course_deviation,
                                                                     const double & curvature,

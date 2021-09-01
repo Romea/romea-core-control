@@ -130,6 +130,7 @@ FrontRearData FollowMe::computeSteeringAngles(const double & wheelbase,
   if (fabs(desired_longitudinal_distance)<0.2)
     CoefYawrate=0;
 
+  CoefYawrate=1;
 
   double front_steering_angle_command  = std::atan(wheelbase*(kd_*EpsThet*std::cos(0*Thet2)+CoefYawrate*yaw_rate_leader)/(VitMin_*std::cos(rear_steering_angle)) + std::tan(rear_steering_angle));
 
@@ -168,16 +169,16 @@ FrontRearData FollowMe::computeSteeringAngles(const double & wheelbase,
     rear_steering_angle_command = std::copysign(maximal_rear_steering_angle, rear_steering_angle_command);
   }
 
-  //  std::cout<<" kp_" << kp_;
-  //  std::cout<<" ki_" << ki_ ;
-  //  std::cout<<" kd_" << kd_;
-  //  std::cout<<" lateral_deviation "<< lateral_deviation;
-  //  std::cout<<" course_deviation "<< course_deviation;
-  //  std::cout <<" omega_d " << omega_d_;
-  //  std::cout <<" integrated_omega_ " << integrated_omega_;
-  //  std::cout <<" theta_consigne " << theta_consigne;
-  //  std::cout<< " front_steering_angle_command " << front_steering_angle_command;
-  //  std::cout<<" rear_steering_angle_command "<<rear_steering_angle_command<<std::endl;
+    std::cout<<" kp_" << kp_;
+    std::cout<<" ki_" << ki_ ;
+    std::cout<<" kd_" << kd_;
+    std::cout<<" lateral_deviation "<< lateral_deviation;
+    std::cout<<" course_deviation "<< course_deviation;
+    std::cout <<" omega_d " << omega_d;
+    std::cout <<" integrated_omega_ " << integrated_omega_;
+    std::cout <<" theta_consigne " << theta_consigne;
+    std::cout<< " front_steering_angle_command " << front_steering_angle_command;
+    std::cout<<" rear_steering_angle_command "<<rear_steering_angle_command<<std::endl;
   rear_steering_angle_command=0;
   return {front_steering_angle_command,rear_steering_angle_command};
 }
@@ -224,9 +225,9 @@ FrontRearData FollowMe::computeSteeringAngles(const double &wheelbase,
   std::cout << "new alpha " << alpha << " omega_d"<< omega_d<<std::endl;
 
 
-  if(fabs(omega_d) > (25*M_PI/180))
+  if(fabs(omega_d) > (40*M_PI/180))
   {
-    omega_d = copysign((25*M_PI/180), omega_d);
+    omega_d = copysign((40*M_PI/180), omega_d);
   }
 
   if (omega_d<minimal_theta)

@@ -43,6 +43,13 @@ FollowTrajectoryPredictiveSliding(const double & whee_base,
 }
 
 //-----------------------------------------------------------------------------
+void FollowTrajectoryPredictiveSliding::setFrontKP(const double & kp)
+{
+  KD_=kp;
+  KP_=(KD_*KD_/4.);
+}
+
+//-----------------------------------------------------------------------------
 FrontRearData FollowTrajectoryPredictiveSliding::computeSteeringAngles(const double& lateral_deviation,
                                                                        const double& course_deviation,
                                                                        const double& curvature,
@@ -51,8 +58,8 @@ FrontRearData FollowTrajectoryPredictiveSliding::computeSteeringAngles(const dou
                                                                        const double& rear_steering_angle,
                                                                        const double& front_sliding_angle,
                                                                        const double& rear_sliding_angle,
-                                                                       const double& front_maximal_steering_angle,
-                                                                       const double& rear_maximal_steering_angle,
+                                                                       const double & front_maximal_steering_angle,
+                                                                       const double & rear_maximal_steering_angle,
                                                                        const double& desired_lateral_deviation,
                                                                        const double& /*desired_course_deviation*/,
                                                                        const double& future_desired_lateral_deviation)

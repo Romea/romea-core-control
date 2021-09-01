@@ -53,11 +53,12 @@ public :
 
   const double & getCourseDeviation()const;
 
+  void initObserver_(const double& ElatM,
+                     const double& EcapM);
+
 
 private :
 
-  void initObserver_(const double& ElatM,
-                     const double& EcapM);
 
 
   /**

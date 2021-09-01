@@ -3,7 +3,6 @@
 #include "romea_control/observer/SpeedObserverMatt.hpp"
 
 //std
-#include <iostream>
 #include <cmath>
 
 namespace romea {

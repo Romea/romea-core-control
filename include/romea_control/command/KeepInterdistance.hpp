@@ -25,6 +25,16 @@ public:
 
   double computeFollowerSpeed(const double & desired_interdistance,
                               const double & interdistance,
+                              const double & leader_linear_speed,
+                              const double & follower_maximal_linear_speed,
+                              const double & follower_lat_dev,
+                              const double & follower_ang_dev,
+                              const double & courbure,
+                              const double & follower_linear_speed);
+
+
+  double computeFollowerSpeed(const double & desired_interdistance,
+                              const double & interdistance,
                               const double & follower_lateral_deviation,
                               const double & follower_linear_speed,
                               const double & follower_maximal_linear_speed);

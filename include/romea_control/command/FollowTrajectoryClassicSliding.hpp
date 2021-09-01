@@ -38,6 +38,9 @@ public:
                                       const double & desired_lateral_deviation,
                                       const double & desired_course_deviation);
 
+
+  void setFrontKP(const double & kp);
+
 private :
 
 

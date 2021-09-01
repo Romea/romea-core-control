@@ -1,6 +1,9 @@
 #ifndef _romea_SpeedObserver_hpp__
 #define _romea_SpeedObserver_hpp__
 
+//std
+#include <iostream>
+
 //romea
 #include "../SpeedAngleData.hpp"
 
@@ -30,6 +33,9 @@ protected :
   bool is_initialized_;
 
 };
+
+std::ostream & operator<<(std::ostream & os , const SpeedObserver & observer);
+
 
 }
 #endif
