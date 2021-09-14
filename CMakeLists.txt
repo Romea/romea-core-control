@@ -10,6 +10,9 @@ project(
 find_package(romea_odo REQUIRED)
 find_package(romea_common REQUIRED)
 
+find_package( PkgConfig )
+pkg_check_modules( EIGEN3 REQUIRED eigen3 )
+
 add_library(${PROJECT_NAME} SHARED
   src/observer/SlidingObserverCinematic.cpp
   src/observer/SlidingObserverCinematicLinearTangent.cpp
@@ -27,8 +30,10 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
+
 target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
-  ${romea_odo_INCLUDE_DIRS})
+  ${romea_odo_INCLUDE_DIRS}
+  ${EIGEN3_INCLUDE_DIRS})
 
 target_compile_options(${PROJECT_NAME} PRIVATE
   -Wall -Wextra -O3 -std=c++17)
