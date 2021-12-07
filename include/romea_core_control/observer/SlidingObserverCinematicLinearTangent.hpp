@@ -3,7 +3,7 @@
 
 //romea
 #include "SlidingObserverCinematic.hpp"
-#include <romea_common/signal/FirstOrderButterworth.hpp>
+#include <romea_core_common/signal/FirstOrderButterworth.hpp>
 
 //eigen
 #include <Eigen/Dense>

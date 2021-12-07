@@ -1,14 +1,14 @@
 cmake_minimum_required(VERSION 3.5)
 
 project(
-  "romea_control"
+  "romea_core_control"
   VERSION 0.1.0
   #  DESCRIPTION
   #  HOMEPAGE_URL
   LANGUAGES CXX)
 
-find_package(romea_odo REQUIRED)
-find_package(romea_common REQUIRED)
+find_package(romea_core_odo REQUIRED)
+find_package(romea_core_common REQUIRED)
 
 find_package( PkgConfig )
 pkg_check_modules( EIGEN3 REQUIRED eigen3 )
@@ -32,14 +32,14 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 
 
 target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
-  ${romea_odo_INCLUDE_DIRS}
+  ${romea_core_odo_INCLUDE_DIRS}
   ${EIGEN3_INCLUDE_DIRS})
 
 target_compile_options(${PROJECT_NAME} PRIVATE
   -Wall -Wextra -O3 -std=c++17)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
-  romea_odo::romea_odo)
+  romea_core_odo::romea_core_odo)
 
 include(GNUInstallDirs)
 

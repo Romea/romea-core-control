@@ -1,4 +1,4 @@
-#include "romea_control/observer/SpeedObserver.hpp"
+#include "romea_core_control/observer/SpeedObserver.hpp"
 
 namespace romea {
 

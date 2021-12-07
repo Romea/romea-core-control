@@ -1,5 +1,5 @@
 #include "test_follow_trajectory_base.hpp"
-#include "romea_control/observer/SlidingObserverCinematicLyapounov.hpp"
+#include "romea_core_control/observer/SlidingObserverCinematicLyapounov.hpp"
 
 //cinematic_lyapounov:
 //  gains:

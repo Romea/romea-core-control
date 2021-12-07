@@ -1,6 +1,6 @@
 //romea
-#include "romea_control/command/FollowMe.hpp"
-#include <romea_common/math/Algorithm.hpp>
+#include "romea_core_control/command/FollowMe.hpp"
+#include <romea_core_common/math/Algorithm.hpp>
 
 //std
 #include <cmath>

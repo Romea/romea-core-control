@@ -1,6 +1,6 @@
 #include "test_follow_base.hpp"
-#include "romea_control/command/KeepInterdistance.hpp"
-#include "romea_control/command/FollowMe.hpp"
+#include "romea_core_control/command/KeepInterdistance.hpp"
+#include "romea_core_control/command/FollowMe.hpp"
 
 
 class TestFollowMeBase : public TestFollow

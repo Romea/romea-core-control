@@ -1,5 +1,5 @@
 //romea
-#include "romea_control/observer/SlidingObserverCinematicLinearTangent.hpp"
+#include "romea_core_control/observer/SlidingObserverCinematicLinearTangent.hpp"
 
 //std
 #include <cmath>

@@ -1,6 +1,6 @@
 #include "test_follow_trajectory_base.hpp"
-#include "romea_control/command/FollowTrajectoryPredictiveSliding.hpp"
-#include "romea_control/observer/SlidingObserverCinematicLyapounov.hpp"
+#include "romea_core_control/command/FollowTrajectoryPredictiveSliding.hpp"
+#include "romea_core_control/observer/SlidingObserverCinematicLyapounov.hpp"
 
 
 //predictive:

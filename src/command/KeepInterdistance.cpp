@@ -1,6 +1,6 @@
 //romea
-#include "romea_control/command/KeepInterdistance.hpp"
-#include <romea_common/signal/FirstOrderButterworth.hpp>
+#include "romea_core_control/command/KeepInterdistance.hpp"
+#include <romea_core_common/signal/FirstOrderButterworth.hpp>
 
 //std
 #include <cmath>

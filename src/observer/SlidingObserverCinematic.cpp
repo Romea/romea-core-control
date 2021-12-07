@@ -1,4 +1,4 @@
-#include "romea_control/observer/SlidingObserverCinematic.hpp"
+#include "romea_core_control/observer/SlidingObserverCinematic.hpp"
 
 namespace romea {
 

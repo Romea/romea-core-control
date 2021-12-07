@@ -1,5 +1,5 @@
 #include "test_follow_me_base.hpp"
-#include "romea_control/command/FollowMe.hpp"
+#include "romea_core_control/command/FollowMe.hpp"
 
 //<param name="follow_me/gains/kp" value="-0.25" type="double"/>
 //<param name="follow_me/gains/ki" value="0" type="double"/>

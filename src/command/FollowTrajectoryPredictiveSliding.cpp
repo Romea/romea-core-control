@@ -1,6 +1,6 @@
 //romea
-#include "romea_control/command/FollowTrajectoryPredictiveSliding.hpp"
-#include <romea_common/math/Algorithm.hpp>
+#include "romea_core_control/command/FollowTrajectoryPredictiveSliding.hpp"
+#include <romea_core_common/math/Algorithm.hpp>
 
 
 //Eigen

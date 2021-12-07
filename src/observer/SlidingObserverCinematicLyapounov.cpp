@@ -1,5 +1,5 @@
 //romea
-#include "romea_control/observer/SlidingObserverCinematicLyapounov.hpp"
+#include "romea_core_control/observer/SlidingObserverCinematicLyapounov.hpp"
 
 //std
 #include <cmath>

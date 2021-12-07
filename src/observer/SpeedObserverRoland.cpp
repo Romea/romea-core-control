@@ -1,5 +1,5 @@
 //romea
-#include "romea_control/observer/SpeedObserverRoland.hpp"
+#include "romea_core_control/observer/SpeedObserverRoland.hpp"
 
 //std
 #include <cmath>

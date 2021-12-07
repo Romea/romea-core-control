@@ -5,8 +5,8 @@
 #include <vector>
 
 //romea
-#include <romea_common/signal/FirstOrderButterworth.hpp>
-#include <romea_common/math/Algorithm.hpp>
+#include <romea_core_common/signal/FirstOrderButterworth.hpp>
+#include <romea_core_common/math/Algorithm.hpp>
 
 namespace romea {
 

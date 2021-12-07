@@ -1,5 +1,5 @@
 #include "test_follow_trajectory_base.hpp"
-#include "romea_control/observer/SlidingObserverCinematicLinearTangent.hpp"
+#include "romea_core_control/observer/SlidingObserverCinematicLinearTangent.hpp"
 
 
 //cinematic_linear_tangent:

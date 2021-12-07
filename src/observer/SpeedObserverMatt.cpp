@@ -1,6 +1,6 @@
 //Mathieu Deremetz // Coordonnées polaires
 //romea
-#include "romea_control/observer/SpeedObserverMatt.hpp"
+#include "romea_core_control/observer/SpeedObserverMatt.hpp"
 
 //std
 #include <cmath>
