@@ -7,7 +7,6 @@ project(
   #  HOMEPAGE_URL
   LANGUAGES CXX)
 
-find_package(romea_core_odo REQUIRED)
 find_package(romea_core_common REQUIRED)
 
 find_package( PkgConfig )
@@ -32,14 +31,15 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 
 
 target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
-  ${romea_core_odo_INCLUDE_DIRS}
+  ${romea_core_common_INCLUDE_DIRS}
   ${EIGEN3_INCLUDE_DIRS})
 
 target_compile_options(${PROJECT_NAME} PRIVATE
   -Wall -Wextra -O3 -std=c++17)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
-  romea_core_odo::romea_core_odo)
+  romea_core_common::romea_core_common
+  )
 
 include(GNUInstallDirs)
 
@@ -47,7 +47,7 @@ install(
   TARGETS ${PROJECT_NAME}
   EXPORT ${PROJECT_NAME}Targets
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 install(FILES package.xml DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME})

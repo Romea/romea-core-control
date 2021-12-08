@@ -11,5 +11,5 @@
   <export>
     <build_type>cmake</build_type>
   </export>
-  <depend>romea_core_odo</depend>
+  <depend>romea_core_common</depend>
 </package>
