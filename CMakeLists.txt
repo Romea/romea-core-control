@@ -7,6 +7,7 @@ project(
   #  HOMEPAGE_URL
   LANGUAGES CXX)
 
+#find_package(romea_core_odo REQUIRED)
 find_package(romea_core_common REQUIRED)
 
 find_package( PkgConfig )
