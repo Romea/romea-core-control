@@ -81,7 +81,7 @@ void SpeedObserverMatt::initObserverMatt_(double X,
   YObs=Y;
   SpeedMatt=AngleMatt=0;
   counter_hand_ =0;
-  std::cout << "var" << " " << X <<" "<< Y <<" "<< SpeedMatt <<" "<< AngleMatt <<std::endl;
+//  std::cout << "var" << " " << X <<" "<< Y <<" "<< SpeedMatt <<" "<< AngleMatt <<std::endl;
 }
 
 //-----------------------------------------------------------------------------
