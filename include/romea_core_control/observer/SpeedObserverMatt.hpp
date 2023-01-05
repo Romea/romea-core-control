@@ -1,20 +1,23 @@
-#ifndef _romea_MattSpeedObserver_hpp
-#define _romea_MattSpeedObserver_hpp
+// Copyright 2022 INRAE, French National Research Institute for Agriculture, Food and Environment
+// Add license
 
-//romea
+#ifndef ROMEA_CORE_CONTROL_OBSERVER_SPEEDOBSERVERMATT_HPP_
+#define ROMEA_CORE_CONTROL_OBSERVER_SPEEDOBSERVERMATT_HPP_
+
+// romea
 #include "SpeedObserver.hpp"
 
-namespace romea {
+namespace romea
+{
 
 class SpeedObserverMatt : public SpeedObserver
 {
-
 public:
+  explicit SpeedObserverMatt(const double & samplingPeriod);
 
-  SpeedObserverMatt(const double & samplingPeriod);
-
-  SpeedObserverMatt(const double & samplingPeriod,
-                    const double & wheelBase);
+  SpeedObserverMatt(
+    const double & samplingPeriod,
+    const double & wheelBase);
 
   virtual ~SpeedObserverMatt();
 
@@ -23,36 +26,36 @@ public:
   const double & getWheelBase()const;
 
 public:
+  void init(
+    double x,
+    double y);
 
+  void update(
+    double x,
+    double y,
+    double linearSpeed,
+    double angularSpeed);
 
-  void init(double x,
-            double y);
+  const double & getSpeed() const override;
 
-  void update(double x,
-              double y,
-              double linearSpeed,
-              double angularSpeed);
-
-  virtual const double & getSpeed() const override;
-
-  virtual const double & getAngle() const override;
+  const double & getAngle() const override;
 
   const double & getX() const;
 
   const double & getY() const;
 
-private :
+private:
+  void initObserverMatt_(
+    double X,
+    double Y);
 
-  void initObserverMatt_(double X,
-                         double Y);
-
-  void updateObserverMatt_(double X,
-                           double Y,
-                           double vitesse,
-                           double omega);
+  void updateObserverMatt_(
+    double X,
+    double Y,
+    double vitesse,
+    double omega);
 
 private:
-
   double wheelBase_;
 
   double XObs;
@@ -60,8 +63,8 @@ private:
   double SpeedMatt;
   double AngleMatt;
   unsigned int counter_hand_;
-
 };
 
-}
-#endif
+}  // namespace romea
+
+#endif  // ROMEA_CORE_CONTROL_OBSERVER_SPEEDOBSERVERMATT_HPP_

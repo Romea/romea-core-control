@@ -1,15 +1,18 @@
-#ifndef _romea_SlidingObserverKinematicLyapunov_hpp
-#define _romea_SlidingObserverKinematicLyapunov_hpp
+// Copyright 2022 INRAE, French National Research Institute for Agriculture, Food and Environment
+// Add license
 
-//romea
+#ifndef ROMEA_CORE_CONTROL__OBSERVER__SLIDINGOBSERVERCINEMATICLYAPOUNOV_HPP_
+#define ROMEA_CORE_CONTROL__OBSERVER__SLIDINGOBSERVERCINEMATICLYAPOUNOV_HPP_
+
+// romea
 #include "SlidingObserverCinematic.hpp"
 
-namespace romea {
+namespace romea
+{
 
 class SlidingObserverCinematicLyapounov : public SlidingObserverCinematic
 {
-public :
-
+public:
   struct Parameters
   {
     double xDeviationGain;
@@ -20,26 +23,25 @@ public :
   };
 
 public:
+  SlidingObserverCinematicLyapounov(
+    const double & samplingPeriod,
+    const double & wheelBase,
+    const Parameters & parameters);
 
-  SlidingObserverCinematicLyapounov(const double & samplingPeriod,
-                                    const double & wheelBase,
-                                    const Parameters & parameters);
-
-  virtual ~SlidingObserverCinematicLyapounov()=default;
-
+  virtual ~SlidingObserverCinematicLyapounov() = default;
 
 public:
+  void update(
+    double x,
+    double y,
+    double course,
+    double linearSpeed,
+    double frontSteeringAngle,
+    double rearSteeringAngle);
 
-  void update(double x,
-              double y,
-              double course,
-              double linearSpeed,
-              double frontSteeringAngle,
-              double rearSteeringAngle);
+  const double & getFrontSlidingAngle() const override;
 
-  virtual const double & getFrontSlidingAngle() const override;
-
-  virtual const double & getRearSlidingAngle() const override;
+  const double & getRearSlidingAngle() const override;
 
   const double & getX() const;
 
@@ -47,23 +49,21 @@ public:
 
   const double & getTheta() const;
 
-  void initObserverHandbooks_(double X,
-                              double Y,
-                              double Theta);
-
-private :
-
-
-
-  void updateObserverHandbooks_(double X,
-                                double Y,
-                                double Theta,
-                                double deltaF,
-                                double deltaR,
-                                double vitesse);
+  void initObserverHandbooks_(
+    double X,
+    double Y,
+    double Theta);
 
 private:
+  void updateObserverHandbooks_(
+    double X,
+    double Y,
+    double Theta,
+    double deltaF,
+    double deltaR,
+    double vitesse);
 
+private:
   double wheelBase_;
 
   double XObs;
@@ -78,8 +78,8 @@ private:
   double Kone3_;
   double Ktwo1_;
   double Ktwo2_;
-
 };
 
-}
-#endif
+}  // namespace romea
+
+#endif  //  ROMEA_CORE_CONTROL__OBSERVER__SLIDINGOBSERVERCINEMATICLYAPOUNOV_HPP_

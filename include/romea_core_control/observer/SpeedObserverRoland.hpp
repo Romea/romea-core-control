@@ -1,35 +1,39 @@
-#ifndef _romea_LeaderSpeedObserver_hpp
-#define _romea_LeaderSpeedObserver_hpp
+// Copyright 2022 INRAE, French National Research Institute for Agriculture, Food and Environment
+// Add license
 
-namespace romea {
+#ifndef ROMEA_CORE_CONTROL__OBSERVER__SPEEDOBSERVERROLAND_HPP_
+#define ROMEA_CORE_CONTROL__OBSERVER__SPEEDOBSERVERROLAND_HPP_
+
+namespace romea
+{
 
 class SpeedObserverRoland
 {
 public:
+  explicit SpeedObserverRoland(const double & sample_period);
 
-  SpeedObserverRoland(const double & sample_period);
+  SpeedObserverRoland(
+    const double & sample_period,
+    const double & kd);
 
-  SpeedObserverRoland(const double & sample_period,
-                      const double & kd);
 
+  double update(
+    const double & longitudinal_deviation,
+    const double & course_deviation,
+    const double & follower_linear_speed,
+    const double & follower_angular_speed);
 
-  double update(const double & longitudinal_deviation,
-                const double & course_deviation,
-                const double & follower_linear_speed,
-                const double & follower_angular_speed);
-
-  double update(const double & longitudinal_deviation,
-                const double & course_deviation,
-                const double & follower_linear_speed);
+  double update(
+    const double & longitudinal_deviation,
+    const double & course_deviation,
+    const double & follower_linear_speed);
 
   void reset();
 
 public:
-
   static const double DEFAULT_KD;
 
 private:
-
   double sampling_period_;
   double kd_;
 
@@ -38,6 +42,7 @@ private:
 
   bool is_initialized_;
 };
-}
 
-#endif
+}  // namespace romea
+
+#endif  // ROMEA_CORE_CONTROL__OBSERVER__SPEEDOBSERVERROLAND_HPP_

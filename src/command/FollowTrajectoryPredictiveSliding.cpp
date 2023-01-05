@@ -1,20 +1,21 @@
-//romea
+// Eigen
+#include <Eigen/Dense>
+#include <iostream>
+
+// romea
 #include "romea_core_control/command/FollowTrajectoryPredictiveSliding.hpp"
 #include <romea_core_common/math/Algorithm.hpp>
 
 
-//Eigen
-#include <Eigen/Dense>
-#include <iostream>
 
-//namespace {
-//const double DEFAULT_KD = 0.7;
-//const double DEFAULT_KP =DEFAULT_KD*DEFAULT_KD/4;
-//const double DEFAULT_KD2 = 0.7;
+// namespace {
+// const double DEFAULT_KD = 0.7;
+// const double DEFAULT_KP =DEFAULT_KD*DEFAULT_KD/4;
+// const double DEFAULT_KD2 = 0.7;
 
-//const unsigned int HORIZON_PREDICTION = 10;
-//const double A0=0.1642, A1=0.1072, B1=1.0086, B2=-0.2801;
-////  const double A0=0.0052, A1=0.0049, B1=1.8282, B2=-0.8383; // identification modele braquage tracteur
+// const unsigned int HORIZON_PREDICTION = 10;
+// const double A0=0.1642, A1=0.1072, B1=1.0086, B2=-0.2801;
+// const double A0=0.0052, A1=0.0049, B1=1.8282, B2=-0.8383; // identification modele braquage tracteur
 
 //}
 
@@ -45,8 +46,8 @@ FollowTrajectoryPredictiveSliding(const double & whee_base,
 //-----------------------------------------------------------------------------
 void FollowTrajectoryPredictiveSliding::setFrontKP(const double & kp)
 {
-  KD_=kp;
-  KP_=(KD_*KD_/4.);
+  KD_ = kp;
+  KP_ = (KD_*KD_/4.);
 }
 
 //-----------------------------------------------------------------------------
@@ -64,7 +65,6 @@ FrontRearData FollowTrajectoryPredictiveSliding::computeSteeringAngles(const dou
                                                                        const double& /*desired_course_deviation*/,
                                                                        const double& future_desired_lateral_deviation)
 {
-
   //compute front steering angle
   double front_steering_angle_command = computeFrontSteeringAngle_(lateral_deviation,
                                                                    course_deviation,
@@ -78,20 +78,20 @@ FrontRearData FollowTrajectoryPredictiveSliding::computeSteeringAngles(const dou
                                                                    future_desired_lateral_deviation);
 
 
-  front_steering_angle_command= clamp(front_steering_angle_command,
-                                      -front_maximal_steering_angle,
-                                      front_maximal_steering_angle);
+  front_steering_angle_command = clamp(front_steering_angle_command,
+                                       -front_maximal_steering_angle,
+                                       front_maximal_steering_angle);
 
   double rear_steering_angle_command = computeRearSteeringAngle_(lateral_deviation-desired_lateral_deviation,
                                                                  course_deviation,
                                                                  curvature,
                                                                  rear_sliding_angle);
 
-  rear_steering_angle_command= clamp(rear_steering_angle_command,
-                                     -rear_maximal_steering_angle,
-                                     rear_maximal_steering_angle);
+  rear_steering_angle_command = clamp(rear_steering_angle_command,
+                                      -rear_maximal_steering_angle,
+                                      rear_maximal_steering_angle);
 
-  return {front_steering_angle_command,rear_steering_angle_command};
+  return {front_steering_angle_command, rear_steering_angle_command};
 }
 
 //-----------------------------------------------------------------------------
@@ -106,14 +106,12 @@ double FollowTrajectoryPredictiveSliding::computeFrontSteeringAngle_(const doubl
                                                                      const double& desired_lateral_deviation,
                                                                      const double& future_desired_lateral_deviation)
 {
-
-  DeltaM_av2=DeltaM_av;
-  DeltaM_av=front_steering_angle ;
-  DeltaM_ar=rear_steering_angle ;
-
+  DeltaM_av2 = DeltaM_av;
+  DeltaM_av = front_steering_angle ;
+  DeltaM_ar = rear_steering_angle ;
 
   // calculs intermediaires
-  double v1 = course_deviation + rear_sliding_angle+DeltaM_ar;// =thilde_2 in papers
+  double v1 = course_deviation + rear_sliding_angle+DeltaM_ar;  // =thilde_2 in papers
   double v2 = 1 - curvature*lateral_deviation;  // =alpha in papers
   double v3 = -KD_*v2*std::tan(v1)-KP_*(lateral_deviation-desired_lateral_deviation)+curvature*v2*((std::tan(v1))*(std::tan(v1)) ); 	// =A in papers
 
@@ -121,8 +119,8 @@ double FollowTrajectoryPredictiveSliding::computeFrontSteeringAngle_(const doubl
   //double  UHcomm  = (wheelbase_/std::cos(rear_sliding_angle+DeltaM_ar))*future_curvature*cos(v1)/v2;						// to be checked
   double UHcomm = (wheelbase_/std::cos(rear_sliding_angle+DeltaM_ar))*(future_curvature/(1-future_curvature*(future_desired_lateral_deviation)));
 
-  //double  delta_traj_pred = atan(UHcomm);
-  //double  delta_traj_pred = atan(UHcomm)-1*2*cRefPred*front_sliding_angle; //*** OK Nexter
+  // double  delta_traj_pred = atan(UHcomm);
+  // double  delta_traj_pred = atan(UHcomm)-1*2*cRefPred*front_sliding_angle; //*** OK Nexter
   double delta_traj_pred = atan(UHcomm)-0*2*future_curvature*front_sliding_angle; //*** OK Simu
 
   double Ucomm = (wheelbase_/cos(rear_sliding_angle+DeltaM_ar))*curvature*std::cos(v1)/v2;
@@ -146,62 +144,60 @@ double FollowTrajectoryPredictiveSliding::computeFrontSteeringAngle_(const doubl
 //------------------------------------------------------------------------------
 double FollowTrajectoryPredictiveSliding::commandPred_(const double& CommFutur)
 {
-
   //  DeltaM_av2=DeltaM_av;
   //  DeltaM_av=front_steering_angle ;
 
-  double feinte,delta,alpha=0.2;
+  double feinte, delta, alpha = 0.2;
 
-  Eigen::Matrix3d Fm,Ident,mult2;
-  Eigen::Vector3d Gm,Etat;
-  Eigen::RowVector3d mult,Cm;
-  double CommFut,R1=0,R2=0,Ai,di;
+  Eigen::Matrix3d Fm, Ident, mult2;
+  Eigen::Vector3d Gm, Etat;
+  Eigen::RowVector3d mult, Cm;
+  double CommFut, R1 = 0, R2 = 0, Ai, di;
 
   //------------------------------------------------
   // Modele interne
   //------------------------------------------------
-  Fm(0,0) = B1_;  Fm(0,1) = B2_;  Fm(0,2) = A1_;
-  Fm(1,0) = 1;    Fm(1,1) = 0;    Fm(1,2) = 0;
-  Fm(2,0) = 0;    Fm(2,1) = 0;    Fm(2,2) = 0;
+  Fm(0, 0) = B1_;  Fm(0, 1) = B2_;  Fm(0, 2) = A1_;
+  Fm(1, 0) = 1;    Fm(1, 1) = 0;    Fm(1, 2) = 0;
+  Fm(2, 0) = 0;    Fm(2, 1) = 0;    Fm(2, 2) = 0;
 
-  Cm(0,0) = 1;    Cm(0,1) = 0;   Cm(0,2) = 0;
+  Cm(0, 0) = 1;    Cm(0, 1) = 0;   Cm(0, 2) = 0;
 
-  Gm(0,0) = A0_;
-  Gm(1,0) = 0;
-  Gm(2,0) = 1;
+  Gm(0, 0) = A0_;
+  Gm(1, 0) = 0;
+  Gm(2, 0) = 1;
   //------------------------------------------------
 
   Ident = Eigen::Matrix3d::Identity();
   mult2 = Eigen::Matrix3d::Zero();
 
-  /*Etat(0,0) = DeltaM_av - delta_ecart;
-                                                              Etat(1,0) = DeltaM_av2 - DeltaEcartAV;
-                                                              Etat(2,0) = DeltaContr_av;
+  // Etat(0,0) = DeltaM_av - delta_ecart;
+  // Etat(1,0) = DeltaM_av2 - DeltaEcartAV;
+  // Etat(2,0) = DeltaContr_av;
+  // CommFut = CommFutur;
+  // feinte      =  DeltaM_av - delta_ecart;
 
-                                                              CommFut = CommFutur;
-                                                              feinte      =  DeltaM_av - delta_ecart;  */
 
-
-  Etat(0,0) = DeltaM_av ;
-  Etat(1,0) = DeltaM_av2 ;
-  Etat(2,0) = DeltaContr_av;
+  Etat(0, 0) = DeltaM_av ;
+  Etat(1, 0) = DeltaM_av2 ;
+  Etat(2, 0) = DeltaContr_av;
 
   CommFut = CommFutur;
   feinte      =  DeltaM_av ;
 
-  mult(0,0)=1;
-  mult(0,1)=0;
-  mult(0,2)=0;
+  mult(0, 0) = 1;
+  mult(0, 1) = 0;
+  mult(0, 2) = 0;
 
   std::vector<double> Ref(horizon_+3);
-  Ref = reference_(CommFutur,alpha,feinte);
+  Ref = reference_(CommFutur, alpha, feinte);
 
-  for (int i=1;i<(horizon_+1);i++)
+  for (int i=1;i < (horizon_+1);i++)
   {
     // Calcul intermediaire Ai
     mult2 = Fm;
     Ai    = mult*Ident*Gm;
-    for (int j=1;j<(i+1);j++)
+    for (int j=1; j < (i+1);j++)
     {
       Ai    = Ai + mult*mult2*Gm;
       mult2 = mult2*Fm;
@@ -226,9 +222,9 @@ std::vector<double> FollowTrajectoryPredictiveSliding::reference_(const double& 
   std::vector<double> delta(horizon_+3);
 
   delta[1] = feinte1;
-  for (int j=2;j<(horizon_+2);j++)
+  for (int j=2;j < (horizon_+2);j++)
   {
-    delta[j] = CommFutur-(pow(alpha,j-1))*(CommFutur- feinte1);
+    delta[j] = CommFutur-(pow(alpha, j-1))*(CommFutur- feinte1);
   }
 
   return delta;
@@ -243,25 +239,21 @@ double FollowTrajectoryPredictiveSliding::computeRearSteeringAngle_(const double
 
   double rear_stering_angle_command = -course_deviation -rear_sliding_angle;
 
-  if(std::abs(curvature) <= 0.001)
+  if (std::abs(curvature) <= 0.001)
   {
     rear_stering_angle_command += std::atan(-KD_*lateral_deviation/4 + KD2_*course_deviation/KD_);
-  }
-  else
-  {
+  } else {
     double alpha = 1-curvature*lateral_deviation;
     double delta = KD_*KD_/alpha - 4*curvature*KD2_*course_deviation;
     rear_stering_angle_command += std::atan((KD_-std::sqrt(delta)) / (2*curvature));
   }
 
-  if(std::abs(rear_stering_angle_command) > M_PI_4) //???
+  if (std::abs(rear_stering_angle_command) > M_PI_4)  // ???
   {
-    rear_stering_angle_command += std::copysign(M_PI_2,-rear_stering_angle_command);
+    rear_stering_angle_command += std::copysign(M_PI_2, -rear_stering_angle_command);
   }
 
   return rear_stering_angle_command;
 }
 
-
-
-}
+}  // namespace romea

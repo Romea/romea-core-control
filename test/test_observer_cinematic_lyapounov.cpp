@@ -1,7 +1,14 @@
+// Copyright 2022 INRAE, French National Research Institute for Agriculture, Food and Environment
+// Add license
+
+// std
+#include <memory>
+
+// local
 #include "test_follow_trajectory_base.hpp"
 #include "romea_core_control/observer/SlidingObserverCinematicLyapounov.hpp"
 
-//cinematic_lyapounov:
+// cinematic_lyapounov:
 //  gains:
 //    x_deviation: -3.
 //    y_deviation: -3.
@@ -11,60 +18,61 @@
 
 class TestObserverCinematicLyapounov : public TestFollowTrajectoryBase
 {
-public :
-
-  TestObserverCinematicLyapounov():
-    TestFollowTrajectoryBase(),
+public:
+  TestObserverCinematicLyapounov()
+  : TestFollowTrajectoryBase(),
     output_x(),
     output_y(),
     output_course(),
     observer(nullptr)
   {}
 
-  virtual ~TestObserverCinematicLyapounov()=default;
+  virtual ~TestObserverCinematicLyapounov() = default;
 
-  virtual void SetUp()override
+  void SetUp()override
   {
     using Observer = romea::SlidingObserverCinematicLyapounov;
-    observer=std::make_unique<Observer>(0.1,1.6, Observer::Parameters{-3.,-3.,-3.,-1.8,-1.22});
+    observer = std::make_unique<Observer>(
+      0.1, 1.6, Observer::Parameters{-3., -3., -3., -1.8, -1.22});
   }
 
-  virtual void readOutputData() override
+  void readOutputData() override
   {
-    output_data>>output_x;
-    output_data>>output_y;
-    output_data>>output_course;
-    output_data>>output_front_sliding;
-    output_data>>output_rear_sliding;
+    output_data >> output_x;
+    output_data >> output_y;
+    output_data >> output_course;
+    output_data >> output_front_sliding;
+    output_data >> output_rear_sliding;
   }
 
-  virtual void writeEstimatedData() override
+  void writeEstimatedData() override
   {
-    output_data<<std::setprecision(10)<<observer->getX()<<" ";
-    output_data<<std::setprecision(10)<<observer->getY()<<" ";
-    output_data<<std::setprecision(10)<<observer->getTheta()<<" ";
-    output_data<<std::setprecision(10)<<observer->getFrontSlidingAngle()<<" ";
-    output_data<<std::setprecision(10)<<observer->getRearSlidingAngle();
-    output_data<<std::endl;
+    output_data << std::setprecision(10) << observer->getX() << " ";
+    output_data << std::setprecision(10) << observer->getY() << " ";
+    output_data << std::setprecision(10) << observer->getTheta() << " ";
+    output_data << std::setprecision(10) << observer->getFrontSlidingAngle() << " ";
+    output_data << std::setprecision(10) << observer->getRearSlidingAngle();
+    output_data << std::endl;
   }
 
-  virtual void checkData() override
+  void checkData() override
   {
-    EXPECT_NEAR(observer->getX(),output_x,0.0001);
-    EXPECT_NEAR(observer->getY(),output_y,0.0001);
-    EXPECT_NEAR(observer->getTheta(),output_course,0.0001);
-    EXPECT_NEAR(observer->getFrontSlidingAngle(),output_front_sliding,0.0001);
-    EXPECT_NEAR(observer->getRearSlidingAngle(),output_rear_sliding,0.0001);
+    EXPECT_NEAR(observer->getX(), output_x, 0.0001);
+    EXPECT_NEAR(observer->getY(), output_y, 0.0001);
+    EXPECT_NEAR(observer->getTheta(), output_course, 0.0001);
+    EXPECT_NEAR(observer->getFrontSlidingAngle(), output_front_sliding, 0.0001);
+    EXPECT_NEAR(observer->getRearSlidingAngle(), output_rear_sliding, 0.0001);
   }
 
-  virtual void update() override
+  void update() override
   {
-    observer->update(input_x,
-                     input_y,
-                     input_course,
-                     input_linear_speed,
-                     input_front_steering,
-                     input_rear_steering);
+    observer->update(
+      input_x,
+      input_y,
+      input_course,
+      input_linear_speed,
+      input_front_steering,
+      input_rear_steering);
   }
 
 
@@ -77,15 +85,15 @@ public :
 //-----------------------------------------------------------------------------
 TEST_F(TestObserverCinematicLyapounov, test1ws)
 {
-  //generateEstimatedDataFile("input_1ws.txt","output_cinematic_lyapounov_1ws.txt");
-  openFiles("input_1ws.txt","output_cinematic_lyapounov_1ws.txt");
+  // generateEstimatedDataFile("input_1ws.txt","output_cinematic_lyapounov_1ws.txt");
+  openFiles("input_1ws.txt", "output_cinematic_lyapounov_1ws.txt");
   check();
 }
 
 
-
 //-----------------------------------------------------------------------------
-int main(int argc, char **argv){
+int main(int argc, char ** argv)
+{
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }

@@ -1,21 +1,23 @@
-#ifndef _romea_FollowTrajectoryClassicSliding_hpp_
-#define _romea_FollowTrajectoryClassicSliding_hpp_
+// Copyright 2022 INRAE, French National Research Institute for Agriculture, Food and Environment
+// Add license
 
-//std
+#ifndef ROMEA_CORE_CONTROL__COMMAND__FOLLOWTRAJECTORYCLASSICSLIDING_HPP_
+#define ROMEA_CORE_CONTROL__COMMAND__FOLLOWTRAJECTORYCLASSICSLIDING_HPP_
+
+// std
 #include <utility>
 #include <vector>
 
-//romea
+// romea
 #include "../FrontRearData.hpp"
 
-namespace romea {
+namespace romea
+{
 
 
 class FollowTrajectoryClassicSliding
 {
-
-public :
-
+public:
   struct Parameters
   {
     double front_kp;
@@ -23,43 +25,42 @@ public :
   };
 
 public:
+  FollowTrajectoryClassicSliding(
+    const double & wheel_base,
+    const Parameters & parameters);
 
-  FollowTrajectoryClassicSliding(const double & wheel_base,
-                                 const Parameters & parameters);
-
-  FrontRearData computeSteeringAngles(const double&  lateral_deviation,
-                                      const double & course_deviation,
-                                      const double & curvature,
-                                      const double & front_sliding_angle,
-                                      const double & rear_sliding_angle,
-                                      const double & rear_steering_angle,
-                                      const double & front_maximal_steering_angle,
-                                      const double & rear_maximal_steering_angle,
-                                      const double & desired_lateral_deviation,
-                                      const double & desired_course_deviation);
+  FrontRearData computeSteeringAngles(
+    const double & lateral_deviation,
+    const double & course_deviation,
+    const double & curvature,
+    const double & front_sliding_angle,
+    const double & rear_sliding_angle,
+    const double & rear_steering_angle,
+    const double & front_maximal_steering_angle,
+    const double & rear_maximal_steering_angle,
+    const double & desired_lateral_deviation,
+    const double & desired_course_deviation);
 
 
   void setFrontKP(const double & kp);
 
-private :
+private:
+  double computeFrontSteeringAngle_(
+    const double & lateral_deviation,
+    const double & course_deviation,
+    const double & curvature,
+    const double & front_sliding_angle,
+    const double & rear_sliding_angle,
+    const double & desired_lateral_deviation);
 
 
-  double computeFrontSteeringAngle_(const double & lateral_deviation,
-                                    const double & course_deviation,
-                                    const double & curvature,
-                                    const double & front_sliding_angle,
-                                    const double & rear_sliding_angle,
-                                    const double & desired_lateral_deviation);
+  double computeRearSteeringAngle_(
+    const double & lateral_deviation,
+    const double & course_deviation,
+    const double & curvature,
+    const double & rear_sliding_angle);
 
-
-  double computeRearSteeringAngle_(const double& lateral_deviation,
-                                   const double& course_deviation,
-                                   const double& curvature,
-                                   const double &rear_sliding_angle);
-
-
-private :
-
+private:
   double wheelbase_;
   double KD_;
   double KP_;
@@ -67,6 +68,6 @@ private :
   double DeltaM_ar;
 };
 
-}
+}  // namespace romea
 
-#endif
+#endif  // ROMEA_CORE_CONTROL__COMMAND__FOLLOWTRAJECTORYCLASSICSLIDING_HPP_

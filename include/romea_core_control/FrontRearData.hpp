@@ -1,6 +1,8 @@
-#ifndef _romea_FrontRearData_hpp_
-#define _romea_FrontRearData_hpp_
+// Copyright 2022 INRAE, French National Research Institute for Agriculture, Food and Environment
+// Add license
 
+#ifndef ROMEA_CORE_CONTROL__FRONTREARDATA_HPP_
+#define ROMEA_CORE_CONTROL__FRONTREARDATA_HPP_
 
 namespace romea
 {
@@ -11,7 +13,6 @@ struct FrontRearData
   double rear;
 };
 
-}
+}  // namespace romea
 
-
-#endif
+#endif  // ROMEA_CORE_CONTROL_FRONTREARDATA_HPP_

@@ -1,10 +1,14 @@
+// Copyright 2022 INRAE, French National Research Institute for Agriculture, Food and Environment
+// Add license
+
 #include "romea_core_control/observer/SlidingObserverCinematic.hpp"
 
-namespace romea {
+namespace romea
+{
 
 //-----------------------------------------------------------------------------
-SlidingObserverCinematic::SlidingObserverCinematic(const double & samplingPeriod):
-  samplingPeriod_(samplingPeriod),
+SlidingObserverCinematic::SlidingObserverCinematic(const double & samplingPeriod)
+: samplingPeriod_(samplingPeriod),
   is_initialized_(false)
 {
 
@@ -13,13 +17,13 @@ SlidingObserverCinematic::SlidingObserverCinematic(const double & samplingPeriod
 //-----------------------------------------------------------------------------
 FrontRearData SlidingObserverCinematic::getSlidingAngles()const
 {
-  return {getFrontSlidingAngle(),getRearSlidingAngle()};
+  return {getFrontSlidingAngle(), getRearSlidingAngle()};
 }
 
 //-----------------------------------------------------------------------------
 void SlidingObserverCinematic::reset()
 {
-  is_initialized_=false;
+  is_initialized_ = false;
 }
 
-}
+}  // namespace romea

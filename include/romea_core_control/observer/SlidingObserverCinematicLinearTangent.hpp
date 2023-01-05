@@ -1,21 +1,24 @@
-#ifndef _romea_SlidingObserverCinematicLinearTangent_hpp_
-#define _romea_SlidingObserverCinematicLinearTangent_hpp_
+// Copyright 2022 INRAE, French National Research Institute for Agriculture, Food and Environment
+// Add license
 
-//romea
-#include "SlidingObserverCinematic.hpp"
-#include <romea_core_common/signal/FirstOrderButterworth.hpp>
+#ifndef ROMEA_CORE_CONTROL__OBSERVER__SLIDINGOBSERVERCINEMATICLINEARTANGENT_HPP_
+#define ROMEA_CORE_CONTROL__OBSERVER__SLIDINGOBSERVERCINEMATICLINEARTANGENT_HPP_
 
-//eigen
+// eigen
 #include <Eigen/Dense>
 
-namespace romea {
+
+// romea
+#include <romea_core_common/signal/FirstOrderButterworth.hpp>
+#include "SlidingObserverCinematic.hpp"
+
+namespace romea
+{
 
 
 class SlidingObserverCinematicLinearTangent : public SlidingObserverCinematic
 {
-
-public :
-
+public:
   struct Parameters
   {
     double lateralDeviationGain;
@@ -26,41 +29,36 @@ public :
     double rearSlidingAngleFilterWeight;
   };
 
+public:
+  SlidingObserverCinematicLinearTangent(
+    const double & samplingPeriod,
+    const double & wheelBase,
+    const Parameters & parameters);
+
+  virtual ~SlidingObserverCinematicLinearTangent() = default;
 
 public:
+  void update(
+    const double & lateralDeviation,
+    const double & courseDeviation,
+    const double & curvature,
+    const double & linearSpeed,
+    const double & frontSteeringAngle,
+    const double & rearSteeringAngle);
 
-  SlidingObserverCinematicLinearTangent(const double & samplingPeriod,
-                                        const double & wheelBase,
-                                        const Parameters & parameters);
+  const double & getFrontSlidingAngle() const override;
 
-  virtual ~SlidingObserverCinematicLinearTangent()=default;
-
-
-public :
-
-  void update(const double & lateralDeviation,
-              const double & courseDeviation,
-              const double & curvature,
-              const double & linearSpeed,
-              const double & frontSteeringAngle,
-              const double & rearSteeringAngle);
-
-  virtual const double & getFrontSlidingAngle() const override;
-
-  virtual const double & getRearSlidingAngle() const override;
+  const double & getRearSlidingAngle() const override;
 
   const double & getLateralDeviation()const;
 
   const double & getCourseDeviation()const;
 
-  void initObserver_(const double& ElatM,
-                     const double& EcapM);
+  void initObserver_(
+    const double & ElatM,
+    const double & EcapM);
 
-
-private :
-
-
-
+private:
   /**
    * Compute sliding
    * @param[in] lateral_deviation : lateral deviation in meters, positive on the right
@@ -70,19 +68,21 @@ private :
    * @param[in] curvature at the point of the trajectory which is nearest to the robot
    * @param[in] rear_steering : in radian, counterclockwise
   **/
-  bool computeSliding_(const double& lateral_deviation,
-                       const double& cap_deviation,
-                       const double& speed,
-                       const double& front_steering,
-                       const double& curvature,
-                       const double& rear_steering);
+  bool computeSliding_(
+    const double & lateral_deviation,
+    const double & cap_deviation,
+    const double & speed,
+    const double & front_steering,
+    const double & curvature,
+    const double & rear_steering);
 
-  bool computeSliding2_(const double& lateral_deviation,
-                        const double& cap_deviation,
-                        const double& speed,
-                        const double& front_steering,
-                        const double& curvature,
-                        const double& rear_steering);
+  bool computeSliding2_(
+    const double & lateral_deviation,
+    const double & cap_deviation,
+    const double & speed,
+    const double & front_steering,
+    const double & curvature,
+    const double & rear_steering);
 
   /**
    * evolution of sliding observer
@@ -93,23 +93,23 @@ private :
    * @param[in] curvature at the point of the trajectory which is nearest to the robot
    * @param[in] rear_steering : in radian, counterclockwise
   **/
-  void evolution_(const double&  lateral_deviation,
-                  const double&  cap_deviation,
-                  const double&  speed,
-                  const double& front_steering,
-                  const double& curvature,
-                  const double& rear_steering);
+  void evolution_(
+    const double & lateral_deviation,
+    const double & cap_deviation,
+    const double & speed,
+    const double & front_steering,
+    const double & curvature,
+    const double & rear_steering);
 
-  void evolution2_(const double&  lateral_deviation,
-                   const double&  cap_deviation,
-                   const double&  speed,
-                   const double& front_steering,
-                   const double& curvature,
-                   const double& rear_steering);
+  void evolution2_(
+    const double & lateral_deviation,
+    const double & cap_deviation,
+    const double & speed,
+    const double & front_steering,
+    const double & curvature,
+    const double & rear_steering);
 
-
-private :
-
+private:
   double wheelBase_;
 
   double betaR;
@@ -124,15 +124,14 @@ private :
   double EcapDeriv;
   unsigned int counter_;
 
-  Eigen::Matrix2d G_,B_,invB_;
-  Eigen::Vector2d A_,Y_,K_,X_;
+  Eigen::Matrix2d G_, B_, invB_;
+  Eigen::Vector2d A_, Y_, K_, X_;
   FirstOrderButterworth lateral_deviation_drift_f_;
   FirstOrderButterworth cap_deviation_drift_f_;
   FirstOrderButterworth betaR_f_;
   FirstOrderButterworth betaF_f_;
-
 };
 
-}
+}  // namespace romea
 
-#endif
+#endif  // ROMEA_CORE_CONTROL__OBSERVER__SLIDINGOBSERVERCINEMATICLINEARTANGENT_HPP_

@@ -1,18 +1,21 @@
-#ifndef _romea_CommandFollowMe_hpp
-#define _romea_CommandFollowMe_hpp
+// Copyright 2022 INRAE, French National Research Institute for Agriculture, Food and Environment
+// Add license
 
-//std
+#ifndef ROMEA_CORE_CONTROL__COMMAND__FOLLOWME_HPP_
+#define ROMEA_CORE_CONTROL__COMMAND__FOLLOWME_HPP_
+
+// std
 #include <utility>
 
-//romea
-#include "../FrontRearData.hpp"
+// romea
+#include "romea_core_control/FrontRearData.hpp"
 
-namespace romea {
+namespace romea
+{
 
 class FollowMe
 {
-public :
-
+public:
   struct Parameters
   {
     double kp;
@@ -22,72 +25,75 @@ public :
   };
 
 public:
+  FollowMe(
+    const double & sampling_period,
+    const Parameters & parameters);
 
-  FollowMe(const double & sampling_period,
-           const Parameters & parameters);
-
-  void setDesiredLateralDeviation(const double& desired_lat_dev);
+  void setDesiredLateralDeviation(const double & desired_lat_dev);
 
   const double & getDesiredLateralDeviation()const;
 
-  double computeAngularSpeed(const double & lateral_deviation,
-                             const double & course_deviation,
-                             const double & maximal_angular_speed,
-                             double & omega_d,
-                             double & theta_error);
+  double computeAngularSpeed(
+    const double & lateral_deviation,
+    const double & course_deviation,
+    const double & maximal_angular_speed,
+    double & omega_d,
+    double & theta_error);
 
-  FrontRearData computeSteeringAngles(const double &wheelbase,
-                                      const double & lateral_deviation,
-                                      const double & course_deviation,
-                                      const double & rear_steering_angle,
-                                      const double &maximal_front_steering_angle,
-                                      const double &maximal_rear_steering_angle,
-                                      double & omega_d,
-                                      double & theta_consigne,
-                                      const double & vitesse,
-                                      const double & yaw_rate_leader,
-                                      const double & desired_longitudinal_distance);
+  FrontRearData computeSteeringAngles(
+    const double & wheelbase,
+    const double & lateral_deviation,
+    const double & course_deviation,
+    const double & rear_steering_angle,
+    const double & maximal_front_steering_angle,
+    const double & maximal_rear_steering_angle,
+    double & omega_d,
+    double & theta_consigne,
+    const double & vitesse,
+    const double & yaw_rate_leader,
+    const double & desired_longitudinal_distance);
 
-  FrontRearData computeSteeringAngles(const double &wheelbase,
-                                      const double &lateral_deviation,
-                                      const double &course_deviation,
-                                      const double &courbure,
-                                      const double &speed,
-                                      const double &rear_steering_angle,
-                                      const double &rear_sliding_angle,
-                                      const double &front_sliding_angle,
-                                      const double &minimal_theta,
-                                      const double &maximal_theta,
-                                      const double &maximal_front_steering_angle,
-                                      const double &maximal_rear_steering_angle,
-                                      double &omega_d,
-                                      double &theta_consigne);
+  FrontRearData computeSteeringAngles(
+    const double & wheelbase,
+    const double & lateral_deviation,
+    const double & course_deviation,
+    const double & courbure,
+    const double & speed,
+    const double & rear_steering_angle,
+    const double & rear_sliding_angle,
+    const double & front_sliding_angle,
+    const double & minimal_theta,
+    const double & maximal_theta,
+    const double & maximal_front_steering_angle,
+    const double & maximal_rear_steering_angle,
+    double & omega_d,
+    double & theta_consigne);
 
 
-  FrontRearData computeSteeringAngles(const double &wheelbase,
-                                      const double &lateral_deviation,
-                                      const double &course_deviation,
-                                      const double &curvature,
-                                      const double & speed,
-                                      const double &rear_steering_angle,
-                                      const double &rear_sliding_angle,
-                                      const double &front_sliding_angle,
-                                      const double &minimal_theta,
-                                      const double &maximal_theta,
-                                      const double &maximal_front_steering_angle,
-                                      const double &maximal_rear_steering_angle,
-                                      const double &courbe0,
-                                      const double &courbe1,
-                                      const double &courbe2,
-                                      const double &lambda,
-                                      double &omega_d,
-                                      double &theta_consigne);
+  FrontRearData computeSteeringAngles(
+    const double & wheelbase,
+    const double & lateral_deviation,
+    const double & course_deviation,
+    const double & curvature,
+    const double & speed,
+    const double & rear_steering_angle,
+    const double & rear_sliding_angle,
+    const double & front_sliding_angle,
+    const double & minimal_theta,
+    const double & maximal_theta,
+    const double & maximal_front_steering_angle,
+    const double & maximal_rear_steering_angle,
+    const double & courbe0,
+    const double & courbe1,
+    const double & courbe2,
+    const double & lambda,
+    double & omega_d,
+    double & theta_consigne);
 
 
   void reset();
 
 private:
-
   double sampling_period_;
 
   double kp_;
@@ -97,9 +103,8 @@ private:
 
   double desired_lat_dev_;
   double integrated_omega_;
-
 };
 
-}
+}  // namespace romea
 
-#endif
+#endif  // ROMEA_CORE_CONTROL__COMMAND__FOLLOWME_HPP_
