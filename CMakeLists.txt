@@ -15,7 +15,7 @@ pkg_check_modules( EIGEN3 REQUIRED eigen3 )
 add_library(${PROJECT_NAME} SHARED
   src/observer/SlidingObserverCinematic.cpp
   src/observer/SlidingObserverCinematicLinearTangent.cpp
-  src/observer/SlidingObserverCinematicLyapounov.cpp
+  src/observer/SlidingObserverCinematicLyapunov.cpp
   src/observer/SpeedObserver.cpp
   src/observer/SpeedObserverRoland.cpp
   src/observer/SpeedObserverMatt.cpp

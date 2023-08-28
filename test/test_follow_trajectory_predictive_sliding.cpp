@@ -19,7 +19,7 @@
 // local
 #include "test_follow_trajectory_base.hpp"
 #include "romea_core_control/command/FollowTrajectoryPredictiveSliding.hpp"
-#include "romea_core_control/observer/SlidingObserverCinematicLyapounov.hpp"
+#include "romea_core_control/observer/SlidingObserverCinematicLyapunov.hpp"
 
 
 // predictive:
@@ -33,7 +33,7 @@
 //    b1: 1.0086
 //    b2: -0.2801
 
-// cinematic_lyapounov:
+// cinematic_lyapunov:
 //  gains:
 //    x_deviation: -3.
 //    y_deviation: -3.
@@ -57,7 +57,7 @@ public:
   void SetUp() override
   {
     using Command = romea::FollowTrajectoryPredictiveSliding;
-    using Observer = romea::SlidingObserverCinematicLyapounov;
+    using Observer = romea::SlidingObserverCinematicLyapunov;
     command = std::make_unique<Command>(1.6, Command::Parameters{0.7, 0.7, 10, 0.1642, 0.1072,
           1.0086, -0.2801});
     observer =
@@ -113,7 +113,7 @@ public:
   romea::FrontRearData steering_angles;
   romea::FrontRearData ouput_steering_angles;
   std::unique_ptr<romea::FollowTrajectoryPredictiveSliding> command;
-  std::unique_ptr<romea::SlidingObserverCinematicLyapounov> observer;
+  std::unique_ptr<romea::SlidingObserverCinematicLyapunov> observer;
 };
 
 //-----------------------------------------------------------------------------

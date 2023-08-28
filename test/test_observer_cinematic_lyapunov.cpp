@@ -18,9 +18,9 @@
 
 // local
 #include "test_follow_trajectory_base.hpp"
-#include "romea_core_control/observer/SlidingObserverCinematicLyapounov.hpp"
+#include "romea_core_control/observer/SlidingObserverCinematicLyapunov.hpp"
 
-// cinematic_lyapounov:
+// cinematic_lyapunov:
 //  gains:
 //    x_deviation: -3.
 //    y_deviation: -3.
@@ -28,10 +28,10 @@
 //    front_sliding_angle: -1.8
 //    rear_sliding_angle: -1.22
 
-class TestObserverCinematicLyapounov : public TestFollowTrajectoryBase
+class TestObserverCinematicLyapunov : public TestFollowTrajectoryBase
 {
 public:
-  TestObserverCinematicLyapounov()
+  TestObserverCinematicLyapunov()
   : TestFollowTrajectoryBase(),
     output_x(),
     output_y(),
@@ -39,11 +39,11 @@ public:
     observer(nullptr)
   {}
 
-  virtual ~TestObserverCinematicLyapounov() = default;
+  virtual ~TestObserverCinematicLyapunov() = default;
 
   void SetUp()override
   {
-    using Observer = romea::SlidingObserverCinematicLyapounov;
+    using Observer = romea::SlidingObserverCinematicLyapunov;
     observer = std::make_unique<Observer>(
       0.1, 1.6, Observer::Parameters{-3., -3., -3., -1.8, -1.22});
   }
@@ -91,14 +91,14 @@ public:
   double output_x;
   double output_y;
   double output_course;
-  std::unique_ptr<romea::SlidingObserverCinematicLyapounov> observer;
+  std::unique_ptr<romea::SlidingObserverCinematicLyapunov> observer;
 };
 
 //-----------------------------------------------------------------------------
-TEST_F(TestObserverCinematicLyapounov, test1ws)
+TEST_F(TestObserverCinematicLyapunov, test1ws)
 {
-  // generateEstimatedDataFile("input_1ws.txt","output_cinematic_lyapounov_1ws.txt");
-  openFiles("input_1ws.txt", "output_cinematic_lyapounov_1ws.txt");
+  // generateEstimatedDataFile("input_1ws.txt","output_cinematic_lyapunov_1ws.txt");
+  openFiles("input_1ws.txt", "output_cinematic_lyapunov_1ws.txt");
   check();
 }
 

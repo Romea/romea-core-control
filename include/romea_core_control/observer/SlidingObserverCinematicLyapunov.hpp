@@ -13,8 +13,8 @@
 // limitations under the License.
 
 
-#ifndef ROMEA_CORE_CONTROL__OBSERVER__SLIDINGOBSERVERCINEMATICLYAPOUNOV_HPP_
-#define ROMEA_CORE_CONTROL__OBSERVER__SLIDINGOBSERVERCINEMATICLYAPOUNOV_HPP_
+#ifndef ROMEA_CORE_CONTROL__OBSERVER__SLIDINGOBSERVERCINEMATICLYAPUNOV_HPP_
+#define ROMEA_CORE_CONTROL__OBSERVER__SLIDINGOBSERVERCINEMATICLYAPUNOV_HPP_
 
 // romea
 #include "SlidingObserverCinematic.hpp"
@@ -22,7 +22,7 @@
 namespace romea
 {
 
-class SlidingObserverCinematicLyapounov : public SlidingObserverCinematic
+class SlidingObserverCinematicLyapunov : public SlidingObserverCinematic
 {
 public:
   struct Parameters
@@ -35,12 +35,12 @@ public:
   };
 
 public:
-  SlidingObserverCinematicLyapounov(
+  SlidingObserverCinematicLyapunov(
     const double & samplingPeriod,
     const double & wheelBase,
     const Parameters & parameters);
 
-  virtual ~SlidingObserverCinematicLyapounov() = default;
+  virtual ~SlidingObserverCinematicLyapunov() = default;
 
 public:
   void update(
@@ -94,4 +94,4 @@ private:
 
 }  // namespace romea
 
-#endif  //  ROMEA_CORE_CONTROL__OBSERVER__SLIDINGOBSERVERCINEMATICLYAPOUNOV_HPP_
+#endif  //  ROMEA_CORE_CONTROL__OBSERVER__SLIDINGOBSERVERCINEMATICLYAPUNOV_HPP_

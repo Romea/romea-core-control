@@ -17,14 +17,14 @@
 #include <cmath>
 
 // romea
-#include "romea_core_control/observer/SlidingObserverCinematicLyapounov.hpp"
+#include "romea_core_control/observer/SlidingObserverCinematicLyapunov.hpp"
 
 
 namespace romea
 {
 
 //-----------------------------------------------------------------------------
-SlidingObserverCinematicLyapounov::SlidingObserverCinematicLyapounov(
+SlidingObserverCinematicLyapunov::SlidingObserverCinematicLyapunov(
   const double & samplingPeriod,
   const double & wheelBase,
   const Parameters & parameters)
@@ -46,7 +46,7 @@ SlidingObserverCinematicLyapounov::SlidingObserverCinematicLyapounov(
 
 
 //-----------------------------------------------------------------------------
-void SlidingObserverCinematicLyapounov::update(
+void SlidingObserverCinematicLyapunov::update(
   double x,
   double y,
   double course,
@@ -68,7 +68,7 @@ void SlidingObserverCinematicLyapounov::update(
 
 
 //-----------------------------------------------------------------------------
-void SlidingObserverCinematicLyapounov::initObserverHandbooks_(
+void SlidingObserverCinematicLyapunov::initObserverHandbooks_(
   double X,
   double Y,
   double Theta)
@@ -81,19 +81,19 @@ void SlidingObserverCinematicLyapounov::initObserverHandbooks_(
 }
 
 //-----------------------------------------------------------------------------
-const double & SlidingObserverCinematicLyapounov::getFrontSlidingAngle() const
+const double & SlidingObserverCinematicLyapunov::getFrontSlidingAngle() const
 {
   return BetaFHand;
 }
 
 //-----------------------------------------------------------------------------
-const double & SlidingObserverCinematicLyapounov::getRearSlidingAngle() const
+const double & SlidingObserverCinematicLyapunov::getRearSlidingAngle() const
 {
   return BetaRHand;
 }
 
 //-----------------------------------------------------------------------------
-void SlidingObserverCinematicLyapounov::updateObserverHandbooks_(
+void SlidingObserverCinematicLyapunov::updateObserverHandbooks_(
   double X,
   double Y,
   double Theta,
@@ -203,19 +203,19 @@ void SlidingObserverCinematicLyapounov::updateObserverHandbooks_(
 }
 
 //-----------------------------------------------------------------------------
-const double & SlidingObserverCinematicLyapounov::getX() const
+const double & SlidingObserverCinematicLyapunov::getX() const
 {
   return XObs;
 }
 
 //-----------------------------------------------------------------------------
-const double & SlidingObserverCinematicLyapounov::getY() const
+const double & SlidingObserverCinematicLyapunov::getY() const
 {
   return YObs;
 }
 
 //-----------------------------------------------------------------------------
-const double & SlidingObserverCinematicLyapounov::getTheta() const
+const double & SlidingObserverCinematicLyapunov::getTheta() const
 {
   return ThetaObs;
 }

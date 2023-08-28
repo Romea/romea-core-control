@@ -9,10 +9,10 @@ target_link_libraries(${PROJECT_NAME}_test_observer_cinematic_linear_tangent ${P
 target_compile_options(${PROJECT_NAME}_test_observer_cinematic_linear_tangent PRIVATE -std=c++17)
 add_test(test_observer_cinematic_linear_tangent ${PROJECT_NAME}_test_observer_cinematic_linear_tangent)
 
-add_executable(${PROJECT_NAME}_test_observer_cinematic_lyapounov test_observer_cinematic_lyapounov.cpp )
-target_link_libraries(${PROJECT_NAME}_test_observer_cinematic_lyapounov ${PROJECT_NAME} GTest::GTest GTest::Main)
-target_compile_options(${PROJECT_NAME}_test_observer_cinematic_lyapounov PRIVATE -std=c++17)
-add_test(test_observer_cinematic_lyapounov ${PROJECT_NAME}_test_observer_cinematic_lyapounov)
+add_executable(${PROJECT_NAME}_test_observer_cinematic_lyapunov test_observer_cinematic_lyapunov.cpp )
+target_link_libraries(${PROJECT_NAME}_test_observer_cinematic_lyapunov ${PROJECT_NAME} GTest::GTest GTest::Main)
+target_compile_options(${PROJECT_NAME}_test_observer_cinematic_lyapunov PRIVATE -std=c++17)
+add_test(test_observer_cinematic_lyapunov ${PROJECT_NAME}_test_observer_cinematic_lyapunov)
 
 add_executable(${PROJECT_NAME}_test_follow_trajectory_classic_sliding test_follow_trajectory_classic_sliding.cpp )
 target_link_libraries(${PROJECT_NAME}_test_follow_trajectory_classic_sliding ${PROJECT_NAME} GTest::GTest GTest::Main)
