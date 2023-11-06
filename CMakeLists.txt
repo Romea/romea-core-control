@@ -22,8 +22,7 @@ add_library(${PROJECT_NAME} SHARED
   src/command/FollowMe.cpp
   src/command/FollowTrajectoryClassicSliding.cpp
   src/command/FollowTrajectoryPredictiveSliding.cpp
-  src/command/KeepInterdistance.cpp
-  )
+  src/command/KeepInterdistance.cpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -38,8 +37,7 @@ target_compile_options(${PROJECT_NAME} PRIVATE
   -Wall -Wextra -O3 -std=c++17)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
-  romea_core_common::romea_core_common
-  )
+  romea_core_common::romea_core_common)
 
 include(GNUInstallDirs)
 
@@ -47,7 +45,7 @@ install(
   TARGETS ${PROJECT_NAME}
   EXPORT ${PROJECT_NAME}Targets
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 install(FILES package.xml DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME})
@@ -81,5 +79,5 @@ set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/LICENSE")
 if(BUILD_TESTING)
   enable_testing()
   add_subdirectory(test)
-endif(BUILD_TESTING)
+endif()
 

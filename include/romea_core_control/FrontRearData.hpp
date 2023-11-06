@@ -27,4 +27,4 @@ struct FrontRearData
 
 }  // namespace romea
 
-#endif  // ROMEA_CORE_CONTROL_FRONTREARDATA_HPP_
+#endif  // ROMEA_CORE_CONTROL__FRONTREARDATA_HPP_

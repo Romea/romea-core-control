@@ -21,8 +21,8 @@
 
 
 // romea
-#include <romea_core_common/signal/FirstOrderButterworth.hpp>
-#include "SlidingObserverCinematic.hpp"
+#include "romea_core_common/signal/FirstOrderButterworth.hpp"
+#include "romea_core_control/observer/SlidingObserverCinematic.hpp"
 
 namespace romea
 {

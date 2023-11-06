@@ -16,11 +16,11 @@
 // Eigen
 #include <Eigen/Dense>
 
-// romea core
-#include <romea_core_common/math/Algorithm.hpp>
-
 // std
 #include <iostream>
+
+// romea core
+#include "romea_core_common/math/Algorithm.hpp"
 
 // local
 #include "romea_core_control/command/FollowTrajectoryClassicSliding.hpp"
@@ -114,8 +114,7 @@ double FollowTrajectoryClassicSliding::computeFrontSteeringAngle_(
   return std::atan(
     (wheelbase_ / std::cos(rear_sliding_angle + DeltaM_ar)) *
     (curvature * std::cos(a1) / a2 + a3 * ( (std::cos(a1)) * (std::cos(a1)) * (std::cos(a1))) /
-    (a2 * a2)) +
-    std::tan(rear_sliding_angle)) + front_sliding_angle;
+    (a2 * a2)) + std::tan(rear_sliding_angle)) + front_sliding_angle;
 }
 
 //------------------------------------------------------------------------------
@@ -128,8 +127,7 @@ double FollowTrajectoryClassicSliding::computeRearSteeringAngle_(
   double rear_stering_angle_ = -course_deviation - rear_sliding_angle;
 
   if (std::abs(curvature) <= 0.001) {
-    rear_stering_angle_ +=
-      std::atan(
+    rear_stering_angle_ += std::atan(
       -KD_ * lateral_deviation / 4 + KD2_ * (course_deviation - 5 / 180. * M_PI * 0) / KD_);
   } else {
     double alpha = 1 - curvature * lateral_deviation;

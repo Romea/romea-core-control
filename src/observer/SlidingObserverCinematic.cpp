@@ -23,7 +23,6 @@ SlidingObserverCinematic::SlidingObserverCinematic(const double & samplingPeriod
 : samplingPeriod_(samplingPeriod),
   is_initialized_(false)
 {
-
 }
 
 //-----------------------------------------------------------------------------

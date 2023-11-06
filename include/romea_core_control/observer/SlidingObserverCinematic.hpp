@@ -44,8 +44,8 @@ public:
 protected:
   double samplingPeriod_;
   bool is_initialized_;
-
 };
 
-}
+}  // namespace romea
+
 #endif   // ROMEA_CORE_CONTROL__OBSERVER__SLIDINGOBSERVERCINEMATIC_HPP_

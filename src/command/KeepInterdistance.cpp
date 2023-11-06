@@ -15,12 +15,10 @@
 
 // std
 #include <cmath>
+#include <iostream>
 
 // romea core
-#include <romea_core_common/signal/FirstOrderButterworth.hpp>
-
-// std
-#include <iostream>
+#include "romea_core_common/signal/FirstOrderButterworth.hpp"
 
 // local
 #include "romea_core_control/command/KeepInterdistance.hpp"
@@ -178,7 +176,9 @@ double KeepInterdistance::computeFollowerSpeed(
   // if(std::abs(interdistance_error_)) {
 
   double t_pred = 0.8;
-  //  double linear_speed_gain = 0.3/(1+0*4*std::abs(follower_course_deviation-desired_angular_deviation)) + 0.3/(1+4*std::abs(0*follower_lateral_deviation));
+  // double linear_speed_gain = 0.3 /
+  //   (1 + 0 * 4 * std::abs(follower_course_deviation - desired_angular_deviation)) + 0.3 /
+  //   (1 + 4 * std::abs(0 * follower_lateral_deviation));
   //  double linear_speed_gain = .5;
   double linear_speed_gain = 1.0;
   double k_vitesse_leader = 1;
@@ -210,9 +210,12 @@ double KeepInterdistance::computeFollowerSpeed(
       offset_free_leader_linear_speed * std::cos(clamped_follower_course_deviation) * t_pred) +
       0 * integrated_longitudinal_deviation_ * KI_ * 1.0;
 
-    //    if (fabs(0.2*(follower_interdistance)+0.8*(leader_interdistance) - desired_interdistance)>1){
-    //         follower_linear_speed_command=std::min(follower_linear_speed_command,0.5);
-    //    }
+    // if (fabs(
+    //     0.2 * (follower_interdistance) + 0.8 * (leader_interdistance) -
+    //     desired_interdistance) > 1)
+    // {
+    //   follower_linear_speed_command = std::min(follower_linear_speed_command, 0.5);
+    // }
   }
 
 
@@ -221,20 +224,22 @@ double KeepInterdistance::computeFollowerSpeed(
   //    follower_linear_speed_command=0;
   //  }
 
-  //  if (std::abs(desired_interdistance)>1)
-  //  {
-  //    if (std::sqrt(interdistance*interdistance+follower_lateral_deviation*follower_lateral_deviation)<.8)
-  //    {
-  //      follower_linear_speed_command=0;
-  //    }
-  //  }
-  //  else
-  //  {
-  //    if (std::sqrt(interdistance*interdistance+(follower_lateral_deviation+desired_lateral_deviation)*(follower_lateral_deviation+desired_lateral_deviation))<.8)
-  //    {
-  //      follower_linear_speed_command=0;
-  //    }
-  //  }
+  // if (std::abs(desired_interdistance) > 1) {
+  //   if (std::sqrt(
+  //       interdistance * interdistance + follower_lateral_deviation *
+  //       follower_lateral_deviation) < .8)
+  //   {
+  //     follower_linear_speed_command = 0;
+  //   }
+  // } else {
+  //   if (std::sqrt(
+  //       interdistance * interdistance +
+  //       (follower_lateral_deviation + desired_lateral_deviation) *
+  //       (follower_lateral_deviation + desired_lateral_deviation)) < .8)
+  //   {
+  //     follower_linear_speed_command = 0;
+  //   }
+  // }
 
   //  if (ObstacleDetect==1 && follower_speed>0.5)
   //    follower_speed=0.5;

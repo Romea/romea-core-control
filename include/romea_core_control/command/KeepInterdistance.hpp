@@ -16,12 +16,12 @@
 #ifndef ROMEA_CORE_CONTROL__COMMAND__KEEPINTERDISTANCE_HPP_
 #define ROMEA_CORE_CONTROL__COMMAND__KEEPINTERDISTANCE_HPP_
 
-// romea
-#include <romea_core_common/signal/FirstOrderButterworth.hpp>
-#include <romea_core_common/math/Algorithm.hpp>
-
 // std
 #include <vector>
+
+// romea
+#include "romea_core_common/signal/FirstOrderButterworth.hpp"
+#include "romea_core_common/math/Algorithm.hpp"
 
 
 namespace romea

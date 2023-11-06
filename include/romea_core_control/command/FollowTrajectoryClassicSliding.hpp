@@ -21,7 +21,7 @@
 #include <vector>
 
 // romea
-#include "../FrontRearData.hpp"
+#include "romea_core_control/FrontRearData.hpp"
 
 namespace romea
 {

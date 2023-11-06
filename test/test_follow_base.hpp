@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#ifndef TEST_FOLLOW_BASE_HPP_
+#define TEST_FOLLOW_BASE_HPP_
 
 // gtest
 #include <gtest/gtest.h>
@@ -80,3 +82,6 @@ public:
   std::fstream output_data;
   std::string path;
 };
+
+
+#endif  // TEST_FOLLOW_BASE_HPP_

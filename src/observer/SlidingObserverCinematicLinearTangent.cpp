@@ -160,7 +160,6 @@ bool SlidingObserverCinematicLinearTangent::computeSliding_(
   ElatDeriv = (ElatM - Elat_av) / sampling_period_;
   EcapDeriv = (EcapM - Ecap_av) / sampling_period_;
 
-  //  static romea::FirstOrderButterworth lateral_deviation_drift_f(0.9), cap_deviation_drift_f(0.9);
   ElatDeriv = lateral_deviation_drift_f_.update(ElatDeriv);
   EcapDeriv = cap_deviation_drift_f_.update(EcapDeriv);
 
@@ -202,7 +201,6 @@ bool SlidingObserverCinematicLinearTangent::computeSliding_(
   }
 
   // Filtrage derive cinematique
-  //  static romea::FirstOrderButterworth betaR_f(0.96), betaF_f(0.98);
   betaRF = betaR_f_.update(betaR);
   betaFF = betaF_f_.update(betaF);
 
@@ -236,18 +234,17 @@ bool SlidingObserverCinematicLinearTangent::computeSliding2_(
 
   B_(0, 0) = 0;
   B_(1, 0) = vitesse * std::cos(EcapM + betaR);
-  B_(
-    0,
-    1) = vitesse * std::cos(betaR) * (1 + std::tan(delta + betaF) * std::tan(delta + betaF)) /
+  B_(0, 1) = vitesse * std::cos(betaR) * (1 + std::tan(delta + betaF) * std::tan(delta + betaF)) /
     wheelbase_;
-  B_(1, 1) = vitesse * (courb * std::sin(EcapM + betaR) / (1 - courb * ElatM)) - vitesse * std::sin(
-    betaR) * (std::tan(delta + betaF) - std::tan(betaR)) / wheelbase_ - vitesse *
-    std::cos(betaR) * (1 + std::tan(betaR) * std::tan(betaR)) / wheelbase_;
+  B_(1, 1) = vitesse * (courb * std::sin(EcapM + betaR) / (1 - courb * ElatM)) -
+    vitesse * std::sin(betaR) * (std::tan(delta + betaF) - std::tan(betaR)) / wheelbase_ -
+    vitesse * std::cos(betaR) * (1 + std::tan(betaR) * std::tan(betaR)) / wheelbase_;
 
-  //~ B(2,1) = vitesse*std::cos(Ecap4+d_AR);
-  //~ B(1,1) = 0;
-  //~ B(2,2) = vitesse*(courb*std::sin(Ecap4+d_AR)/(1-courb*Elat4))-vitesse*(std::cos(d_AR)+std::tan(delta)*std::sin(d_AR))/wheelbase_;
-  //~ B(2,1) = (vitesse*std::cos(d_AR)/wheelbase_)*(1+pow(std::tan(delta),2));
+  // B(2,1) = vitesse*std::cos(Ecap4+d_AR);
+  // B(1,1) = 0;
+  // B(2, 2) = vitesse * (courb * std::sin(Ecap4 + d_AR) / (1 - courb * Elat4)) -
+  //  vitesse * (std::cos(d_AR) + std::tan(delta) * std::sin(d_AR)) / wheelbase_;
+  // B(2,1) = (vitesse*std::cos(d_AR)/wheelbase_)*(1+pow(std::tan(delta),2));
   Y_(0) = Elat4 - ElatM;
   Y_(1) = Ecap4 - EcapM;
 
@@ -306,10 +303,10 @@ void SlidingObserverCinematicLinearTangent::evolution2_(
   double K12 = 10;
   Ecap4 += vitesse * sampling_period_ *
     (std::cos(betaR + d_AR) * (std::tan(delta + betaF) - std::tan(betaR + d_AR)) / wheelbase_ -
-    (courb * std::cos(EcapM + betaR + d_AR)) / (1 - courb * ElatM) ) - K12 * sampling_period_ *
-    (Ecap4 - EcapM);
-  Elat4 += vitesse * sampling_period_ * std::sin(EcapM + betaR + d_AR) - K11 * sampling_period_ *
-    (Elat4 - ElatM);
+    (courb * std::cos(EcapM + betaR + d_AR)) / (1 - courb * ElatM) ) -
+    K12 * sampling_period_ * (Ecap4 - EcapM);
+  Elat4 += vitesse * sampling_period_ * std::sin(EcapM + betaR + d_AR) -
+    K11 * sampling_period_ * (Elat4 - ElatM);
 
   if (counter_ < 10) {
     Elat4 = ElatM;

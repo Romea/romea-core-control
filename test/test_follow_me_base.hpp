@@ -13,6 +13,10 @@
 // limitations under the License.
 
 
+#ifndef TEST_FOLLOW_ME_BASE_HPP_
+#define TEST_FOLLOW_ME_BASE_HPP_
+
+
 // std
 #include <memory>
 #include <limits>
@@ -115,3 +119,5 @@ public:
   std::unique_ptr<romea::KeepInterdistance> keep_interdistance;
   std::unique_ptr<romea::FollowMe> follow_me;
 };
+
+#endif  // TEST_FOLLOW_ME_BASE_HPP_

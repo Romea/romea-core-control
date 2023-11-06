@@ -13,6 +13,10 @@
 // limitations under the License.
 
 
+#ifndef TEST_FOLLOW_TRAJECTORY_BASE_HPP_
+#define TEST_FOLLOW_TRAJECTORY_BASE_HPP_
+
+
 #include "test_follow_base.hpp"
 
 class TestFollowTrajectoryBase : public TestFollow
@@ -63,3 +67,5 @@ public:
   double output_front_sliding;
   double output_rear_sliding;
 };
+
+#endif  // TEST_FOLLOW_TRAJECTORY_BASE_HPP_
