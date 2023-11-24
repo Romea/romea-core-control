@@ -26,7 +26,8 @@
 
 namespace romea
 {
-
+namespace core
+{
 
 class SlidingObserverCinematicLinearTangent : public SlidingObserverCinematic
 {
@@ -144,6 +145,7 @@ private:
   FirstOrderButterworth betaF_f_;
 };
 
+}  // namespace core
 }  // namespace romea
 
 #endif  // ROMEA_CORE_CONTROL__OBSERVER__SLIDINGOBSERVERCINEMATICLINEARTANGENT_HPP_

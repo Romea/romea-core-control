@@ -52,11 +52,11 @@ public:
 
   void SetUp() override
   {
-    using Command = romea::FollowTrajectoryClassicSliding;
-    using Observer = romea::SlidingObserverCinematicLinearTangent;
+    using Command = romea::core::FollowTrajectoryClassicSliding;
+    using Observer = romea::core::SlidingObserverCinematicLinearTangent;
     command = std::make_unique<Command>(1.6, Command::Parameters{0.7, 0.5});
-    observer = std::make_unique<Observer>(0.1, 1.6, Observer::Parameters{-4, -2, 0.9, 0.9, 0.98,
-          0.96});
+    observer = std::make_unique<Observer>(
+      0.1, 1.6, Observer::Parameters{-4, -2, 0.9, 0.9, 0.98, 0.96});
   }
 
   void readOutputData() override
@@ -102,10 +102,10 @@ public:
       0);
   }
 
-  romea::FrontRearData steering_angles;
-  romea::FrontRearData ouput_steering_angles;
-  std::unique_ptr<romea::FollowTrajectoryClassicSliding> command;
-  std::unique_ptr<romea::SlidingObserverCinematicLinearTangent> observer;
+  romea::core::FrontRearData steering_angles;
+  romea::core::FrontRearData ouput_steering_angles;
+  std::unique_ptr<romea::core::FollowTrajectoryClassicSliding> command;
+  std::unique_ptr<romea::core::SlidingObserverCinematicLinearTangent> observer;
 };
 
 //-----------------------------------------------------------------------------

@@ -17,6 +17,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 //-----------------------------------------------------------------------------
 SlidingObserverCinematic::SlidingObserverCinematic(const double & samplingPeriod)
@@ -37,4 +39,5 @@ void SlidingObserverCinematic::reset()
   is_initialized_ = false;
 }
 
+}  // namespace core
 }  // namespace romea

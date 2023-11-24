@@ -24,6 +24,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 class SpeedObserver
 {
@@ -48,6 +50,7 @@ protected:
 
 std::ostream & operator<<(std::ostream & os, const SpeedObserver & observer);
 
+}  // namespace core
 }  // namespace romea
 
 #endif  // ROMEA_CORE_CONTROL__OBSERVER__SPEEDOBSERVER_HPP_

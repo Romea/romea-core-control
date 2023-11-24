@@ -25,6 +25,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 
 class FollowTrajectoryClassicSliding
@@ -80,6 +82,7 @@ private:
   double DeltaM_ar;
 };
 
+}  // namespace core
 }  // namespace romea
 
 #endif  // ROMEA_CORE_CONTROL__COMMAND__FOLLOWTRAJECTORYCLASSICSLIDING_HPP_

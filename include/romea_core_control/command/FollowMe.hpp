@@ -24,6 +24,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 class FollowMe
 {
@@ -117,6 +119,7 @@ private:
   double integrated_omega_;
 };
 
+}  // namespace core
 }  // namespace romea
 
 #endif  // ROMEA_CORE_CONTROL__COMMAND__FOLLOWME_HPP_

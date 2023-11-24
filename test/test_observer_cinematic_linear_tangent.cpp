@@ -45,7 +45,7 @@ public:
 
   void SetUp()override
   {
-    using Observer = romea::SlidingObserverCinematicLinearTangent;
+    using Observer = romea::core::SlidingObserverCinematicLinearTangent;
     observer = std::make_unique<Observer>(
       0.1, 1.6, Observer::Parameters{-4, -2, 0.9, 0.9, 0.98, 0.96});
   }
@@ -89,7 +89,7 @@ public:
 
   double output_lateral_deviation;
   double output_course_deviation;
-  std::unique_ptr<romea::SlidingObserverCinematicLinearTangent> observer;
+  std::unique_ptr<romea::core::SlidingObserverCinematicLinearTangent> observer;
 };
 
 //-----------------------------------------------------------------------------

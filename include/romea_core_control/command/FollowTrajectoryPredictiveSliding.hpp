@@ -25,6 +25,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 
 class FollowTrajectoryPredictiveSliding
@@ -108,6 +110,7 @@ private:
   double DeltaEcartAV;
 };
 
+}  // namespace core
 }  // namespace romea
 
 #endif  // ROMEA_CORE_CONTROL__COMMAND__FOLLOWTRAJECTORYPREDICTIVESLIDING_HPP_

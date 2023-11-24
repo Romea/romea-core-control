@@ -17,6 +17,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 //-----------------------------------------------------------------------------
 SpeedObserver::SpeedObserver(const double & samplingPeriod)
@@ -42,4 +44,5 @@ void SpeedObserver::reset()
   is_initialized_ = false;
 }
 
+}  // namespace core
 }  // namespace romea

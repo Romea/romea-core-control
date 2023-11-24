@@ -30,6 +30,8 @@ const double KI = 0.2;
 
 namespace romea
 {
+namespace core
+{
 
 //-----------------------------------------------------------------------------
 KeepInterdistance::KeepInterdistance(double sampling_period)
@@ -54,7 +56,7 @@ double KeepInterdistance::computeFollowerSpeed(
   const double & follower_linear_speed,
   const double & follower_maximal_linear_speed)
 {
-  static romea::FirstOrderButterworth f(0.25);
+  static FirstOrderButterworth f(0.25);
 
   updateLongitudinalDeviation_(interdistance, desired_interdistance, follower_linear_speed);
 
@@ -85,7 +87,7 @@ double KeepInterdistance::computeFollowerSpeed(
   const double & leader_linear_speed,
   const double & follower_maximal_linear_speed)
 {
-  static romea::FirstOrderButterworth f(0.25);
+  static FirstOrderButterworth f(0.25);
 
   double offset_free_leader_linear_speed = (leader_linear_speed);
 
@@ -114,7 +116,7 @@ double KeepInterdistance::computeFollowerSpeed(
   const double & courbure,
   const double & follower_linear_speed)
 {
-  static romea::FirstOrderButterworth f(0.25);
+  static FirstOrderButterworth f(0.25);
   double interdistance_error = interdistance - desired_interdistance;
   if (fabs(interdistance_error) < 1.0) {
     updateLongitudinalDeviation_(interdistance, desired_interdistance, follower_linear_speed);
@@ -153,7 +155,7 @@ double KeepInterdistance::computeFollowerSpeed(
   const double & /*desired_angular_deviation*/,
   const double & yaw_rate_leader)
 {
-  static romea::FirstOrderButterworth f(0.25);
+  static FirstOrderButterworth f(0.25);
 
 
   double offset_free_leader_linear_speed = offsetFreeLinearSpeed_(leader_linear_speed);
@@ -321,4 +323,5 @@ void KeepInterdistance::updateLongitudinalDeviation_(
   }
 }
 
+}  // namespace core
 }  // namespace romea

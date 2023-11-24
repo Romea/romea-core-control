@@ -22,6 +22,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 const double SpeedObserverRoland::DEFAULT_KD = -2.2;
 
@@ -90,4 +92,5 @@ void SpeedObserverRoland::reset()
   is_initialized_ = false;
 }
 
+}  // namespace core
 }  // namespace romea

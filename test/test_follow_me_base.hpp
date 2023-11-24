@@ -57,9 +57,9 @@ public:
 
   void SetUp()override
   {
-    romea::FollowMe::Parameters gains{-0.25, 0, 0.8, 3.};
-    follow_me = std::make_unique<romea::FollowMe>(0.1, gains);
-    keep_interdistance = std::make_unique<romea::KeepInterdistance>(0.1);
+    romea::core::FollowMe::Parameters gains{-0.25, 0, 0.8, 3.};
+    follow_me = std::make_unique<romea::core::FollowMe>(0.1, gains);
+    keep_interdistance = std::make_unique<romea::core::KeepInterdistance>(0.1);
   }
 
   void readInputData() override
@@ -116,8 +116,8 @@ public:
   double linear_speed_command;
   double linear_speed_omega_d;
 
-  std::unique_ptr<romea::KeepInterdistance> keep_interdistance;
-  std::unique_ptr<romea::FollowMe> follow_me;
+  std::unique_ptr<romea::core::KeepInterdistance> keep_interdistance;
+  std::unique_ptr<romea::core::FollowMe> follow_me;
 };
 
 #endif  // TEST_FOLLOW_ME_BASE_HPP_

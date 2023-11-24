@@ -43,7 +43,7 @@ public:
 
   void SetUp()override
   {
-    using Observer = romea::SlidingObserverCinematicLyapunov;
+    using Observer = romea::core::SlidingObserverCinematicLyapunov;
     observer = std::make_unique<Observer>(
       0.1, 1.6, Observer::Parameters{-3., -3., -3., -1.8, -1.22});
   }
@@ -91,7 +91,7 @@ public:
   double output_x;
   double output_y;
   double output_course;
-  std::unique_ptr<romea::SlidingObserverCinematicLyapunov> observer;
+  std::unique_ptr<romea::core::SlidingObserverCinematicLyapunov> observer;
 };
 
 //-----------------------------------------------------------------------------

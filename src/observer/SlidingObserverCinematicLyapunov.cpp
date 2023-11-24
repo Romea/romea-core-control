@@ -22,6 +22,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 //-----------------------------------------------------------------------------
 SlidingObserverCinematicLyapunov::SlidingObserverCinematicLyapunov(
@@ -220,4 +222,5 @@ const double & SlidingObserverCinematicLyapunov::getTheta() const
   return ThetaObs;
 }
 
+}  // namespace CORE
 }  // namespace romea

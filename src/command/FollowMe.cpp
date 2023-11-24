@@ -32,6 +32,9 @@ const double SKID_STEERING_MAXIMAL_INTEDRATED_OMEGA_D = 0.75;
 
 namespace romea
 {
+namespace core
+{
+
 
 //-----------------------------------------------------------------------------
 FollowMe::FollowMe(
@@ -447,4 +450,5 @@ FrontRearData FollowMe::computeSteeringAngles(
   return {braq_F, braq_R};
 }
 
+}  // namespace core
 }  // namespace romea

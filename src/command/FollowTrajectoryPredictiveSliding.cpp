@@ -34,6 +34,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 
 //-----------------------------------------------------------------------------
@@ -279,4 +281,5 @@ double FollowTrajectoryPredictiveSliding::computeRearSteeringAngle_(
   return rear_stering_angle_command;
 }
 
+}  // namespace core
 }  // namespace romea

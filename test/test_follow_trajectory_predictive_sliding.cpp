@@ -56,10 +56,10 @@ public:
 
   void SetUp() override
   {
-    using Command = romea::FollowTrajectoryPredictiveSliding;
-    using Observer = romea::SlidingObserverCinematicLyapunov;
-    command = std::make_unique<Command>(1.6, Command::Parameters{0.7, 0.7, 10, 0.1642, 0.1072,
-          1.0086, -0.2801});
+    using Command = romea::core::FollowTrajectoryPredictiveSliding;
+    using Observer = romea::core::SlidingObserverCinematicLyapunov;
+    command = std::make_unique<Command>(
+      1.6, Command::Parameters{0.7, 0.7, 10, 0.1642, 0.1072, 1.0086, -0.2801});
     observer =
       std::make_unique<Observer>(0.1, 1.6, Observer::Parameters{-3., -3., -3., -1.8, -1.22});
   }
@@ -110,10 +110,10 @@ public:
       0);
   }
 
-  romea::FrontRearData steering_angles;
-  romea::FrontRearData ouput_steering_angles;
-  std::unique_ptr<romea::FollowTrajectoryPredictiveSliding> command;
-  std::unique_ptr<romea::SlidingObserverCinematicLyapunov> observer;
+  romea::core::FrontRearData steering_angles;
+  romea::core::FrontRearData ouput_steering_angles;
+  std::unique_ptr<romea::core::FollowTrajectoryPredictiveSliding> command;
+  std::unique_ptr<romea::core::SlidingObserverCinematicLyapunov> observer;
 };
 
 //-----------------------------------------------------------------------------

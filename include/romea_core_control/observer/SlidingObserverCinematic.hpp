@@ -24,6 +24,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 class SlidingObserverCinematic
 {
@@ -46,6 +48,7 @@ protected:
   bool is_initialized_;
 };
 
+}  // namespace core
 }  // namespace romea
 
 #endif   // ROMEA_CORE_CONTROL__OBSERVER__SLIDINGOBSERVERCINEMATIC_HPP_

@@ -23,6 +23,8 @@
 namespace romea
 {
 
+namespace core
+{
 
 //-----------------------------------------------------------------------------
 SpeedObserverMatt::SpeedObserverMatt(const double & samplingPeriod)
@@ -194,4 +196,5 @@ const double & SpeedObserverMatt::getY() const
   return YObs;
 }
 
+}  // namespace core
 }  // namespace romea

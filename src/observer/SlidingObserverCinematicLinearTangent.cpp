@@ -21,6 +21,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 //-----------------------------------------------------------------------------
 SlidingObserverCinematicLinearTangent::SlidingObserverCinematicLinearTangent(
@@ -327,4 +329,5 @@ const double & SlidingObserverCinematicLinearTangent::getCourseDeviation() const
   return Ecap4;
 }
 
+}  // namespace core
 }  // namespace romea

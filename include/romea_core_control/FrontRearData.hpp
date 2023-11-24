@@ -18,6 +18,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 struct FrontRearData
 {
@@ -25,6 +27,7 @@ struct FrontRearData
   double rear;
 };
 
+}  // namespace core
 }  // namespace romea
 
 #endif  // ROMEA_CORE_CONTROL__FRONTREARDATA_HPP_

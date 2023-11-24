@@ -18,6 +18,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 struct SpeedAngleData
 {
@@ -25,6 +27,7 @@ struct SpeedAngleData
   double angle;
 };
 
+}  // namespace core
 }  // namespace romea
 
 

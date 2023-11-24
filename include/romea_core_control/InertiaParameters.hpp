@@ -20,6 +20,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 struct InertiaParameters
 {
@@ -28,6 +30,7 @@ struct InertiaParameters
   double zInertialMoment;
 };
 
+}  // namespace core
 }  // namespace romea
 
 #endif  // ROMEA_CORE_CONTROL__INERTIAPARAMETERS_HPP_

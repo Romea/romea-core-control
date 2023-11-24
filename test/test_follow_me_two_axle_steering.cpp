@@ -93,10 +93,10 @@ public:
     computeSteeringAnglesCommand();
   }
 
-  romea::FrontRearData steering_angles_command;
+  romea::core::FrontRearData steering_angles_command;
   double heading_omega_d;
   double theta_consigne;
-  romea::FrontRearData output_steering_angles_command;
+  romea::core::FrontRearData output_steering_angles_command;
   double output_heading_omega_d;
   double output_theta_consigne;
   double wheelbase;

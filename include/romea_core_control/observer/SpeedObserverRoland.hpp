@@ -18,6 +18,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 class SpeedObserverRoland
 {
@@ -55,6 +57,7 @@ private:
   bool is_initialized_;
 };
 
+}  // namespace core
 }  // namespace romea
 
 #endif  // ROMEA_CORE_CONTROL__OBSERVER__SPEEDOBSERVERROLAND_HPP_

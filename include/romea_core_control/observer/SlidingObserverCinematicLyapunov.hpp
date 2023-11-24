@@ -21,6 +21,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 class SlidingObserverCinematicLyapunov : public SlidingObserverCinematic
 {
@@ -92,6 +94,7 @@ private:
   double Ktwo2_;
 };
 
+}  // namespace core
 }  // namespace romea
 
 #endif  //  ROMEA_CORE_CONTROL__OBSERVER__SLIDINGOBSERVERCINEMATICLYAPUNOV_HPP_

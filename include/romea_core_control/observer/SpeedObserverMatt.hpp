@@ -21,6 +21,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 class SpeedObserverMatt : public SpeedObserver
 {
@@ -77,6 +79,7 @@ private:
   unsigned int counter_hand_;
 };
 
+}  // namespace core
 }  // namespace romea
 
 #endif  // ROMEA_CORE_CONTROL__OBSERVER__SPEEDOBSERVERMATT_HPP_
