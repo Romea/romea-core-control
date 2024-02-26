@@ -20,6 +20,7 @@ add_library(${PROJECT_NAME} SHARED
   src/observer/SpeedObserverRoland.cpp
   src/observer/SpeedObserverMatt.cpp
   src/command/FollowMe.cpp
+  src/command/FollowTrajectoryBackStepping.cpp
   src/command/FollowTrajectoryClassicSliding.cpp
   src/command/FollowTrajectoryPredictiveSliding.cpp
   src/command/KeepInterdistance.cpp)
