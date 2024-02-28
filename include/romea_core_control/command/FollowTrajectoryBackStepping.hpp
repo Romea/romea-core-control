@@ -13,8 +13,8 @@
 // limitations under the License.
 
 
-#ifndef ROMEA_CORE_CONTROL__COMMAND__FOLLOWME_HPP_
-#define ROMEA_CORE_CONTROL__COMMAND__FOLLOWME_HPP_
+#ifndef ROMEA_CORE_CONTROL__COMMAND__FOLLOWTRAJECTORYBACKSTEPPING_HPP_
+#define ROMEA_CORE_CONTROL__COMMAND__FOLLOWTRAJECTORYBACKSTEPPING_HPP_
 
 // std
 #include <utility>
@@ -46,10 +46,6 @@ public:
     const double & wheelbase,
     const Parameters & parameters);
 
-  // void setDesiredLateralDeviation(const double & desired_lat_dev);
-
-  // const double & getDesiredLateralDeviation()const;
-
   double computeAngularSpeed(
     const double & lateral_deviation,
     const double & course_deviation,
@@ -66,14 +62,18 @@ public:
     const double & rear_steering_angle,
     const double & rear_sliding_angle,
     const double & front_sliding_angle,
-    const double & minimal_theta,
-    const double & maximal_theta,
     const double & maximal_front_steering_angle,
     const double & maximal_rear_steering_angle,
     const double & desired_lateral_deviation,
     double & omega_d,
     double & theta_consigne);
+
   void reset();
+
+private:
+  void update_omega_d_error_integral_(
+    const double & desired_lateral_deviation,
+    const double & omega_d_error);
 
 private:
   double wheelbase_;
@@ -84,11 +84,11 @@ private:
   double kd_;
   double kdd_;
   double maximal_omega_d_;
-  double maximal_omega_d_integral_;
+  double maximal_omega_d_error_integral_;
 
   // double desired_lat_dev_;
-  double omega_d_integral_;
-  double previous_desired_lateral_deviation_;
+  double omega_d_error_integral_;
+  double last_desired_lateral_deviation_;
 };
 
 }  // namespace core

@@ -47,15 +47,15 @@ FollowTrajectoryBackStepping::FollowTrajectoryBackStepping(
   ki_(parameters.ki),
   kd_(parameters.kd),
   kdd_(parameters.kdd),
-  omega_d_integral_(0),
-  previous_desired_lateral_deviation_(0)
+  omega_d_error_integral_(0),
+  last_desired_lateral_deviation_(0)
 {
 }
 
 //-----------------------------------------------------------------------------
 void FollowTrajectoryBackStepping::reset()
 {
-  omega_d_integral_ = 0;
+  omega_d_error_integral_ = 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -69,27 +69,16 @@ double FollowTrajectoryBackStepping::computeAngularSpeed(
   double & omega_d)
 {
 
-  if (std::abs(desired_lateral_deviation - previous_desired_lateral_deviation_) >
-    std::numeric_limits<double>::epsilon())
-  {
-    reset();
-  }
-  previous_desired_lateral_deviation_ = desired_lateral_deviation;
-
-
   omega_d = std::atan2(kp_ * (lateral_deviation - desired_lateral_deviation), 1);
 
   if (std::abs(omega_d) > maximal_omega_d_) {
     omega_d = copysign(maximal_omega_d_, omega_d);
   }
 
-  omega_d_integral_ += sampling_period_ * (course_deviation - omega_d);
+  double omega_d_error = course_deviation - omega_d;
+  update_omega_d_error_integral_(lateral_deviation, omega_d_error);
 
-  if (std::abs(omega_d_integral_) > maximal_omega_d_integral_) {
-    omega_d_integral_ = copysign(maximal_omega_d_integral_, omega_d_integral_);
-  }
-
-  double angular_speed_command = kd_ * (course_deviation - omega_d) + ki_ * omega_d_integral_ -
+  double angular_speed_command = kd_ * omega_d_error + ki_ * omega_d_error_integral_ -
     (linear_speed * curvature * std::cos(course_deviation)) / (1 - curvature * lateral_deviation);
 
   if (std::abs(angular_speed_command) > maximal_angular_speed) {
@@ -108,8 +97,6 @@ FrontRearData FollowTrajectoryBackStepping::computeSteeringAngles(
   const double & rear_steering_angle,
   const double & rear_sliding_angle,
   const double & front_sliding_angle,
-  const double & minimal_theta,
-  const double & maximal_theta,
   const double & maximal_front_steering_angle,
   const double & maximal_rear_steering_angle,
   const double & desired_lateral_deviation,
@@ -120,27 +107,16 @@ FrontRearData FollowTrajectoryBackStepping::computeSteeringAngles(
   // omega_d = atan(kp_ * (lateral_deviation - desired_lat_dev_) / alpha);
   omega_d = kp_ * (lateral_deviation - desired_lateral_deviation);
 
-
   if (std::abs(omega_d) > maximal_omega_d_) {
     omega_d = copysign(maximal_omega_d_, omega_d);
-  }
-
-  if (omega_d < minimal_theta) {
-    omega_d = minimal_theta;
-  }
-
-  if (omega_d > maximal_theta) {
-    omega_d = maximal_theta;
   }
 
   double Thet2 = course_deviation + rear_steering_angle + rear_sliding_angle;
   double EpsThet = -(Thet2 - omega_d);
 
-  // braq_F = std::atan(
-  // kd_ * EpsThet * wheelbase * cos(Thet2) / cos(rear_steering_angle) + tan(rear_steering_angle));
   double front_steering_angle_command = std::atan(
     (kd_ * EpsThet + curvature) * wheelbase_ * std::cos(Thet2) /
-    cos(rear_steering_angle + rear_sliding_angle) +
+    std::cos(rear_steering_angle + rear_sliding_angle) +
     std::tan(rear_steering_angle + rear_sliding_angle)) - front_sliding_angle;
 
   theta_consigne = 0;
@@ -149,19 +125,8 @@ FrontRearData FollowTrajectoryBackStepping::computeSteeringAngles(
   }
 
   double ThetaError2 = theta_consigne - course_deviation;
-  //  integrated_omega_ += 0.1*(tan(course_deviation)-omega_d);
-  //  if (fabs(integrated_omega_) > 0.75)
-  //    integrated_omega_ = copysign(0.75, integrated_omega_);
-
-  //  if(fabs(speed) < 0.1)
-  //    integrated_omega_ = 0;
-
-  //  braq_R=-course_deviation-(1/kd_)*( kdd_*ThetaError2 - kd_*omega_d);
   double rear_steering_angle_command = -course_deviation - rear_sliding_angle -
     (1 / kd_) * (kdd_ * ThetaError2 - kd_ * omega_d);
-
-  // std::cout << " new command " << omega_d << " " << Thet2 << " " << EpsThet << " " << braq_F <<
-  //   " " << theta_consigne << " " << ThetaError2 << " " << braq_R << std::endl;
 
   if (std::abs(rear_steering_angle_command) > maximal_rear_steering_angle) {
     rear_steering_angle_command = copysign(
@@ -176,6 +141,25 @@ FrontRearData FollowTrajectoryBackStepping::computeSteeringAngles(
   }
 
   return {front_steering_angle_command, rear_steering_angle_command};
+}
+
+//-----------------------------------------------------------------------------
+void FollowTrajectoryBackStepping::update_omega_d_error_integral_(
+  const double & desired_lateral_deviation,
+  const double & omega_d_error)
+{
+  if (std::abs(desired_lateral_deviation - last_desired_lateral_deviation_) >
+    std::numeric_limits<double>::epsilon())
+  {
+    omega_d_error_integral_ += sampling_period_ * omega_d_error;
+
+    if (std::abs(omega_d_error_integral_) > maximal_omega_d_error_integral_) {
+      omega_d_error_integral_ = copysign(maximal_omega_d_error_integral_, omega_d_error_integral_);
+    }
+  } else {
+    last_desired_lateral_deviation_ = desired_lateral_deviation;
+    omega_d_error_integral_ = 0;
+  }
 }
 
 
