@@ -46,7 +46,9 @@ FollowTrajectoryBackStepping::FollowTrajectoryBackStepping(
   kp_(parameters.kp),
   ki_(parameters.ki),
   kd_(parameters.kd),
+  iclamp_(parameters.iclamp),
   kdd_(parameters.kdd),
+  maximal_omega_d_(parameters.maximal_omega_d),
   omega_d_error_integral_(0),
   last_desired_lateral_deviation_(0)
 {
@@ -75,10 +77,10 @@ double FollowTrajectoryBackStepping::computeAngularSpeed(
     omega_d = copysign(maximal_omega_d_, omega_d);
   }
 
-  double omega_d_error = course_deviation - omega_d;
-  update_omega_d_error_integral_(lateral_deviation, omega_d_error);
+  double error = course_deviation - omega_d;
+  update_integral_(lateral_deviation, error);
 
-  double angular_speed_command = kd_ * omega_d_error + ki_ * omega_d_error_integral_ -
+  double angular_speed_command = kd_ * error + ki_ * i_ -
     (linear_speed * curvature * std::cos(course_deviation)) / (1 - curvature * lateral_deviation);
 
   if (std::abs(angular_speed_command) > maximal_angular_speed) {
@@ -144,21 +146,21 @@ FrontRearData FollowTrajectoryBackStepping::computeSteeringAngles(
 }
 
 //-----------------------------------------------------------------------------
-void FollowTrajectoryBackStepping::update_omega_d_error_integral_(
+void FollowTrajectoryBackStepping::update_integral_(
   const double & desired_lateral_deviation,
-  const double & omega_d_error)
+  const double & error)
 {
   if (std::abs(desired_lateral_deviation - last_desired_lateral_deviation_) >
     std::numeric_limits<double>::epsilon())
   {
-    omega_d_error_integral_ += sampling_period_ * omega_d_error;
+    i_ += sampling_period_ * error;
 
-    if (std::abs(omega_d_error_integral_) > maximal_omega_d_error_integral_) {
-      omega_d_error_integral_ = copysign(maximal_omega_d_error_integral_, omega_d_error_integral_);
+    if (std::abs(i_) > iclamp_) {
+      i_ = copysign(iclamp_, i_);
     }
   } else {
     last_desired_lateral_deviation_ = desired_lateral_deviation;
-    omega_d_error_integral_ = 0;
+    i_ = 0;
   }
 }
 

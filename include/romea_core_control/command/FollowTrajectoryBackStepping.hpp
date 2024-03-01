@@ -35,9 +35,9 @@ public:
     double kp;
     double kd;
     double ki;
+    double iclamp;
     double kdd;
     double maximal_omega_d;
-    double maximal_omega_d_integral;
   };
 
 public:
@@ -71,9 +71,9 @@ public:
   void reset();
 
 private:
-  void update_omega_d_error_integral_(
+  void update_integral_(
     const double & desired_lateral_deviation,
-    const double & omega_d_error);
+    const double & error);
 
 private:
   double wheelbase_;
@@ -82,9 +82,10 @@ private:
   double kp_;
   double ki_;
   double kd_;
+  double i_;
+  double iclamp_;
   double kdd_;
   double maximal_omega_d_;
-  double maximal_omega_d_error_integral_;
 
   // double desired_lat_dev_;
   double omega_d_error_integral_;
