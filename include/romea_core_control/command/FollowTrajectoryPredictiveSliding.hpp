@@ -84,7 +84,9 @@ private:
     const double & lateral_deviation,
     const double & course_deviation,
     const double & curvature,
-    const double & rear_sliding_angle);
+    const double & rear_sliding_angle,
+    const double & desired_lateral_deviation,
+    const double & desired_course_deviation);
 
   double commandPred_(const double & CommFutur);
 

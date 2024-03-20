@@ -67,7 +67,7 @@ FrontRearData FollowTrajectoryClassicSliding::computeSteeringAngles(
   const double & front_maximal_steering_angle,
   const double & rear_maximal_steering_angle,
   const double & desired_lateral_deviation,
-  const double & /*desired_course_deviation*/)
+  const double & desired_course_deviation)
 {
   // compute front steering angle
   double front_steering_angle_ = computeFrontSteeringAngle_(
@@ -85,10 +85,12 @@ FrontRearData FollowTrajectoryClassicSliding::computeSteeringAngles(
 
   // compute rear steering angle
   double rear_steering_angle_ = computeRearSteeringAngle_(
-    lateral_deviation - desired_lateral_deviation,
+    lateral_deviation,
     course_deviation,
     curvature,
-    rear_sliding_angle);
+    rear_sliding_angle,
+    desired_lateral_deviation,
+    desired_course_deviation);
 
 
   rear_steering_angle_ = clamp(
@@ -124,25 +126,32 @@ double FollowTrajectoryClassicSliding::computeRearSteeringAngle_(
   const double & lateral_deviation,
   const double & course_deviation,
   const double & curvature,
-  const double & rear_sliding_angle)
+  const double & rear_sliding_angle,
+  const double & desired_lateral_deviation,
+  const double & desired_course_deviation)
 {
-  double rear_stering_angle_ = -course_deviation - rear_sliding_angle;
+  if (std::isfinite(KD2_)) {
+    double rear_stering_angle_ = -course_deviation - rear_sliding_angle;
 
-  if (std::abs(curvature) <= 0.001) {
-    rear_stering_angle_ += std::atan(
-      -KD_ * lateral_deviation / 4 + KD2_ * (course_deviation - 5 / 180. * M_PI * 0) / KD_);
+    if (std::abs(curvature) <= 0.001) {
+      rear_stering_angle_ += std::atan(
+        -KD_ * (lateral_deviation - desired_lateral_deviation) / 4 +
+        KD2_ * (course_deviation - desired_course_deviation) / KD_);
+    } else {
+      double alpha = 1 - curvature * (lateral_deviation - desired_lateral_deviation);
+      double delta = KD_ * KD_ / alpha - 4 * curvature * KD2_ *
+        (course_deviation - desired_course_deviation);
+      rear_stering_angle_ += std::atan((KD_ - std::sqrt(delta)) / (2 * curvature));
+    }
+
+    if (std::abs(rear_stering_angle_) > M_PI_4) { // ???
+      rear_stering_angle_ += std::copysign(M_PI_2, -rear_stering_angle_);
+    }
+
+    return rear_stering_angle_;
   } else {
-    double alpha = 1 - curvature * lateral_deviation;
-    double delta = KD_ * KD_ / alpha - 4 * curvature * KD2_ *
-      (course_deviation - 5 / 180. * M_PI * 0);
-    rear_stering_angle_ += std::atan((KD_ - std::sqrt(delta)) / (2 * curvature));
+    return 0;
   }
-
-  if (std::abs(rear_stering_angle_) > M_PI_4) {  // ???
-    rear_stering_angle_ += std::copysign(M_PI_2, -rear_stering_angle_);
-  }
-
-  return rear_stering_angle_;
 }
 
 }  // namespace core
