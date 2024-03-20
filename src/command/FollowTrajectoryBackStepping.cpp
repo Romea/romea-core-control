@@ -71,7 +71,8 @@ double FollowTrajectoryBackStepping::computeAngularSpeed(
   double & omega_d)
 {
 
-  omega_d = std::atan2(kp_ * (lateral_deviation - desired_lateral_deviation), 1);
+  double alpha = 1 - curvature * lateral_deviation;
+  omega_d = std::atan2(kp_ * (lateral_deviation - desired_lateral_deviation), alpha);
 
   if (std::abs(omega_d) > maximal_omega_d_) {
     omega_d = copysign(maximal_omega_d_, omega_d);
@@ -80,8 +81,8 @@ double FollowTrajectoryBackStepping::computeAngularSpeed(
   double error = course_deviation - omega_d;
   update_integral_(lateral_deviation, error);
 
-  double angular_speed_command = kd_ * error + ki_ * i_ -
-    (linear_speed * curvature * std::cos(course_deviation)) / (1 - curvature * lateral_deviation);
+  double angular_speed_command = sign(linear_speed) * (kd_ * error + ki_ * i_) +
+    (linear_speed * curvature * std::cos(course_deviation)) / alpha;
 
   if (std::abs(angular_speed_command) > maximal_angular_speed) {
     angular_speed_command = std::copysign(maximal_angular_speed, angular_speed_command);
