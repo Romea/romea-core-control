@@ -34,10 +34,10 @@ Project Title is released under the Apache License 2.0. See the LICENSE file for
 
 ## **Authors**
 
-The Romea Core Control library, created by **[Jean Laneurit](https://github.com/username)**, is the result of extensive research conducted by the robotic team of the **INRAE  TSCF** unit. This project benefited from the valuable contributions of researchers, PhD students, postdoctoral fellows, and external partners, all working under the supervision of **[Roland Lenain](roland.lenain@inrae.fr)**.
+The Romea Core Control library, created by **Jean Laneurit**, is the result of extensive research conducted by the robotic team of the **INRAE  TSCF** unit. This project benefited from the valuable contributions of researchers, PhD students, postdoctoral fellows, and external partners, all working under the supervision of **Roland Lenain**.
 
 TODO add list of contributors
 
 ## **Contact**
 
-If you have any questions or comments about Romea Core Control, please contact **[Jean Laneurit](jean.laneurit@inrae.fr)** or **[Roland Lenain](roland.lenain@inrae.fr)** 
+If you have any questions or comments about Romea Core Control, please contact **[Jean Laneurit](mailto:jean.laneurit@inrae.fr)** or **[Roland Lenain](mailto:roland.lenain@inrae.fr)** 
