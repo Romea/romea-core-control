@@ -30,13 +30,13 @@ If you'd like to contribute to Project Title, here are some guidelines:
 
 ## **License**
 
-Project Title is released under the Apache License 2.0. See the file for details.
+Project Title is released under the Apache License 2.0. See the LICENSE file for details.
 
 ## **Authors**
 
 The Romea Core Control library, created by **[Jean Laneurit](https://github.com/username)**, is the result of extensive research conducted by the robotic team of the **INRAE  TSCF** unit. This project benefited from the valuable contributions of researchers, PhD students, postdoctoral fellows, and external partners, all working under the supervision of **[Roland Lenain](roland.lenain@inrae.fr)**.
 
-TODO add list
+TODO add list of contributors
 
 ## **Contact**
 
