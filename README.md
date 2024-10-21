@@ -1,6 +1,6 @@
-# Romea Core Control
+# romea_core_control #
 
-The **Romea Core Control** library provides a robust set of control algorithms designed to enhance robotic coordination and precision. It includes features such as **Formation Control**, which enables the synchronized movement of multiple robots, and **Trajectory Tracking** for the accurate following of predefined paths. Additionally, the library offers **Slip Estimation** algorithms to detect and compensate for slip during robot motion.
+This project is a C++ library that provides a robust set of control algorithms designed to enhance robotic coordination and precision. It includes features such as **Formation Control**, which enables the synchronized movement of multiple robots, and **Trajectory Tracking** for the accurate following of predefined paths. Additionally, the library offers **Slip Estimation** algorithms to detect and compensate for slip during robot motion.
 
 
 ## **Usage**
@@ -34,10 +34,10 @@ This project is released under the Apache License 2.0. See the LICENSE file for 
 
 ## **Authors**
 
-The Romea Core Control library, created by **Jean Laneurit**, is the result of extensive research conducted by the robotic team of the **INRAE  TSCF** unit. This project benefited from the valuable contributions of researchers, PhD students, postdoctoral fellows, and external partners, all working under the supervision of **Roland Lenain**.
+The romea_core_control library, created by **Jean Laneurit**, is the result of extensive research conducted by the robotic team of the **INRAE  TSCF** unit. This project benefited from the valuable contributions of researchers, PhD students, postdoctoral fellows, and external partners, all working under the supervision of **Roland Lenain**.
 
 TODO add list of contributors
 
 ## **Contact**
 
-If you have any questions or comments about Romea Core Control, please contact **[Jean Laneurit](mailto:jean.laneurit@inrae.fr)** or **[Roland Lenain](mailto:roland.lenain@inrae.fr)** 
+If you have any questions or comments about romea_core_control library, please contact **[Jean Laneurit](mailto:jean.laneurit@inrae.fr)** or **[Roland Lenain](mailto:roland.lenain@inrae.fr)** 
