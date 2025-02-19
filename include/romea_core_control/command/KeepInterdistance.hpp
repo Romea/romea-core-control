@@ -36,72 +36,72 @@ public:
   explicit KeepInterdistance(double sampling_period);
 
   double computeFollowerSpeed(
-    const double & desired_interdistance,
-    const double & interdistance,
-    const double & leader_linear_speed,
-    const double & follower_maximal_linear_speed);
+    double desired_interdistance,
+    double interdistance,
+    double leader_linear_speed,
+    double follower_maximal_linear_speed);
 
 
   double computeFollowerSpeed(
-    const double & desired_interdistance,
-    const double & interdistance,
-    const double & leader_linear_speed,
-    const double & follower_maximal_linear_speed,
-    const double & follower_lat_dev,
-    const double & follower_ang_dev,
-    const double & courbure,
-    const double & follower_linear_speed);
+    double desired_interdistance,
+    double interdistance,
+    double leader_linear_speed,
+    double follower_maximal_linear_speed,
+    double follower_lat_dev,
+    double follower_ang_dev,
+    double courbure,
+    double follower_linear_speed);
 
 
   double computeFollowerSpeed(
-    const double & desired_interdistance,
-    const double & interdistance,
-    const double & follower_lateral_deviation,
-    const double & follower_linear_speed,
-    const double & follower_maximal_linear_speed);
+    double desired_interdistance,
+    double interdistance,
+    double follower_lateral_deviation,
+    double follower_linear_speed,
+    double follower_maximal_linear_speed);
 
   double computeFollowerSpeed(
-    const double & desired_interdistance,
-    const double & desired_lateral_deviation,
-    const double & follower_interdistance,
-    const double & leader_interdistance,
-    const double & leader_linear_speed,
-    const double & follower_lateral_deviation,
-    const double & follower_course_deviation,
-    const double & follower_linear_speed,
-    const double & follower_maximal_linear_speed,
-    const double & desired_angular_deviation,
-    const double & yaw_rate_leader);
+    double desired_interdistance,
+    double desired_lateral_deviation,
+    double follower_interdistance,
+    double leader_interdistance,
+    double leader_linear_speed,
+    double follower_lateral_deviation,
+    double follower_course_deviation,
+    double follower_linear_speed,
+    double follower_maximal_linear_speed,
+    double desired_angular_deviation,
+    double yaw_rate_leader);
 
   double computeFollowerSpeed(
-    const double & desired_interdistance,
-    const double & interdistance,
-    const double & leader_lateral_deviation,
-    const double & leader_course_deviation,
-    const double & leader_curvature,
-    const double & leader_linear_speed,
-    const double & leader_rear_streering_angle,
-    const double & leader_rear_sliding_angle,
-    const double & follower_lateral_deviation,
-    const double & follower_course_deviation,
-    const double & follower_curvature,
-    const double & follower_linear_speed,
-    const double & follower_rear_streering_angle,
-    const double & follower_rear_sliding_angle,
-    const double & follower_maximal_linear_speed);
+    double desired_interdistance,
+    double interdistance,
+    double leader_lateral_deviation,
+    double leader_course_deviation,
+    double leader_curvature,
+    double leader_linear_speed,
+    double leader_rear_streering_angle,
+    double leader_rear_sliding_angle,
+    double follower_lateral_deviation,
+    double follower_course_deviation,
+    double follower_curvature,
+    double follower_linear_speed,
+    double follower_rear_streering_angle,
+    double follower_rear_sliding_angle,
+    double follower_maximal_linear_speed);
 
   void reset();
 
 private:
-//  double clampLinearSpeed_(const double & linear_speed,
-//                           const double & maximal_linear_speed);
+//  double clampLinearSpeed_(double linear_speed,
+//                           double maximal_linear_speed);
 
-  double offsetFreeLinearSpeed_(const double & linear_speed);
+  double offsetFreeLinearSpeed_(double linear_speed);
 
   void updateLongitudinalDeviation_(
-    const double & interdistance,
-    const double & desired_interdistance,
-    const double & follower_linear_speed);
+    double interdistance,
+    double desired_interdistance,
+    double follower_linear_speed);
 
 private:
   double sampling_period_;

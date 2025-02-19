@@ -40,67 +40,67 @@ public:
 
 public:
   FollowMe(
-    const double & sampling_period,
+    double sampling_period,
     const Parameters & parameters);
 
-  void setDesiredLateralDeviation(const double & desired_lat_dev);
+  void setDesiredLateralDeviation(double desired_lat_dev);
 
-  const double & getDesiredLateralDeviation()const;
+  double getDesiredLateralDeviation()const;
 
   double computeAngularSpeed(
-    const double & lateral_deviation,
-    const double & course_deviation,
-    const double & maximal_angular_speed,
+    double lateral_deviation,
+    double course_deviation,
+    double maximal_angular_speed,
     double & omega_d,
     double & theta_error);
 
   FrontRearData computeSteeringAngles(
-    const double & wheelbase,
-    const double & lateral_deviation,
-    const double & course_deviation,
-    const double & rear_steering_angle,
-    const double & maximal_front_steering_angle,
-    const double & maximal_rear_steering_angle,
+    double wheelbase,
+    double lateral_deviation,
+    double course_deviation,
+    double rear_steering_angle,
+    double maximal_front_steering_angle,
+    double maximal_rear_steering_angle,
     double & omega_d,
     double & theta_consigne,
-    const double & vitesse,
-    const double & yaw_rate_leader,
-    const double & desired_longitudinal_distance);
+    double vitesse,
+    double yaw_rate_leader,
+    double desired_longitudinal_distance);
 
   FrontRearData computeSteeringAngles(
-    const double & wheelbase,
-    const double & lateral_deviation,
-    const double & course_deviation,
-    const double & courbure,
-    const double & speed,
-    const double & rear_steering_angle,
-    const double & rear_sliding_angle,
-    const double & front_sliding_angle,
-    const double & minimal_theta,
-    const double & maximal_theta,
-    const double & maximal_front_steering_angle,
-    const double & maximal_rear_steering_angle,
+    double wheelbase,
+    double lateral_deviation,
+    double course_deviation,
+    double courbure,
+    double speed,
+    double rear_steering_angle,
+    double rear_sliding_angle,
+    double front_sliding_angle,
+    double minimal_theta,
+    double maximal_theta,
+    double maximal_front_steering_angle,
+    double maximal_rear_steering_angle,
     double & omega_d,
     double & theta_consigne);
 
 
   FrontRearData computeSteeringAngles(
-    const double & wheelbase,
-    const double & lateral_deviation,
-    const double & course_deviation,
-    const double & curvature,
-    const double & speed,
-    const double & rear_steering_angle,
-    const double & rear_sliding_angle,
-    const double & front_sliding_angle,
-    const double & minimal_theta,
-    const double & maximal_theta,
-    const double & maximal_front_steering_angle,
-    const double & maximal_rear_steering_angle,
-    const double & courbe0,
-    const double & courbe1,
-    const double & courbe2,
-    const double & lambda,
+    double wheelbase,
+    double lateral_deviation,
+    double course_deviation,
+    double curvature,
+    double speed,
+    double rear_steering_angle,
+    double rear_sliding_angle,
+    double front_sliding_angle,
+    double minimal_theta,
+    double maximal_theta,
+    double maximal_front_steering_angle,
+    double maximal_rear_steering_angle,
+    double courbe0,
+    double courbe1,
+    double courbe2,
+    double lambda,
     double & omega_d,
     double & theta_consigne);
 

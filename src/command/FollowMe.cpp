@@ -38,7 +38,7 @@ namespace core
 
 //-----------------------------------------------------------------------------
 FollowMe::FollowMe(
-  const double & sampling_period,
+  double sampling_period,
   const Parameters & parameters)
 : sampling_period_(sampling_period),
   kp_(parameters.kp),
@@ -57,7 +57,7 @@ void FollowMe::reset()
 }
 
 //-----------------------------------------------------------------------------
-void FollowMe::setDesiredLateralDeviation(const double & desired_lat_dev)
+void FollowMe::setDesiredLateralDeviation(double desired_lat_dev)
 {
   if (std::abs(desired_lat_dev - desired_lat_dev_) > 0.1) {
     desired_lat_dev_ = desired_lat_dev;
@@ -66,16 +66,16 @@ void FollowMe::setDesiredLateralDeviation(const double & desired_lat_dev)
 }
 
 //-----------------------------------------------------------------------------
-const double & FollowMe::getDesiredLateralDeviation()const
+double FollowMe::getDesiredLateralDeviation()const
 {
   return desired_lat_dev_;
 }
 
 //-----------------------------------------------------------------------------
 double FollowMe::computeAngularSpeed(
-  const double & lateral_deviation,
-  const double & course_deviation,
-  const double & maximal_angular_speed,
+  double lateral_deviation,
+  double course_deviation,
+  double maximal_angular_speed,
   double & omega_d,
   double & theta_error)
 {
@@ -118,17 +118,17 @@ double FollowMe::computeAngularSpeed(
 
 //-----------------------------------------------------------------------------
 FrontRearData FollowMe::computeSteeringAngles(
-  const double & wheelbase,
-  const double & lateral_deviation,
-  const double & course_deviation,
-  const double & rear_steering_angle,
-  const double & maximal_front_steering_angle,
-  const double & maximal_rear_steering_angle,
+  double wheelbase,
+  double lateral_deviation,
+  double course_deviation,
+  double rear_steering_angle,
+  double maximal_front_steering_angle,
+  double maximal_rear_steering_angle,
   double & omega_d,
   double & theta_consigne,
-  const double & vitesse,
-  const double & yaw_rate_leader,
-  const double & desired_longitudinal_distance)
+  double vitesse,
+  double yaw_rate_leader,
+  double desired_longitudinal_distance)
 {
   assert(std::abs(kp_) > 0);
   assert(std::abs(kd_) > 0);
@@ -219,18 +219,18 @@ FrontRearData FollowMe::computeSteeringAngles(
 
 //-----------------------------------------------------------------------------
 FrontRearData FollowMe::computeSteeringAngles(
-  const double & wheelbase,
-  const double & lateral_deviation,
-  const double & course_deviation,
-  const double & curvature,
-  const double & /*speed*/,
-  const double & rear_steering_angle,
-  const double & rear_sliding_angle,
-  const double & front_sliding_angle,
-  const double & minimal_theta,
-  const double & maximal_theta,
-  const double & maximal_front_steering_angle,
-  const double & maximal_rear_steering_angle,
+  double wheelbase,
+  double lateral_deviation,
+  double course_deviation,
+  double curvature,
+  double /*speed*/,
+  double rear_steering_angle,
+  double rear_sliding_angle,
+  double front_sliding_angle,
+  double minimal_theta,
+  double maximal_theta,
+  double maximal_front_steering_angle,
+  double maximal_rear_steering_angle,
   double & omega_d,
   double & theta_consigne)
 {
@@ -315,22 +315,22 @@ FrontRearData FollowMe::computeSteeringAngles(
 
 //-----------------------------------------------------------------------------
 FrontRearData FollowMe::computeSteeringAngles(
-  const double & wheelbase,
-  const double & lateral_deviation,
-  const double & course_deviation,
-  const double & curvature,
-  const double & /*speed*/,
-  const double & rear_steering_angle,
-  const double & rear_sliding_angle,
-  const double & front_sliding_angle,
-  const double & minimal_theta,
-  const double & maximal_theta,
-  const double & front_maximal_steering_angle,
-  const double & rear_maximal_steering_angle,
-  const double & courbe0,
-  const double & courbe1,
-  const double & courbe2,
-  const double & lambda,
+  double wheelbase,
+  double lateral_deviation,
+  double course_deviation,
+  double curvature,
+  double /*speed*/,
+  double rear_steering_angle,
+  double rear_sliding_angle,
+  double front_sliding_angle,
+  double minimal_theta,
+  double maximal_theta,
+  double front_maximal_steering_angle,
+  double rear_maximal_steering_angle,
+  double courbe0,
+  double courbe1,
+  double courbe2,
+  double lambda,
   double & omega_d,
   double & theta_consigne)
 {

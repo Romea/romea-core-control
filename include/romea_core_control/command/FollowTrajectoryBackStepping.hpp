@@ -42,29 +42,29 @@ public:
 
 public:
   FollowTrajectoryBackStepping(
-    const double & sampling_period,
-    const double & wheelbase,
+    double sampling_period,
+    double wheelbase,
     const Parameters & parameters);
 
   double computeAngularSpeed(
-    const double & lateral_deviation,
-    const double & course_deviation,
-    const double & curvature,
-    const double & linear_speed,
-    const double & maximal_angular_speed,
-    const double & desired_lateral_deviation,
+    double lateral_deviation,
+    double course_deviation,
+    double curvature,
+    double linear_speed,
+    double maximal_angular_speed,
+    double desired_lateral_deviation,
     double & omega_d);
 
   FrontRearData computeSteeringAngles(
-    const double & lateral_deviation,
-    const double & course_deviation,
-    const double & curvature,
-    const double & rear_steering_angle,
-    const double & rear_sliding_angle,
-    const double & front_sliding_angle,
-    const double & maximal_front_steering_angle,
-    const double & maximal_rear_steering_angle,
-    const double & desired_lateral_deviation,
+    double lateral_deviation,
+    double course_deviation,
+    double curvature,
+    double rear_steering_angle,
+    double rear_sliding_angle,
+    double front_sliding_angle,
+    double maximal_front_steering_angle,
+    double maximal_rear_steering_angle,
+    double desired_lateral_deviation,
     double & omega_d,
     double & theta_consigne);
 
@@ -72,8 +72,8 @@ public:
 
 private:
   void update_integral_(
-    const double & desired_lateral_deviation,
-    const double & error);
+    double desired_lateral_deviation,
+    double error);
 
 private:
   double wheelbase_;

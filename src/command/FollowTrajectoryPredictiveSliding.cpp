@@ -40,7 +40,7 @@ namespace core
 
 //-----------------------------------------------------------------------------
 FollowTrajectoryPredictiveSliding::FollowTrajectoryPredictiveSliding(
-  const double & whee_base,
+  double whee_base,
   const Parameters & parameters)
 : wheelbase_(whee_base),
   KD_(parameters.front_kp),
@@ -60,7 +60,7 @@ FollowTrajectoryPredictiveSliding::FollowTrajectoryPredictiveSliding(
 }
 
 //-----------------------------------------------------------------------------
-void FollowTrajectoryPredictiveSliding::setFrontKP(const double & kp)
+void FollowTrajectoryPredictiveSliding::setFrontKP(double kp)
 {
   KD_ = kp;
   KP_ = (KD_ * KD_ / 4.);
@@ -68,19 +68,19 @@ void FollowTrajectoryPredictiveSliding::setFrontKP(const double & kp)
 
 //-----------------------------------------------------------------------------
 FrontRearData FollowTrajectoryPredictiveSliding::computeSteeringAngles(
-  const double & lateral_deviation,
-  const double & course_deviation,
-  const double & curvature,
-  const double & future_curvature,
-  const double & front_steering_angle,
-  const double & rear_steering_angle,
-  const double & front_sliding_angle,
-  const double & rear_sliding_angle,
-  const double & front_maximal_steering_angle,
-  const double & rear_maximal_steering_angle,
-  const double & desired_lateral_deviation,
-  const double & desired_course_deviation,
-  const double & future_desired_lateral_deviation)
+  double lateral_deviation,
+  double course_deviation,
+  double curvature,
+  double future_curvature,
+  double front_steering_angle,
+  double rear_steering_angle,
+  double front_sliding_angle,
+  double rear_sliding_angle,
+  double front_maximal_steering_angle,
+  double rear_maximal_steering_angle,
+  double desired_lateral_deviation,
+  double desired_course_deviation,
+  double future_desired_lateral_deviation)
 {
   // compute front steering angle
   double front_steering_angle_command = computeFrontSteeringAngle_(
@@ -119,16 +119,16 @@ FrontRearData FollowTrajectoryPredictiveSliding::computeSteeringAngles(
 
 //-----------------------------------------------------------------------------
 double FollowTrajectoryPredictiveSliding::computeFrontSteeringAngle_(
-  const double & lateral_deviation,
-  const double & course_deviation,
-  const double & curvature,
-  const double & future_curvature,
-  const double & front_steering_angle,
-  const double & rear_steering_angle,
-  const double & front_sliding_angle,
-  const double & rear_sliding_angle,
-  const double & desired_lateral_deviation,
-  const double & future_desired_lateral_deviation)
+  double lateral_deviation,
+  double course_deviation,
+  double curvature,
+  double future_curvature,
+  double front_steering_angle,
+  double rear_steering_angle,
+  double front_sliding_angle,
+  double rear_sliding_angle,
+  double desired_lateral_deviation,
+  double future_desired_lateral_deviation)
 {
   DeltaM_av2 = DeltaM_av;
   DeltaM_av = front_steering_angle;
@@ -172,7 +172,7 @@ double FollowTrajectoryPredictiveSliding::computeFrontSteeringAngle_(
 
 
 //------------------------------------------------------------------------------
-double FollowTrajectoryPredictiveSliding::commandPred_(const double & CommFutur)
+double FollowTrajectoryPredictiveSliding::commandPred_(double CommFutur)
 {
   //  DeltaM_av2=DeltaM_av;
   //  DeltaM_av=front_steering_angle ;
@@ -244,9 +244,9 @@ double FollowTrajectoryPredictiveSliding::commandPred_(const double & CommFutur)
 
 //------------------------------------------------------------------------------
 std::vector<double> FollowTrajectoryPredictiveSliding::reference_(
-  const double & CommFutur,
-  const double & alpha,
-  const double & feinte1)
+  double CommFutur,
+  double alpha,
+  double feinte1)
 {
   std::vector<double> delta(horizon_ + 3);
 
@@ -260,12 +260,12 @@ std::vector<double> FollowTrajectoryPredictiveSliding::reference_(
 
 //------------------------------------------------------------------------------
 double FollowTrajectoryPredictiveSliding::computeRearSteeringAngle_(
-  const double & lateral_deviation,
-  const double & course_deviation,
-  const double & curvature,
-  const double & rear_sliding_angle,
-  const double & desired_lateral_deviation,
-  const double & desired_course_deviation)
+  double lateral_deviation,
+  double course_deviation,
+  double curvature,
+  double rear_sliding_angle,
+  double desired_lateral_deviation,
+  double desired_course_deviation)
 {
   if (std::isfinite(KD2_)) {
     double rear_stering_angle_command = -course_deviation - rear_sliding_angle;
@@ -286,9 +286,8 @@ double FollowTrajectoryPredictiveSliding::computeRearSteeringAngle_(
     }
 
     return rear_stering_angle_command;
-  } else {
-    return 0;
   }
+  return 0;
 }
 
 }  // namespace core

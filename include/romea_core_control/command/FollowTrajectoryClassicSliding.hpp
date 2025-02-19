@@ -40,41 +40,41 @@ public:
 
 public:
   FollowTrajectoryClassicSliding(
-    const double & wheel_base,
+    double wheel_base,
     const Parameters & parameters);
 
   FrontRearData computeSteeringAngles(
-    const double & lateral_deviation,
-    const double & course_deviation,
-    const double & curvature,
-    const double & front_sliding_angle,
-    const double & rear_sliding_angle,
-    const double & rear_steering_angle,
-    const double & front_maximal_steering_angle,
-    const double & rear_maximal_steering_angle,
-    const double & desired_lateral_deviation,
-    const double & desired_course_deviation);
+    double lateral_deviation,
+    double course_deviation,
+    double curvature,
+    double front_sliding_angle,
+    double rear_sliding_angle,
+    double rear_steering_angle,
+    double front_maximal_steering_angle,
+    double rear_maximal_steering_angle,
+    double desired_lateral_deviation,
+    double desired_course_deviation);
 
 
-  void setFrontKP(const double & kp);
+  void setFrontKP(double kp);
 
 private:
   double computeFrontSteeringAngle_(
-    const double & lateral_deviation,
-    const double & course_deviation,
-    const double & curvature,
-    const double & front_sliding_angle,
-    const double & rear_sliding_angle,
-    const double & desired_lateral_deviation);
+    double lateral_deviation,
+    double course_deviation,
+    double curvature,
+    double front_sliding_angle,
+    double rear_sliding_angle,
+    double desired_lateral_deviation);
 
 
   double computeRearSteeringAngle_(
-    const double & lateral_deviation,
-    const double & course_deviation,
-    const double & curvature,
-    const double & rear_sliding_angle,
-    const double & desired_lateral_deviation,
-    const double & desired_course_deviation);
+    double lateral_deviation,
+    double course_deviation,
+    double curvature,
+    double rear_sliding_angle,
+    double desired_lateral_deviation,
+    double desired_course_deviation);
 
 private:
   double wheelbase_;

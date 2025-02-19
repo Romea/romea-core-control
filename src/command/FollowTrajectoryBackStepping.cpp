@@ -38,8 +38,8 @@ namespace core
 
 //-----------------------------------------------------------------------------
 FollowTrajectoryBackStepping::FollowTrajectoryBackStepping(
-  const double & sampling_period,
-  const double & wheelbase,
+  double sampling_period,
+  double wheelbase,
   const Parameters & parameters)
 : wheelbase_(wheelbase),
   sampling_period_(sampling_period),
@@ -62,12 +62,12 @@ void FollowTrajectoryBackStepping::reset()
 
 //-----------------------------------------------------------------------------
 double FollowTrajectoryBackStepping::computeAngularSpeed(
-  const double & lateral_deviation,
-  const double & course_deviation,
-  const double & curvature,
-  const double & linear_speed,
-  const double & maximal_angular_speed,
-  const double & desired_lateral_deviation,
+  double lateral_deviation,
+  double course_deviation,
+  double curvature,
+  double linear_speed,
+  double maximal_angular_speed,
+  double desired_lateral_deviation,
   double & omega_d)
 {
 
@@ -94,15 +94,15 @@ double FollowTrajectoryBackStepping::computeAngularSpeed(
 
 //-----------------------------------------------------------------------------
 FrontRearData FollowTrajectoryBackStepping::computeSteeringAngles(
-  const double & lateral_deviation,
-  const double & course_deviation,
-  const double & curvature,
-  const double & rear_steering_angle,
-  const double & rear_sliding_angle,
-  const double & front_sliding_angle,
-  const double & maximal_front_steering_angle,
-  const double & maximal_rear_steering_angle,
-  const double & desired_lateral_deviation,
+  double lateral_deviation,
+  double course_deviation,
+  double curvature,
+  double rear_steering_angle,
+  double rear_sliding_angle,
+  double front_sliding_angle,
+  double maximal_front_steering_angle,
+  double maximal_rear_steering_angle,
+  double desired_lateral_deviation,
   double & omega_d,
   double & theta_consigne)
 {
@@ -148,8 +148,8 @@ FrontRearData FollowTrajectoryBackStepping::computeSteeringAngles(
 
 //-----------------------------------------------------------------------------
 void FollowTrajectoryBackStepping::update_integral_(
-  const double & desired_lateral_deviation,
-  const double & error)
+  double desired_lateral_deviation,
+  double error)
 {
   if (std::abs(desired_lateral_deviation - last_desired_lateral_deviation_) >
     std::numeric_limits<double>::epsilon())
