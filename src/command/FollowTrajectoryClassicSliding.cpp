@@ -154,7 +154,7 @@ double FollowTrajectoryClassicSliding::computeRearSteeringAngle_(
     rear_steering_angle_ += std::copysign(M_PI_2, -rear_steering_angle_);
   }
 
-  return rear_steering_angle_;
+  return -rear_steering_angle_;
 }
 
 }  // namespace core

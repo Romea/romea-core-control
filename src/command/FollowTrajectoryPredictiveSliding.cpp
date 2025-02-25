@@ -291,7 +291,7 @@ double FollowTrajectoryPredictiveSliding::computeRearSteeringAngle_(
     rear_stering_angle_command += std::copysign(M_PI_2, -rear_stering_angle_command);
   }
 
-  return rear_stering_angle_command;
+  return -rear_stering_angle_command;
 }
 
 } // namespace romea::core
