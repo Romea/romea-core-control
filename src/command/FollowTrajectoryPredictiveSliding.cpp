@@ -32,9 +32,8 @@
 
 //}
 
-namespace romea
-{
-namespace core
+
+namespace romea::core
 {
 
 
@@ -177,12 +176,12 @@ double FollowTrajectoryPredictiveSliding::commandPred_(double CommFutur)
   //  DeltaM_av2=DeltaM_av;
   //  DeltaM_av=front_steering_angle ;
 
-  double feinte, delta, alpha = 0.2;
+  double alpha = 0.2;
 
   Eigen::Matrix3d Fm, Ident, mult2;
   Eigen::Vector3d Gm, Etat;
   Eigen::RowVector3d mult, Cm;
-  double CommFut, R1 = 0, R2 = 0, Ai, di;
+  double R1 = 0, R2 = 0;
 
   //------------------------------------------------
   // Modele interne
@@ -212,8 +211,8 @@ double FollowTrajectoryPredictiveSliding::commandPred_(double CommFutur)
   Etat(1, 0) = DeltaM_av2;
   Etat(2, 0) = DeltaContr_av;
 
-  CommFut = CommFutur;
-  feinte = DeltaM_av;
+  double CommFut = CommFutur;
+  double feinte = DeltaM_av;
 
   mult(0, 0) = 1;
   mult(0, 1) = 0;
@@ -225,7 +224,7 @@ double FollowTrajectoryPredictiveSliding::commandPred_(double CommFutur)
   for (int i = 1; i < (horizon_ + 1); i++) {
     // Calcul intermediaire Ai
     mult2 = Fm;
-    Ai = mult * Ident * Gm;
+    double Ai = mult * Ident * Gm;
     for (int j = 1; j < (i + 1); j++) {
       Ai = Ai + mult * mult2 * Gm;
       mult2 = mult2 * Fm;
@@ -233,12 +232,13 @@ double FollowTrajectoryPredictiveSliding::commandPred_(double CommFutur)
 
     // Calcul intermediaire di
     CommFut = Ref[i];
-    di = CommFut - (Cm * mult2 * Etat);
+    double di = CommFut - (Cm * mult2 * Etat);
 
     R2 = R2 + Ai * di;
     R1 = R1 + (Ai * Ai);
   }
-  delta = R2 / R1;
+
+  double delta = R2 / R1;
   return delta;
 }
 
@@ -267,28 +267,32 @@ double FollowTrajectoryPredictiveSliding::computeRearSteeringAngle_(
   double desired_lateral_deviation,
   double desired_course_deviation)
 {
-  if (std::isfinite(KD2_)) {
-    double rear_stering_angle_command = -course_deviation - rear_sliding_angle;
-
-    if (std::abs(curvature) <= 0.001) {
-      rear_stering_angle_command += std::atan(
-        -KD_ * (lateral_deviation - desired_lateral_deviation) / 4 +
-        KD2_ * (course_deviation - desired_course_deviation) / KD_);
-    } else {
-      double alpha = 1 - curvature * (lateral_deviation - desired_lateral_deviation);
-      double delta = KD_ * KD_ / alpha - 4 * curvature * KD2_ *
-        (course_deviation - desired_course_deviation);
-      rear_stering_angle_command += std::atan((KD_ - std::sqrt(delta)) / (2 * curvature));
-    }
-
-    if (std::abs(rear_stering_angle_command) > M_PI_4) { //  ???
-      rear_stering_angle_command += std::copysign(M_PI_2, -rear_stering_angle_command);
-    }
-
-    return rear_stering_angle_command;
+  // If rear Kd is not defined, return no angle
+  if (std::isnan(KD2_)) {
+    return 0;
   }
-  return 0;
+
+  double rear_stering_angle_command = -course_deviation - rear_sliding_angle;
+
+  // if the trajectory is a straight line
+  if (std::abs(curvature) <= 0.001) {
+    rear_stering_angle_command += std::atan(
+      -KD_ * (lateral_deviation - desired_lateral_deviation) / 4 +
+      KD2_ * (course_deviation - desired_course_deviation) / KD_);
+  } else {
+    double alpha = 1 - curvature * (lateral_deviation - desired_lateral_deviation);
+    double delta = KD_ * KD_ / alpha - 4 * curvature * KD2_ *
+      (course_deviation - desired_course_deviation);
+    rear_stering_angle_command += std::atan((KD_ - std::sqrt(delta)) / (2 * curvature));
+  }
+
+  // if the angle is greater than 90°, steer in the other direction with a smaller angle
+  if (std::abs(rear_stering_angle_command) > M_PI_4) { //  ???
+    rear_stering_angle_command += std::copysign(M_PI_2, -rear_stering_angle_command);
+  }
+
+  return rear_stering_angle_command;
 }
 
-}  // namespace core
-}  // namespace romea
+} // namespace romea::core
+

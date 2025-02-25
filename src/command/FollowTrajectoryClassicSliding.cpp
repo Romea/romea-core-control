@@ -17,6 +17,7 @@
 #include <Eigen/Dense>
 
 // std
+#include <cmath>
 #include <iostream>
 
 // romea core
@@ -130,28 +131,30 @@ double FollowTrajectoryClassicSliding::computeRearSteeringAngle_(
   double desired_lateral_deviation,
   double desired_course_deviation)
 {
-  if (std::isfinite(KD2_)) {
-    double rear_stering_angle_ = -course_deviation - rear_sliding_angle;
-
-    if (std::abs(curvature) <= 0.001) {
-      rear_stering_angle_ += std::atan(
-        -KD_ * (lateral_deviation - desired_lateral_deviation) / 4 +
-        KD2_ * (course_deviation - desired_course_deviation) / KD_);
-    } else {
-      double alpha = 1 - curvature * (lateral_deviation - desired_lateral_deviation);
-      double delta = KD_ * KD_ / alpha - 4 * curvature * KD2_ *
-        (course_deviation - desired_course_deviation);
-      rear_stering_angle_ += std::atan((KD_ - std::sqrt(delta)) / (2 * curvature));
-    }
-
-    if (std::abs(rear_stering_angle_) > M_PI_4) { // ???
-      rear_stering_angle_ += std::copysign(M_PI_2, -rear_stering_angle_);
-    }
-
-    return rear_stering_angle_;
-  } else {
+  // if rear Kd is not defined, use a null angle
+  if (std::isnan(KD2_)) {
     return 0;
   }
+
+  double rear_steering_angle_ = -course_deviation - rear_sliding_angle;
+
+  // if it is a straight line
+  if (std::abs(curvature) <= 0.001) {
+    rear_steering_angle_ += std::atan(
+      -KD_ * (lateral_deviation - desired_lateral_deviation) / 4 +
+      KD2_ * (course_deviation - desired_course_deviation) / KD_);
+  } else {
+    double alpha = 1 - curvature * (lateral_deviation - desired_lateral_deviation);
+    double delta = KD_ * KD_ / alpha - 4 * curvature * KD2_ *
+      (course_deviation - desired_course_deviation);
+    rear_steering_angle_ += std::atan((KD_ - std::sqrt(delta)) / (2 * curvature));
+  }
+
+  if (std::abs(rear_steering_angle_) > M_PI_4) { // ???
+    rear_steering_angle_ += std::copysign(M_PI_2, -rear_steering_angle_);
+  }
+
+  return rear_steering_angle_;
 }
 
 }  // namespace core
