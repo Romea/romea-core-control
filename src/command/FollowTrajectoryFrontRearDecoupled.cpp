@@ -132,7 +132,7 @@ double FollowTrajectoryFrontRearDecoupled::computeFrontSteeringAngle_(
   double lambda2 = (future_curvature * cos(thetaT2)) / (1 - future_curvature * lateral_deviation);
 
   double front_command_dyn_ = 0;
-  if (linear_speed > 0.5) {
+  if (std::abs(linear_speed) > 1e-3) {
     front_command_dyn_ =
       std::atan(
         ((wheelbase_ * lambda2) / (std::cos(rear_steering_angle + rear_sliding_angle))) +
@@ -155,7 +155,7 @@ double FollowTrajectoryFrontRearDecoupled::computeRearSteeringAngle_(
             << " rsb " << rear_sliding_angle << std::endl;
 
   double rear_command_dyn_ = 0;
-  if (std::abs(linear_speed) > 0.8) {
+  if (std::abs(linear_speed) > 1e-3) {
     double ConvInter = (-params_.rear_kp * lateral_deviation) / (linear_speed);
     if (ConvInter > 0.9) {
       ConvInter = 0.9;
