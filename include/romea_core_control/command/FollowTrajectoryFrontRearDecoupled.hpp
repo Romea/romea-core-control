@@ -46,7 +46,7 @@ FrontRearData computeSteeringAngles(
   double front_maximal_steering_angle,
   double rear_maximal_steering_angle,
   double desired_lateral_deviation,
-  double desired_course_deviation);
+  double desired_course_deviation) const;
 
 private:
   double computeFrontSteeringAngle_(
@@ -58,13 +58,13 @@ private:
     double front_steering_angle,
     double rear_steering_angle,
     double front_sliding_angle,
-    double rear_sliding_angle);
+    double rear_sliding_angle) const;
 
   double computeRearSteeringAngle_(
     double lateral_deviation,
     double course_deviation,
     double linear_speed,
-    double rear_sliding_angle);
+    double rear_sliding_angle) const;
 
 private:
   double wheelbase_;

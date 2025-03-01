@@ -46,7 +46,7 @@ FrontRearData FollowTrajectoryFrontRearDecoupled::computeSteeringAngles(
   double front_maximal_steering_angle,
   double rear_maximal_steering_angle,
   double desired_lateral_deviation,
-  double /*desired_course_deviation*/)
+  double /*desired_course_deviation*/) const
 {
   double front_steering_angle_command = computeFrontSteeringAngle_(
     -lateral_deviation - desired_lateral_deviation,
@@ -70,10 +70,12 @@ FrontRearData FollowTrajectoryFrontRearDecoupled::computeSteeringAngles(
   double clamped_rear_steering_angle_command =
     clamp(rear_steering_angle_command, -rear_maximal_steering_angle, rear_maximal_steering_angle);
 
-  if (
-    (std::abs(front_steering_angle_command) > front_maximal_steering_angle) &&
-    (std::abs(rear_steering_angle_command) > front_maximal_steering_angle) &&
-    ((front_steering_angle_command * front_steering_angle_command) > 0)) {
+  // this handles a singularity of the control command when the front steering is saturated
+  bool is_singularity =
+    std::abs(front_steering_angle_command) > front_maximal_steering_angle &&
+    std::abs(rear_steering_angle_command) > front_maximal_steering_angle &&
+    std::signbit(front_steering_angle_command) == std::signbit(rear_steering_angle_command);
+  if (is_singularity) {
     rear_steering_angle_command = std::atan(
       std::tan(clamped_rear_steering_angle_command) +
       std::tan(clamped_front_steering_angle_command) - std::tan(front_steering_angle_command));
@@ -86,85 +88,72 @@ FrontRearData FollowTrajectoryFrontRearDecoupled::computeSteeringAngles(
 }
 
 double FollowTrajectoryFrontRearDecoupled::computeFrontSteeringAngle_(
-  double lateral_deviation,  // EcLat    y
-  double course_deviation,   // EcAng    theta
-  double curvature,          // CR obsdynglob
-  double future_curvature,   // courbure future
-  double linear_speed,       // vitesse  v
+  double lateral_deviation,
+  double course_deviation,
+  double curvature,
+  double future_curvature,
+  double linear_speed,
   double /*front_steering_angle*/,
   double rear_steering_angle,
-  double front_sliding_angle,  // BetaF obsdynglob
-  double rear_sliding_angle)   // BetaR obsdynglob
+  double front_sliding_angle,
+  double rear_sliding_angle) const
 {
-  std::cout << " front dynpred " << std::endl;
-  std::cout << "l " << lateral_deviation << " co " << course_deviation << " cu " << curvature
-            << " cuf " << future_curvature << std::endl;
-  std::cout << "s " << linear_speed << " rs " << rear_steering_angle << " fsb "
-            << front_sliding_angle << " rsb  " << rear_sliding_angle << std::endl;
-
-  double kf = params_.front_kp;
+  // std::cout << " front dynpred " << std::endl;
+  // std::cout << "l " << lateral_deviation << " co " << course_deviation << " cu " << curvature
+  //           << " cuf " << future_curvature << std::endl;
+  // std::cout << "s " << linear_speed << " rs " << rear_steering_angle << " fsb "
+  //           << front_sliding_angle << " rsb  " << rear_sliding_angle << std::endl;
 
   double thetaT2 = course_deviation + rear_steering_angle + rear_sliding_angle;
+  double cos_course_deviation = std::cos(course_deviation);
+  double mode_courbure = wheelbase_ * curvature * cos_course_deviation;
 
-  double B1 = (std::sin(thetaT2) /
-               (std::cos(rear_steering_angle + rear_sliding_angle) * std::cos(course_deviation))) -
-              std::tan(rear_steering_angle + rear_sliding_angle);
-
-  double mode_courbure = wheelbase_ * curvature * std::cos(course_deviation);
-
-  double front_lateral_deviation;
+  double front_lateral_deviation = 0.;
   if (std::abs(mode_courbure) < .9) {
     double alpha = std::asin(mode_courbure);
     double e = 0;
-    if (std::abs(curvature) > 0.001) {
+    if (std::abs(curvature) > 1e-3) {
       e = (1 - std::cos(alpha)) / curvature;
     }
     front_lateral_deviation = lateral_deviation - wheelbase_ * sin(course_deviation) + e;
   } else {
     double alpha = std::atan(
       (1 / curvature - lateral_deviation - wheelbase_ * std::sin(course_deviation)) /
-      (wheelbase_ * std::cos(course_deviation)));
-    front_lateral_deviation =
-      wheelbase_ * std::cos(course_deviation) / std::cos(alpha) - (1 / curvature);
+      (wheelbase_ * cos_course_deviation));
+    front_lateral_deviation = wheelbase_ * cos_course_deviation / std::cos(alpha) - (1 / curvature);
   }
 
-  // double YF2_=front_lateral_deviation;
-  double lambda2 = (future_curvature * cos(thetaT2)) / (1 - future_curvature * lateral_deviation);
+  double lambda2 = future_curvature * cos(thetaT2) / (1 - future_curvature * lateral_deviation);
 
   double front_command_dyn_ = 0;
   if (std::abs(linear_speed) > 1e-3) {
-    front_command_dyn_ =
-      std::atan(
-        ((wheelbase_ * lambda2) / (std::cos(rear_steering_angle + rear_sliding_angle))) +
-        ((kf * front_lateral_deviation) /
-         (linear_speed * std::cos(rear_steering_angle + rear_sliding_angle) *
-          (std::cos(course_deviation)))) -
-        B1) +
-      front_sliding_angle;
+    double cos_rear_angle = std::cos(rear_steering_angle + rear_sliding_angle);
+    double B1 = std::sin(thetaT2) / (cos_rear_angle * cos_course_deviation) -
+                std::tan(rear_steering_angle + rear_sliding_angle);
+    front_command_dyn_ = std::atan(
+                           (wheelbase_ * lambda2 / cos_rear_angle) +
+                           (params_.front_kp * front_lateral_deviation /
+                            (linear_speed * cos_rear_angle * cos_course_deviation)) -
+                           B1) +
+                         front_sliding_angle;
   }
 
-  std::cout << "front_command_dyn_  " << front_command_dyn_ << std::endl;
+  // std::cout << "front_command_dyn_  " << front_command_dyn_ << std::endl;
   return front_command_dyn_;
 }
 
 double FollowTrajectoryFrontRearDecoupled::computeRearSteeringAngle_(
-  double lateral_deviation, double course_deviation, double linear_speed, double rear_sliding_angle)
+  double lateral_deviation,
+  double course_deviation,
+  double linear_speed,
+  double rear_sliding_angle) const
 {
-  std::cout << " rear dynpred " << std::endl;
-  std::cout << "l " << lateral_deviation << " co " << course_deviation << " s " << linear_speed
-            << " rsb " << rear_sliding_angle << std::endl;
-
   double rear_command_dyn_ = 0;
   if (std::abs(linear_speed) > 1e-3) {
-    double ConvInter = (-params_.rear_kp * lateral_deviation) / (linear_speed);
-    if (ConvInter > 0.9) {
-      ConvInter = 0.9;
-    }
-    if (ConvInter < -0.9) {
-      ConvInter = -0.9;
-    }
-
-    rear_command_dyn_ = std::asin(ConvInter) - course_deviation - rear_sliding_angle;
+    double conv_inter = -params_.rear_kp * lateral_deviation / linear_speed;
+    // saturate conv_inter to stay in the domain of asin()
+    conv_inter = clamp(conv_inter, -1., 1.);
+    rear_command_dyn_ = std::asin(conv_inter) - course_deviation - rear_sliding_angle;
   }
 
   return rear_command_dyn_;
