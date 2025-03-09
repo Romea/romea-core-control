@@ -24,6 +24,7 @@ add_library(${PROJECT_NAME} SHARED
   src/command/FollowTrajectoryClassicSliding.cpp
   src/command/FollowTrajectoryFrontRearDecoupled.cpp
   src/command/FollowTrajectoryPredictiveSliding.cpp
+  src/command/FollowTrajectorySkidSliding.cpp
   src/command/KeepInterdistance.cpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC

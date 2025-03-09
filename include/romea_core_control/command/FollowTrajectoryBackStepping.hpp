@@ -16,15 +16,10 @@
 #ifndef ROMEA_CORE_CONTROL__COMMAND__FOLLOWTRAJECTORYBACKSTEPPING_HPP_
 #define ROMEA_CORE_CONTROL__COMMAND__FOLLOWTRAJECTORYBACKSTEPPING_HPP_
 
-// std
-#include <utility>
-
 // romea
 #include "romea_core_control/FrontRearData.hpp"
 
-namespace romea
-{
-namespace core
+namespace romea::core
 {
 
 class FollowTrajectoryBackStepping
@@ -92,7 +87,7 @@ private:
   double last_desired_lateral_deviation_;
 };
 
-}  // namespace core
-}  // namespace romea
+} // namespace romea::core
+
 
 #endif  // ROMEA_CORE_CONTROL__COMMAND__FOLLOWME_HPP_

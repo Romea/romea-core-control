@@ -25,14 +25,7 @@
 namespace romea::core
 {
 
-//-----------------------------------------------------------------------------
-FollowTrajectorySkidSliding::FollowTrajectorySkidSliding(
-  double wheelbase, const Parameters & parameters)
-: wheelbase_(wheelbase), params_(parameters)
-{
-}
-
-double FollowTrajectorySkidSliding::computeAngularSpeed(
+double computeBacksteppingSkidSteering(
   double lateral_deviation,
   double course_deviation,
   double curvature,
@@ -42,7 +35,9 @@ double FollowTrajectorySkidSliding::computeAngularSpeed(
   double sliding_angle,
   double maximal_angular_speed,
   double desired_lateral_deviation,
-  double & target_course) const
+  double gain_lateral_kp,
+  double gain_course_kp,
+  double & target_course)
 {
   // This code comes from the section 2.2.6.1 of the Luc Desbos's thesis: "Contribution à
   // l'élaboration de lois de commandes génériques pour le suivi de trajectoire d'engins agricoles
@@ -51,7 +46,7 @@ double FollowTrajectorySkidSliding::computeAngularSpeed(
   double alpha = 1 - curvature * lateral_deviation;
 
   double diff_deviation = lateral_deviation - desired_lateral_deviation;
-  target_course = std::atan2(params_.lateral_kp * diff_deviation, alpha);
+  target_course = std::atan2(gain_lateral_kp * diff_deviation, alpha);
 
   // This situation should never occur but it can be represented by a scenario where the robot
   // try to follow a circular trajectory and the robot is at the center.
@@ -64,11 +59,12 @@ double FollowTrajectorySkidSliding::computeAngularSpeed(
   double course_disturb = course_deviation + sliding_angle;
   double sum_lin_speed = linear_speed + linear_speed_disturbance;
 
-  double ang_speed_course = params_.course_kp * (course_disturb - target_course);
+  double ang_speed_course = gain_course_kp * (course_disturb - target_course);
   ang_speed_course = std::copysign(ang_speed_course, linear_speed);  // negative if lin_speed < 0
   double ang_speed_curvature = curvature * sum_lin_speed * std::cos(course_disturb) / alpha;
   double ang_speed_command = ang_speed_course + ang_speed_curvature - angular_speed_disturbance;
 
+  // saturate angular speed
   if (std::abs(ang_speed_command) > maximal_angular_speed) {
     ang_speed_command = std::copysign(maximal_angular_speed, ang_speed_command);
   }
