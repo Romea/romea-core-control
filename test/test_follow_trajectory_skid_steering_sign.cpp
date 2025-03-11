@@ -35,24 +35,36 @@ void test_various_scenarios(
   const std::function<double(const TestCase &, double)> & compute_angular_speed)
 {
   std::vector<TestCase> test_cases = {
-    {0.2, 0.0, 0, -1},   // left, zero course, straight line
-    {0.2, 1.0, 0, -1},   // left, positive course, straight line
-    {0.2, -1.0, 0, 1},   // left, negative course, straight line
-    {2., -0.05, 0, -1},  // far left, small negative course, straight line
-    {0.0, 0.0, 0, 0},    // center, zero course, straight line
-    {0.0, 1.0, 0, -1},   // center, positive course, straight line
-    {0.0, -1.0, 0, 1},   // center, negative course, straight line
-    {-0.2, 0.0, 0, 1},   // right, zero course, straight line
-    {-0.2, 1.0, 0, -1},  // right, positive course, straight line
-    {-0.2, -1.0, 0, 1},  // right, negative course, straight line
-    {-2., 0.05, 0, 1},   // far right, small positive course, straight line
+    // straight line
+    {0.0, 0.0, 0, 0},    // center, zero course
+    {0.0, 1.0, 0, -1},   // center, positive course
+    {0.0, -1.0, 0, 1},   // center, negative course
+    {0.2, 0.0, 0, -1},   // left, zero course
+    {0.2, 1.0, 0, -1},   // left, positive course
+    {0.2, -1.0, 0, 1},   // left, negative course
+    {2., -0.05, 0, -1},  // far left, small negative course
+    {-0.2, 0.0, 0, 1},   // right, zero course
+    {-0.2, 1.0, 0, -1},  // right, positive course
+    {-0.2, -1.0, 0, 1},  // right, negative course
+    {-2., 0.05, 0, 1},   // far right, small positive course
 
-    {0.0, M_PI_2, 0, -1},   // center, perpendicular (left), straight line
-    {0.0, -M_PI_2, 0, 1},   // center, perpendicular (right), straight line
-    {2.0, M_PI_2, 0, -1},   // far left, perpendicular (left), straight line
-    {2.0, -M_PI_2, 0, 1},   // far left, perpendicular (right), straight line
-    {-2.0, M_PI_2, 0, -1},  // far right, perpendicular (left), straight line
-    {-2.0, -M_PI_2, 0, 1},  // far right, perpendicular (right), straight line
+    {0.0, M_PI_2, 0, -1},   // center, perpendicular (left)
+    {0.0, -M_PI_2, 0, 1},   // center, perpendicular (right)
+    {2.0, M_PI_2, 0, -1},   // far left, perpendicular (left)
+    {2.0, -M_PI_2, 0, 1},   // far left, perpendicular (right)
+    {-2.0, M_PI_2, 0, -1},  // far right, perpendicular (left)
+    {-2.0, -M_PI_2, 0, 1},  // far right, perpendicular (right)
+
+    // circular trajectory
+    {0.0, 0.0, 0.25, 1},   // center, left turn
+    {0.0, -1.0, 0.25, 1},  // center, left turn, negative course
+    {0.0, 0.05, 0.25, 1},  // center, left turn, small positive course
+    {0.0, 1.2, 0.25, -1},  // center, left turn, highly positive course
+
+    {0.0, 0.0, -0.25, -1},    // center, right turn
+    {0.0, 1.0, -0.25, -1},    // center, right turn, positive course
+    {0.0, -0.05, -0.25, -1},  // center, right turn, small negative course
+    {0.0, -1.2, -0.25, 1},    // center, right turn, highly negative course
   };
 
   for (double linear_speed : {0.1, 0.5, 1.0, 2.0, -1.0}) {

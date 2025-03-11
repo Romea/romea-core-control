@@ -20,15 +20,19 @@
 namespace romea::core
 {
 
-class SkidObserversBackstepping
+class SlidingObserversBacksteppingSkid
 {
 public:
   struct Parameters
   {
+    double ky;
+    double k_theta;
+    double ks;
+    double kis;
   };
 
 public:
-  SkidObserversBackstepping(double step_time, YAML::Node load_yaml_file_mobile);
+  SlidingObserversBacksteppingSkid(double step_time, const Parameters & parameters);
 
   void update(
     double epsilon_y,
@@ -42,14 +46,17 @@ public:
 
   void reset();
 
-  VectorXd getEstime();
-  VectorXd getAllEstime();
+  // VectorXd getEstime();
+  // VectorXd getAllEstime();
 
   double getBetaR();
   double getDotThetaP();
   double getDotEpsilonSP();
 
 private:
+  Parameters params_;
+  double step_time_;
+
   double beta_r_estime_ = 0;
   double dot_theta_p_estime_ = 0;
   double dot_epsilon_s_p_estime_ = 0;
@@ -57,13 +64,11 @@ private:
 
   double integral = 0;
 
-  romea::core::FirstOrderButterworth beta_r_estime_f_;
-  romea::core::FirstOrderButterworth dot_theta_p_estime_f_;
-  romea::core::FirstOrderButterworth dot_epsilon_s_p_estime_f_;
-  romea::core::FirstOrderButterworth w_f_;
-  romea::core::FirstOrderButterworth v_f_;
-
-  double step_time_;
+  romea::core::FirstOrderButterworth beta_r_estime_f_{0.0};
+  romea::core::FirstOrderButterworth dot_theta_p_estime_f_{0.0};
+  romea::core::FirstOrderButterworth dot_epsilon_s_p_estime_f_{0.0};
+  romea::core::FirstOrderButterworth w_f_{0.0};
+  romea::core::FirstOrderButterworth v_f_{0.0};
 
   int counter_ = 0;
   bool is_initialized_ = false;
@@ -72,13 +77,13 @@ private:
   double epsilon_s = 0;
   double S_x_old = 0;
   double S_y_old = 0;
-  romea::core::FirstOrderButterworth epsilon_s_point_f_;
+  romea::core::FirstOrderButterworth epsilon_s_point_f_{0.0};
   double epsilon_s_old_ = 0;
 
   double epsilon_y_estime_ = 0;
 
   double epsilon_theta_estime_ = 0;
-  romea::core::FirstOrderButterworth epsilon_theta_point_f_;
+  romea::core::FirstOrderButterworth epsilon_theta_point_f_{0.0};
   double epsilon_theta_old_ = 0;
 
   // dot values at the previous iteration

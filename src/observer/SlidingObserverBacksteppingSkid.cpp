@@ -14,18 +14,19 @@
 
 #include "romea_core_control/observer/SlidingObserverBacksteppingSkid.hpp"
 
+#include <Eigen/Core>
+#include <algorithm>
+
 namespace romea::core
 {
 
-SkidObserversBackstepping::SkidObserversBackstepping(
-  double step_time, YAML::Node load_yaml_file_mobile)
-: SkidObservers(step_time, load_yaml_file_mobile),
-  epsilon_theta_point_f_(0.0),
-  epsilon_s_point_f_(0.0)
+SlidingObserversBacksteppingSkid::SlidingObserversBacksteppingSkid(
+  double step_time, const Parameters & parameters)
+: params_(parameters), step_time_(step_time)
 {
 }
 
-void SkidObserversBackstepping::update(
+void SlidingObserversBacksteppingSkid::update(
   double epsilon_y,
   double epsilon_theta,
   double curvature,
@@ -38,10 +39,10 @@ void SkidObserversBackstepping::update(
   double beta_r_estime = 0;
   double dot_theta_p_estime = 0;
   double dot_epsilon_s_p_estime = 0;
-  VectorXd desired_speed = VectorXd::Zero(3);
+  Eigen::VectorXd desired_speed = Eigen::VectorXd::Zero(3);
   desired_speed(0) = 1;
 
-  if (is_initialized_ == false) {
+  if (!is_initialized_) {
     reset();
     epsilon_y_estime_ = epsilon_y;
     epsilon_theta_estime_ = epsilon_theta;
@@ -64,15 +65,15 @@ void SkidObserversBackstepping::update(
     dot_theta_p_estime_ = dot_theta_p_estime_f_.update(dot_theta_p_estime);
     dot_epsilon_s_p_estime_ = dot_epsilon_s_p_estime_f_.update(dot_epsilon_s_p_estime);
   } else {
-    //speed_longi=v_f_.update(speed_longi);
+    // speed_longi=v_f_.update(speed_longi);
 
-    /*if(speed_longi>0)
-            epsilon_s+=sqrt(pow(S_x-S_x_old,2)+pow(S_y-S_y_old,2));
-        else
-            epsilon_s-=sqrt(pow(S_x-S_x_old,2)+pow(S_y-S_y_old,2));
-
-        S_x_old=S_x;
-        S_y_old=S_y;*/
+    // if (speed_longi > 0)
+    //   epsilon_s += sqrt(pow(S_x - S_x_old, 2) + pow(S_y - S_y_old, 2));
+    // else
+    //   epsilon_s -= sqrt(pow(S_x - S_x_old, 2) + pow(S_y - S_y_old, 2));
+    //
+    // S_x_old = S_x;
+    // S_y_old = S_y;
     epsilon_s = real_speed_longi;
 
     double epsilon_s_point = epsilon_s_point_f_.update((epsilon_s - epsilon_s_old_) / step_time_);
@@ -83,11 +84,6 @@ void SkidObserversBackstepping::update(
     epsilon_theta_old_ = epsilon_theta;
     epsilon_s_old_ = epsilon_s;
 
-    double ky = load_yaml_file_mobile_["cinematic_skid_observer_gain"]["key"].as<double>();
-    double k_theta = load_yaml_file_mobile_["cinematic_skid_observer_gain"]["kew"].as<double>();
-    double ks = load_yaml_file_mobile_["cinematic_skid_observer_gain"]["kes"].as<double>();
-    double kis = load_yaml_file_mobile_["cinematic_skid_observer_gain"]["kies"].as<double>();
-
     double u_theta = w;
 
     int N = 1;
@@ -95,17 +91,20 @@ void SkidObserversBackstepping::update(
     for (int i = 1; i < N + 1; i++) {
       double speed_longi_adapt = speed_longi / cos(beta_r_estime_);
 
-      //double speed_longi_adapt=speed_longi;
+      // double speed_longi_adapt=speed_longi;
 
       double es = epsilon_s_estime_ - epsilon_s_old_;
       double ey = epsilon_y_estime_ - epsilon_y;
       double e_theta = atan2(
         sin(epsilon_theta_estime_ - epsilon_theta), cos(epsilon_theta_estime_ - epsilon_theta));
 
-      /*cout<<"Skid BS es : "<<epsilon_s_estime_-epsilon_s_old_<<endl;
-        cout<<"Skid BS ey : "<<epsilon_y_estime_-epsilon_y<<endl;
-        cout<<"Skid BS e_theta : "<<atan2(sin(epsilon_theta_estime_-epsilon_theta),cos(epsilon_theta_estime_-epsilon_theta))<<endl;
-*/
+      // std::cout << "Skid BS es : " << epsilon_s_estime_ - epsilon_s_old_ << "\n";
+      // std::cout << "Skid BS ey : " << epsilon_y_estime_ - epsilon_y << "\n";
+      // std::cout << "Skid BS e_theta : "
+      //           << atan2(
+      //                sin(epsilon_theta_estime_ - epsilon_theta),
+      //                cos(epsilon_theta_estime_ - epsilon_theta))
+      //           << std::endl;
 
       //double u_theta=w_f_.update(w);
 
@@ -115,38 +114,48 @@ void SkidObserversBackstepping::update(
 
       //---------------version en dot_epsilon_s_p---------------------------------
 
-      /* //estimation du beta en utilisant la distance
-        //dans ce version il y a une approximation pour le calcul de beta car normalement on ne pet pas se placer en distance
-        //curviligne
-        beta_r_estime=(atan2(ky*ey,(1-curvature*epsilon_y))-epsilon_theta);
+      // //estimation du beta en utilisant la distance
+      // //dans ce version il y a une approximation pour le calcul de beta car normalement on ne pet pas se placer en distance
+      // //curviligne
+      // beta_r_estime = (atan2(params_.ky * ey, (1 - curvature * epsilon_y)) - epsilon_theta);
+      //
+      // //estimation du glissement longitudinal
+      // dot_epsilon_s_p_estime =
+      //   params_.ks * es -
+      //   speed_longi * cos(epsilon_theta + beta_r_estime) / (1 - curvature * epsilon_y) +
+      //   epsilon_s_point;
+      //
+      // //estimation du glissement en lacet en utilisant le temps
+      // dot_theta_p_estime = -u_theta + epsilon_theta_point + params_.k_theta * e_theta +
+      //                      curvature * (speed_longi * cos(epsilon_theta + beta_r_estime) /
+      //                                     (1 - curvature * epsilon_y) +
+      //                                   dot_epsilon_s_p_estime);
+      //
+      // //on calcul les epsilon y et theta estimé
+      // dot_epsilon_y_estime = abs(speed_longi) * sin(epsilon_theta + beta_r_estime);
+      // dot_epsilon_s_estime =
+      //   speed_longi * cos(epsilon_theta + beta_r_estime) / (1 - curvature * epsilon_y) +
+      //   dot_epsilon_s_p_estime;
+      // dot_epsilon_theta_estime = w + dot_theta_p_estime -
+      //                            curvature * (speed_longi * cos(epsilon_theta + beta_r_estime) /
+      //                                           (1 - curvature * epsilon_y) +
+      //                                         dot_epsilon_s_p_estime);
 
-        //estimation du glissement longitudinal
-        dot_epsilon_s_p_estime=ks*es-speed_longi*cos(epsilon_theta+beta_r_estime)/(1-curvature*epsilon_y)+epsilon_s_point;
-
-        //estimation du glissement en lacet en utilisant le temps
-        dot_theta_p_estime=-u_theta+epsilon_theta_point+k_theta*e_theta+curvature*(speed_longi*cos(epsilon_theta+beta_r_estime)/
-                            (1-curvature*epsilon_y)+dot_epsilon_s_p_estime);
-
-        //on calcul les epsilon y et theta estimé
-        dot_epsilon_y_estime=abs(speed_longi)*sin(epsilon_theta+beta_r_estime);
-        dot_epsilon_s_estime=speed_longi*cos(epsilon_theta+beta_r_estime)/(1-curvature*epsilon_y)+dot_epsilon_s_p_estime;
-        dot_epsilon_theta_estime=w+dot_theta_p_estime-curvature*(speed_longi*cos(epsilon_theta+beta_r_estime)/(1-curvature*epsilon_y)+dot_epsilon_s_p_estime);
-*/
       //---------------version en vg----------------------------------------------
 
       //estimation du beta en utilisant la distance
-      beta_r_estime = (atan2(ky * ey, (1 - curvature * epsilon_y)) - epsilon_theta);
+      beta_r_estime = (atan2(params_.ky * ey, (1 - curvature * epsilon_y)) - epsilon_theta);
 
       //estimation du glissement longitudinal
-      dot_epsilon_s_p_estime = (ks * es + kis * integral + epsilon_s_point) *
+      dot_epsilon_s_p_estime = (params_.ks * es + params_.kis * integral + epsilon_s_point) *
                                  (1 - curvature * epsilon_y) / cos(epsilon_theta + beta_r_estime) -
                                speed_longi_adapt;
 
-      // cout<<"Skid BS dot_epsilon_s_p_estime : "<<dot_epsilon_s_p_estime<<endl;
+      // std::cout << "Skid BS dot_epsilon_s_p_estime : " << dot_epsilon_s_p_estime << std::endl;
 
       //estimation du glissement en lacet en utilisant le temps
       dot_theta_p_estime =
-        -u_theta + epsilon_theta_point + k_theta * e_theta +
+        -u_theta + epsilon_theta_point + params_.k_theta * e_theta +
         curvature * ((speed_longi_adapt + dot_epsilon_s_p_estime) *
                      cos(epsilon_theta + beta_r_estime) / (1 - curvature * epsilon_y));
 
@@ -154,7 +163,7 @@ void SkidObserversBackstepping::update(
       dot_epsilon_s_estime = ((speed_longi_adapt + dot_epsilon_s_p_estime)) *
                              cos(epsilon_theta + beta_r_estime) / (1 - curvature * epsilon_y);
 
-      //cout<<"Skid BS dot_epsilon_s_estime : "<<dot_epsilon_s_estime<<endl;
+      // std::cout << "Skid BS dot_epsilon_s_estime : " << dot_epsilon_s_estime << std::endl;
 
       dot_epsilon_y_estime =
         (speed_longi_adapt + dot_epsilon_s_p_estime) * sin(epsilon_theta + beta_r_estime);
@@ -181,23 +190,21 @@ void SkidObserversBackstepping::update(
       dot_epsilon_y_estime_n1_ = dot_epsilon_y_estime;
       dot_epsilon_theta_estime_n1_ = dot_epsilon_theta_estime;
 
-      /*cout<<"dot_epsilon_s_p_estime : "<<dot_epsilon_s_p_estime<<endl;
-    cout<<"epsilon_s_point : "<<epsilon_s_point<<endl;
-    cout<<"dot_epsilon_s_estime : "<<dot_epsilon_s_estime<<endl;
-    cout<<"epsilon_s : "<<epsilon_s<<endl;
-    cout<<"es : "<<es<<endl;*/
+      // std::cout << "dot_epsilon_s_p_estime : " << dot_epsilon_s_p_estime << std::endl;
+      // std::cout << "epsilon_s_point : " << epsilon_s_point << std::endl;
+      // std::cout << "dot_epsilon_s_estime : " << dot_epsilon_s_estime << std::endl;
+      // std::cout << "epsilon_s : " << epsilon_s << std::endl;
+      // std::cout << "es : " << es << std::endl;
     }
   }
 
-  counter_++;
-  if (counter_ > 11) {
-    counter_ = 11;
-  }
+  ++counter_;
+  counter_ = std::min(counter_, 11);
 
-  //cout<<"epsilon_theta : "<<epsilon_theta<<endl;
+  //cout<<"epsilon_theta : "<<epsilon_theta<<std::endl;
 }
 
-void SkidObserversBackstepping::reset()
+void SlidingObserversBacksteppingSkid::reset()
 {
   beta_r_estime_ = 0;
   dot_theta_p_estime_ = 0;
@@ -222,21 +229,21 @@ void SkidObserversBackstepping::reset()
   dot_epsilon_theta_estime_n1_ = 0;
 }
 
-VectorXd SkidObserversBackstepping::getEstime()
-{
-  VectorXd result = VectorXd::Zero(2);
-  result(0) = epsilon_y_estime_;
-  result(1) = epsilon_theta_estime_;
-  return (result);
-}
-
-VectorXd SkidObserversBackstepping::getAllEstime()
-{
-  VectorXd result = VectorXd::Zero(3);
-  result(0) = epsilon_y_estime_;
-  result(1) = epsilon_theta_estime_;
-  result(2) = epsilon_s_estime_;
-  return (result);
-}
+// VectorXd SkidObserversBackstepping::getEstime()
+// {
+//   VectorXd result = VectorXd::Zero(2);
+//   result(0) = epsilon_y_estime_;
+//   result(1) = epsilon_theta_estime_;
+//   return (result);
+// }
+//
+// VectorXd SkidObserversBackstepping::getAllEstime()
+// {
+//   VectorXd result = VectorXd::Zero(3);
+//   result(0) = epsilon_y_estime_;
+//   result(1) = epsilon_theta_estime_;
+//   result(2) = epsilon_s_estime_;
+//   return (result);
+// }
 
 }  // namespace romea::core
