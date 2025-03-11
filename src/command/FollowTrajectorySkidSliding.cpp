@@ -59,8 +59,7 @@ double computeBacksteppingSkidSteering(
   double course_disturb = course_deviation + sliding_angle;
   double sum_lin_speed = linear_speed + linear_speed_disturbance;
 
-  double ang_speed_course = gain_course_kp * (course_disturb - target_course);
-  ang_speed_course = std::copysign(ang_speed_course, linear_speed);  // negative if lin_speed < 0
+  double ang_speed_course = sign(linear_speed) * gain_course_kp * (course_disturb - target_course);
   double ang_speed_curvature = curvature * sum_lin_speed * std::cos(course_disturb) / alpha;
   double ang_speed_command = ang_speed_course + ang_speed_curvature - angular_speed_disturbance;
 

@@ -15,6 +15,7 @@
 
 // std
 #include <limits>
+#include <iomanip>
 
 // local
 #include "test_follow_me_base.hpp"

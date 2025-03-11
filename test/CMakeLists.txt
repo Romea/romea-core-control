@@ -3,33 +3,22 @@ find_package(GTest REQUIRED)
 get_filename_component(TEST_WITH_DATA_TEST_DIR "data" ABSOLUTE)
 configure_file(test_helper.h.in test_helper.h)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
+add_compile_options(-std=c++17)
 
-add_executable(${PROJECT_NAME}_test_observer_cinematic_linear_tangent test_observer_cinematic_linear_tangent.cpp)
-target_link_libraries(${PROJECT_NAME}_test_observer_cinematic_linear_tangent ${PROJECT_NAME} GTest::GTest GTest::Main)
-target_compile_options(${PROJECT_NAME}_test_observer_cinematic_linear_tangent PRIVATE -std=c++17)
-add_test(test_observer_cinematic_linear_tangent ${PROJECT_NAME}_test_observer_cinematic_linear_tangent)
+# name of the unit test to generate. It corresponds to name of the cpp file without extension
+set(test_names 
+  observer_cinematic_linear_tangent
+  observer_cinematic_lyapunov
+  follow_trajectory_classic_sliding
+  follow_trajectory_predictive_sliding
+  follow_me_skid_steering
+  follow_me_two_axle_steering
+  follow_trajectory_skid_steering_sign
+)
 
-add_executable(${PROJECT_NAME}_test_observer_cinematic_lyapunov test_observer_cinematic_lyapunov.cpp)
-target_link_libraries(${PROJECT_NAME}_test_observer_cinematic_lyapunov ${PROJECT_NAME} GTest::GTest GTest::Main)
-target_compile_options(${PROJECT_NAME}_test_observer_cinematic_lyapunov PRIVATE -std=c++17)
-add_test(test_observer_cinematic_lyapunov ${PROJECT_NAME}_test_observer_cinematic_lyapunov)
-
-add_executable(${PROJECT_NAME}_test_follow_trajectory_classic_sliding test_follow_trajectory_classic_sliding.cpp)
-target_link_libraries(${PROJECT_NAME}_test_follow_trajectory_classic_sliding ${PROJECT_NAME} GTest::GTest GTest::Main)
-target_compile_options(${PROJECT_NAME}_test_follow_trajectory_classic_sliding PRIVATE -std=c++17)
-add_test(test_follow_trajectory_classic_sliding ${PROJECT_NAME}_test_follow_trajectory_classic_sliding)
-
-add_executable(${PROJECT_NAME}_test_follow_trajectory_predictive_sliding test_follow_trajectory_predictive_sliding.cpp )
-target_link_libraries(${PROJECT_NAME}_test_follow_trajectory_predictive_sliding ${PROJECT_NAME} GTest::GTest GTest::Main)
-target_compile_options(${PROJECT_NAME}_test_follow_trajectory_predictive_sliding PRIVATE -std=c++17)
-add_test(test_follow_trajectory_predictive_sliding ${PROJECT_NAME}_test_follow_trajectory_predictive_sliding)
-
-add_executable(${PROJECT_NAME}_test_follow_me_skid_steering test_follow_me_skid_steering.cpp)
-target_link_libraries(${PROJECT_NAME}_test_follow_me_skid_steering ${PROJECT_NAME} GTest::GTest GTest::Main)
-target_compile_options(${PROJECT_NAME}_test_follow_me_skid_steering PRIVATE -std=c++17)
-add_test(test_follow_me_skid_steering ${PROJECT_NAME}_test_follow_me_skid_steering)
-
-add_executable(${PROJECT_NAME}_test_follow_me_two_axle_steering test_follow_me_two_axle_steering.cpp)
-target_link_libraries(${PROJECT_NAME}_test_follow_me_two_axle_steering ${PROJECT_NAME} GTest::GTest GTest::Main)
-target_compile_options(${PROJECT_NAME}_test_follow_me_two_axle_steering PRIVATE -std=c++17)
-add_test(test_follow_me_two_axle_steering ${PROJECT_NAME}_test_follow_me_two_axle_steering)
+foreach(test_name ${test_names})
+  string(REPLACE " " "_" target_name "${PROJECT_NAME}_test_${test_name}")
+  add_executable(${target_name} test_${test_name}.cpp)
+  target_link_libraries(${target_name} ${PROJECT_NAME} GTest::GTest GTest::Main)
+  add_test(${target_name} ${target_name})
+endforeach()

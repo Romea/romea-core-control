@@ -13,6 +13,7 @@
 // limitations under the License.
 
 
+#include <iomanip>
 #include "test_follow_me_base.hpp"
 #include "romea_core_control/command/FollowMe.hpp"
 
