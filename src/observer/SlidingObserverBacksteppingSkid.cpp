@@ -13,16 +13,19 @@
 // limitations under the License.
 
 #include "romea_core_control/observer/SlidingObserverBacksteppingSkid.hpp"
+#include <romea_core_common/math/EulerAngles.hpp>
 
 #include <Eigen/Core>
 #include <algorithm>
+#include <cmath>
 
 namespace romea::core
 {
 
 SlidingObserversBacksteppingSkid::SlidingObserversBacksteppingSkid(
   double step_time, const Parameters & parameters)
-: params_(parameters), step_time_(step_time),
+: params_(parameters),
+  step_time_(step_time),
   beta_r_estime_f_(params_.weight_slip_angle),
   dot_theta_p_estime_f_(params_.weight_linear_speed_disturb),
   dot_epsilon_s_p_estime_f_(params_.weight_angular_speed_disturb),
@@ -48,6 +51,11 @@ void SlidingObserversBacksteppingSkid::update(
   double dot_epsilon_s_p_estime = 0;
   Eigen::VectorXd desired_speed = Eigen::VectorXd::Zero(3);
   desired_speed(0) = 1;
+
+  // detect if there is a jump in the trajectory (of at least 2 meters) and reset this observer
+  if (std::abs(curv_abscissa - epsilon_s_old_) > 2.) {
+    reset();
+  }
 
   if (!is_initialized_) {
     reset();
@@ -93,8 +101,8 @@ void SlidingObserversBacksteppingSkid::update(
 
     double u_theta = w;
 
-    int N = 1;
-
+    // The N variable defines the number of sub-steps to predict the robot state
+    constexpr int N = 1;
     for (int i = 1; i < N + 1; i++) {
       double speed_longi_adapt = speed_longi / cos(beta_r_estime_);
 
@@ -180,14 +188,13 @@ void SlidingObserversBacksteppingSkid::update(
                      cos(epsilon_theta + beta_r_estime) / (1 - curvature * epsilon_y));
 
       double dt = step_time_;
-      epsilon_s_estime_ += dot_epsilon_s_estime * dt / N +
-                           ((dot_epsilon_s_estime - dot_epsilon_s_estime_n1_) / dt) * (dt * dt / 2);
-      epsilon_y_estime_ += dot_epsilon_y_estime * dt / N +
-                           ((dot_epsilon_y_estime - dot_epsilon_y_estime_n1_) / dt) * (dt * dt / 2);
-      epsilon_theta_estime_ +=
-        dot_epsilon_theta_estime * dt / N +
-        ((dot_epsilon_theta_estime - dot_epsilon_theta_estime_n1_) / dt) * (dt * dt / 2);
-      epsilon_theta_estime_ = atan2(sin(epsilon_theta_estime_), cos(epsilon_theta_estime_));
+      epsilon_s_estime_ +=
+        dot_epsilon_s_estime * dt / N + (dot_epsilon_s_estime - dot_epsilon_s_estime_n1_) * dt / 2;
+      epsilon_y_estime_ +=
+        dot_epsilon_y_estime * dt / N + (dot_epsilon_y_estime - dot_epsilon_y_estime_n1_) * dt / 2;
+      epsilon_theta_estime_ += dot_epsilon_theta_estime * dt / N +
+                               (dot_epsilon_theta_estime - dot_epsilon_theta_estime_n1_) * dt / 2;
+      epsilon_theta_estime_ = betweenMinusPiAndPi(epsilon_theta_estime_);
 
       beta_r_estime_ = beta_r_estime_f_.update(beta_r_estime);
       dot_theta_p_estime_ = dot_theta_p_estime_f_.update(dot_theta_p_estime);
