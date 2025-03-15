@@ -58,12 +58,12 @@ void test_various_scenarios(
     // circular trajectory
     {0.0, 0.0, 0.25, 1},   // center, left turn
     {0.0, -1.0, 0.25, 1},  // center, left turn, negative course
-    {0.0, 0.05, 0.25, 1},  // center, left turn, small positive course
+    {0.0, 0.02, 0.25, 1},  // center, left turn, small positive course
     {0.0, 1.2, 0.25, -1},  // center, left turn, highly positive course
 
     {0.0, 0.0, -0.25, -1},    // center, right turn
     {0.0, 1.0, -0.25, -1},    // center, right turn, positive course
-    {0.0, -0.05, -0.25, -1},  // center, right turn, small negative course
+    {0.0, -0.02, -0.25, -1},  // center, right turn, small negative course
     {0.0, -1.2, -0.25, 1},    // center, right turn, highly negative course
   };
 
@@ -140,8 +140,9 @@ TEST(SkidSliding, DifferentScenarios)
       0.,      // linear speed disturbance
       0.,      // angular speed disturbance
       0.,      // sliding angle
-      M_PI_2,  // maxi angular speed
       0.,      // desired lateral deviation
+      M_PI_2,  // maximal angular speed
+      M_PI_2,  // maximal target course
       -0.5,    // gain lateral kp
       -1.0,    // gain course kp
       target_course);

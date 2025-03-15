@@ -33,8 +33,9 @@ double computeBacksteppingSkidSteering(
   double linear_speed_disturbance,
   double angular_speed_disturbance,
   double sliding_angle,
-  double maximal_angular_speed,
   double desired_lateral_deviation,
+  double maximal_angular_speed,
+  double maximal_target_course,
   double gain_lateral_kp,
   double gain_course_kp,
   double & target_course)
@@ -47,6 +48,12 @@ double computeBacksteppingSkidSteering(
 
   double diff_deviation = lateral_deviation - desired_lateral_deviation;
   target_course = std::atan2(gain_lateral_kp * diff_deviation, alpha);
+
+  // saturate target_course to a maximal value that controls the angle to reach the desired
+  // lateral deviation when the robot is far
+  if (std::abs(target_course) > maximal_target_course) {
+    target_course = std::copysign(maximal_target_course, target_course);
+  }
 
   // This situation should never occur but it can be represented by a scenario where the robot
   // try to follow a circular trajectory and the robot is at the center.

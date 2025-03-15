@@ -29,6 +29,10 @@ public:
     double k_theta;
     double ks;
     double kis;
+
+    double weight_slip_angle;
+    double weight_linear_speed_disturb;
+    double weight_angular_speed_disturb;
   };
 
 public:
@@ -42,16 +46,16 @@ public:
     double w,
     double S_x,
     double S_y,
-    double real_speed_longi);
+    double curv_abscissa);
 
   void reset();
 
   // VectorXd getEstime();
   // VectorXd getAllEstime();
 
-  double getBetaR();
-  double getDotThetaP();
-  double getDotEpsilonSP();
+  [[nodiscard]] double getBetaR() const;
+  [[nodiscard]] double getDotThetaP() const;
+  [[nodiscard]] double getDotEpsilonSP() const;
 
 private:
   Parameters params_;
@@ -64,11 +68,11 @@ private:
 
   double integral = 0;
 
-  romea::core::FirstOrderButterworth beta_r_estime_f_{0.0};
-  romea::core::FirstOrderButterworth dot_theta_p_estime_f_{0.0};
-  romea::core::FirstOrderButterworth dot_epsilon_s_p_estime_f_{0.0};
-  romea::core::FirstOrderButterworth w_f_{0.0};
-  romea::core::FirstOrderButterworth v_f_{0.0};
+  romea::core::FirstOrderButterworth beta_r_estime_f_;
+  romea::core::FirstOrderButterworth dot_theta_p_estime_f_;
+  romea::core::FirstOrderButterworth dot_epsilon_s_p_estime_f_;
+  romea::core::FirstOrderButterworth w_f_;
+  romea::core::FirstOrderButterworth v_f_;
 
   int counter_ = 0;
   bool is_initialized_ = false;
@@ -77,13 +81,13 @@ private:
   double epsilon_s = 0;
   double S_x_old = 0;
   double S_y_old = 0;
-  romea::core::FirstOrderButterworth epsilon_s_point_f_{0.0};
+  romea::core::FirstOrderButterworth epsilon_s_point_f_;
   double epsilon_s_old_ = 0;
 
   double epsilon_y_estime_ = 0;
 
   double epsilon_theta_estime_ = 0;
-  romea::core::FirstOrderButterworth epsilon_theta_point_f_{0.0};
+  romea::core::FirstOrderButterworth epsilon_theta_point_f_;
   double epsilon_theta_old_ = 0;
 
   // dot values at the previous iteration

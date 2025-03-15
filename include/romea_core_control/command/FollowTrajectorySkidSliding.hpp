@@ -27,8 +27,9 @@ double computeBacksteppingSkidSteering(
   double linear_speed_disturbance,
   double angular_speed_disturbance,
   double sliding_angle,
-  double maximal_angular_speed,
   double desired_lateral_deviation,
+  double maximal_angular_speed,
+  double maximal_target_course,
   double gain_lateral_kp,
   double gain_course_kp,
   double & target_course);

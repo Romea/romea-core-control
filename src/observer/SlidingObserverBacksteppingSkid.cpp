@@ -22,7 +22,14 @@ namespace romea::core
 
 SlidingObserversBacksteppingSkid::SlidingObserversBacksteppingSkid(
   double step_time, const Parameters & parameters)
-: params_(parameters), step_time_(step_time)
+: params_(parameters), step_time_(step_time),
+  beta_r_estime_f_(params_.weight_slip_angle),
+  dot_theta_p_estime_f_(params_.weight_linear_speed_disturb),
+  dot_epsilon_s_p_estime_f_(params_.weight_angular_speed_disturb),
+  w_f_(0),
+  v_f_(0),
+  epsilon_s_point_f_(0),
+  epsilon_theta_point_f_(0)
 {
 }
 
@@ -34,7 +41,7 @@ void SlidingObserversBacksteppingSkid::update(
   double w,
   double S_x,
   double S_y,
-  double real_speed_longi)
+  double curv_abscissa)
 {
   double beta_r_estime = 0;
   double dot_theta_p_estime = 0;
@@ -57,7 +64,7 @@ void SlidingObserversBacksteppingSkid::update(
     S_x_old = S_x;
     S_y_old = S_y;
 
-    epsilon_s_estime_ = real_speed_longi;
+    epsilon_s_estime_ = curv_abscissa;
     epsilon_s_old_ = epsilon_s_estime_;
     epsilon_s_point_f_.update(0);
 
@@ -74,7 +81,7 @@ void SlidingObserversBacksteppingSkid::update(
     //
     // S_x_old = S_x;
     // S_y_old = S_y;
-    epsilon_s = real_speed_longi;
+    epsilon_s = curv_abscissa;
 
     double epsilon_s_point = epsilon_s_point_f_.update((epsilon_s - epsilon_s_old_) / step_time_);
     double epsilon_theta_point = epsilon_theta_point_f_.update(
@@ -229,21 +236,19 @@ void SlidingObserversBacksteppingSkid::reset()
   dot_epsilon_theta_estime_n1_ = 0;
 }
 
-// VectorXd SkidObserversBackstepping::getEstime()
-// {
-//   VectorXd result = VectorXd::Zero(2);
-//   result(0) = epsilon_y_estime_;
-//   result(1) = epsilon_theta_estime_;
-//   return (result);
-// }
-//
-// VectorXd SkidObserversBackstepping::getAllEstime()
-// {
-//   VectorXd result = VectorXd::Zero(3);
-//   result(0) = epsilon_y_estime_;
-//   result(1) = epsilon_theta_estime_;
-//   result(2) = epsilon_s_estime_;
-//   return (result);
-// }
+double SlidingObserversBacksteppingSkid::getBetaR() const
+{
+  return counter_ > 10 ? beta_r_estime_ : 0;
+}
+
+double SlidingObserversBacksteppingSkid::getDotThetaP() const
+{
+  return counter_ > 10 ? dot_theta_p_estime_ : 0;
+}
+
+double SlidingObserversBacksteppingSkid::getDotEpsilonSP() const
+{
+  return counter_ > 10 ? dot_epsilon_s_p_estime_ : 0;
+}
 
 }  // namespace romea::core
