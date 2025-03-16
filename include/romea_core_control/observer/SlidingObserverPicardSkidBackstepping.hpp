@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef ROMEA_CORE_CONTROL__OBSERVER__SLIDING_OBSERVER_BACKSTEPPING_SKID_HPP_
-#define ROMEA_CORE_CONTROL__OBSERVER__SLIDING_OBSERVER_BACKSTEPPING_SKID_HPP_
+#ifndef ROMEA_CORE_CONTROL__OBSERVER__SLIDING_OBSERVER_PICARD_SKID_BACKSTEPPING_HPP_
+#define ROMEA_CORE_CONTROL__OBSERVER__SLIDING_OBSERVER_PICARD_SKID_BACKSTEPPING_HPP_
 
 #include <romea_core_common/signal/FirstOrderButterworth.hpp>
 
 namespace romea::core
 {
 
-class SlidingObserversBacksteppingSkid
+class SlidingObserversPicardSkidBackstepping
 {
 public:
   struct Parameters
@@ -36,7 +36,7 @@ public:
   };
 
 public:
-  SlidingObserversBacksteppingSkid(double step_time, const Parameters & parameters);
+  SlidingObserversPicardSkidBackstepping(double step_time, const Parameters & parameters);
 
   void update(
     double epsilon_y,

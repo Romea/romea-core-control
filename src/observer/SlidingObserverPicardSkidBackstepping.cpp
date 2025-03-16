@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "romea_core_control/observer/SlidingObserverBacksteppingSkid.hpp"
+#include "romea_core_control/observer/SlidingObserverPicardSkidBackstepping.hpp"
 #include <romea_core_common/math/EulerAngles.hpp>
 
 #include <algorithm>
@@ -21,7 +21,7 @@
 namespace romea::core
 {
 
-SlidingObserversBacksteppingSkid::SlidingObserversBacksteppingSkid(
+SlidingObserversPicardSkidBackstepping::SlidingObserversPicardSkidBackstepping(
   double step_time, const Parameters & parameters)
 : params_(parameters),
   step_time_(step_time),
@@ -33,7 +33,7 @@ SlidingObserversBacksteppingSkid::SlidingObserversBacksteppingSkid(
 {
 }
 
-void SlidingObserversBacksteppingSkid::update(
+void SlidingObserversPicardSkidBackstepping::update(
   double epsilon_y,
   double epsilon_theta,
   double curvature,
@@ -199,7 +199,7 @@ void SlidingObserversBacksteppingSkid::update(
   //cout<<"epsilon_theta : "<<epsilon_theta<<std::endl;
 }
 
-void SlidingObserversBacksteppingSkid::reset()
+void SlidingObserversPicardSkidBackstepping::reset()
 {
   beta_r_estime_ = 0;
   dot_theta_p_estime_ = 0;
@@ -220,17 +220,17 @@ void SlidingObserversBacksteppingSkid::reset()
   dot_epsilon_theta_estime_n1_ = 0;
 }
 
-double SlidingObserversBacksteppingSkid::getBetaR() const
+double SlidingObserversPicardSkidBackstepping::getBetaR() const
 {
   return counter_ > 10 ? beta_r_estime_ : 0;
 }
 
-double SlidingObserversBacksteppingSkid::getDotThetaP() const
+double SlidingObserversPicardSkidBackstepping::getDotThetaP() const
 {
   return counter_ > 10 ? dot_theta_p_estime_ : 0;
 }
 
-double SlidingObserversBacksteppingSkid::getDotEpsilonSP() const
+double SlidingObserversPicardSkidBackstepping::getDotEpsilonSP() const
 {
   return counter_ > 10 ? dot_epsilon_s_p_estime_ : 0;
 }
