@@ -17,6 +17,7 @@ add_library(${PROJECT_NAME} SHARED
   src/observer/SlidingObserverCinematicLinearTangent.cpp
   src/observer/SlidingObserverCinematicLyapunov.cpp
   src/observer/SlidingObserverPicardSkidBackstepping.cpp
+  src/observer/SlidingObserverPicardSkidLyapunov.cpp
   src/observer/SpeedObserver.cpp
   src/observer/SpeedObserverRoland.cpp
   src/observer/SpeedObserverMatt.cpp
