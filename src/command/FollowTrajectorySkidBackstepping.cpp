@@ -20,12 +20,12 @@
 #include <romea_core_common/math/Algorithm.hpp>
 
 // local
-#include "romea_core_control/command/FollowTrajectorySkidSliding.hpp"
+#include "romea_core_control/command/FollowTrajectorySkidBackstepping.hpp"
 
 namespace romea::core
 {
 
-double computeBacksteppingSkidSteering(
+double computeSkidBacksteppingAngularSpeed(
   double lateral_deviation,
   double course_deviation,
   double curvature,

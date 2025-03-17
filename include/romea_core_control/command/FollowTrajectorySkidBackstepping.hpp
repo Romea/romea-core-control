@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef ROMEA_CORE_CONTROL__COMMAND__FOLLOW_TRAJECTORY_SKID_SLIDING_HPP_
-#define ROMEA_CORE_CONTROL__COMMAND__FOLLOW_TRAJECTORY_SKID_SLIDING_HPP_
+#ifndef ROMEA_CORE_CONTROL__COMMAND__FOLLOW_TRAJECTORY_SKID_BACKSTEPPING_HPP_
+#define ROMEA_CORE_CONTROL__COMMAND__FOLLOW_TRAJECTORY_SKID_BACKSTEPPING_HPP_
 
 namespace romea::core
 {
 
 /// @brief return angular speed command using backstepping algo for skid steering robot
-double computeBacksteppingSkidSteering(
+double computeSkidBacksteppingAngularSpeed(
   double lateral_deviation,
   double course_deviation,
   double curvature,

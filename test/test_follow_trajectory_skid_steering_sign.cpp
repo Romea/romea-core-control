@@ -16,7 +16,7 @@
 
 #include <cmath>
 #include <romea_core_control/command/FollowTrajectoryBackStepping.hpp>
-#include <romea_core_control/command/FollowTrajectorySkidSliding.hpp>
+#include <romea_core_control/command/FollowTrajectorySkidBackstepping.hpp>
 
 using namespace romea::core;
 
@@ -132,7 +132,7 @@ TEST(SkidSliding, DifferentScenarios)
 {
   test_various_scenarios([this](const TestCase & test_case, double linear_speed) {
     double target_course{};
-    double ang_speed = computeBacksteppingSkidSteering(
+    double ang_speed = computeSkidBacksteppingAngularSpeed(
       test_case.lateral_deviation,
       test_case.course_deviation,
       test_case.curvature,
