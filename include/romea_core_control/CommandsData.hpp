@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef ROMEA_CORE_CONTROL__FRONTREARDATA_HPP_
-#define ROMEA_CORE_CONTROL__FRONTREARDATA_HPP_
+#ifndef ROMEA_CORE_CONTROL__COMMANDS_DATA_HPP_
+#define ROMEA_CORE_CONTROL__COMMANDS_DATA_HPP_
 
 namespace romea::core
 {
@@ -24,6 +24,18 @@ struct FrontRearData
   double rear;
 };
 
+struct SpeedAngleData
+{
+  double speed;
+  double angle;
+};
+
+struct GenericCommandsData
+{
+  double longitudinal_speed;
+  double angular_speed;
+};
+
 }  // namespace romea::core
 
-#endif  // ROMEA_CORE_CONTROL__FRONTREARDATA_HPP_
+#endif  // ROMEA_CORE_CONTROL__COMMANDS_DATA_HPP_

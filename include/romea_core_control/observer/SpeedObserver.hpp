@@ -19,7 +19,7 @@
 #include <iostream>
 
 // romea
-#include "romea_core_control/SpeedAngleData.hpp"
+#include "romea_core_control/CommandsData.hpp"
 
 namespace romea::core
 {

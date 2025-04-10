@@ -20,7 +20,7 @@
 #include <vector>
 
 // romea
-#include "romea_core_control/FrontRearData.hpp"
+#include "romea_core_control/CommandsData.hpp"
 
 namespace romea::core
 {
