@@ -67,7 +67,6 @@ void FollowTrajectoryDesbosGenericPredictive::set_gains(double kp, double kd, do
   ks_ = ks;
 }
 
-
 //-----------------------------------------------------------------------------
 double FollowTrajectoryDesbosGenericPredictive::compute_angular_speed(
   double lateral_deviation,
@@ -89,7 +88,6 @@ double FollowTrajectoryDesbosGenericPredictive::compute_angular_speed(
   double dt)
 {
   if (lmpc_) {
-    std::cout << "model_order_ : " << model_order_ << std::endl;
     if (model_order_ == 2) {
       return compute_angular_speed_lmpc(
         lateral_deviation,
@@ -151,16 +149,16 @@ double FollowTrajectoryDesbosGenericPredictive::compute_angular_speed_hmpc(
   double lateral_deviation,
   double course_deviation,
   double curvature,
-  double  /*future_curvature*/,
+  double /*future_curvature*/,
   double speed,
   double lateral_slip,
   double angular_slip,
   double courbe1,
   double courbe2,
-  double  /*lambda*/,
+  double /*lambda*/,
   double & omega_d,
-  double &  /*theta_consigne*/,
-  double  /*tau*/)
+  double & /*theta_consigne*/,
+  double /*tau*/)
 {
   assert(kp_ < 0);
   assert(kd_ < 0);
@@ -206,18 +204,18 @@ double FollowTrajectoryDesbosGenericPredictive::compute_angular_speed_lmpc(
   double course_deviation,
   double curvature,
   double future_curvature,
-  double speed,
+  double  /*speed*/,
   double longitudinal_speed_command,
   double angular_speed,
   double lateral_slip,
   double angular_slip,
-  double  /*courbe1*/,
-  double  /*courbe2*/,
-  double  /*lambda*/,
+  double /*courbe1*/,
+  double /*courbe2*/,
+  double /*lambda*/,
   double & omega_d,
   double & pred_command,
-  double  /*tau*/,
-  double  /*dt*/)
+  double /*tau*/,
+  double /*dt*/)
 {
   assert(std::abs(kp_) > 0);
   assert(std::abs(kd_) > 0);
@@ -248,8 +246,6 @@ double FollowTrajectoryDesbosGenericPredictive::compute_angular_speed_lmpc(
   double error = atan2(sin(course_deviation - omega_d), cos(course_deviation - omega_d));
   // std::cout << kd_*(std::tan(course_deviation)-omega_d) <<" "<< ki_*integrated_omega_ << std::endl;
 
-  std::cout << " future_curvature:" << future_curvature << std::endl;
-  std::cout << " speed:" << speed << std::endl;
   pred_command = command_pred(
     longitudinal_speed_command * future_curvature * cos(course_deviation) /
       (1 - curvature * lateral_deviation),
@@ -257,6 +253,11 @@ double FollowTrajectoryDesbosGenericPredictive::compute_angular_speed_lmpc(
   double angular_speed_command = kd_ * (error) + pred_command - angular_slip * activ_obs;
 
   angular_speed_command_2_ = angular_speed_command;
+
+  // std::cout << "LMPC2 -----------------\n";
+  // std::cout << " future_curvature:" << future_curvature << "\n";
+  // std::cout << " ang speed cmd:" << angular_speed_command << std::endl;
+
   return angular_speed_command;
 }
 
@@ -266,14 +267,14 @@ double FollowTrajectoryDesbosGenericPredictive::compute_angular_speed_lmpc1(
   double course_deviation,
   double curvature,
   double future_curvature,
-  double speed,
+  double  /*speed*/,
   double longitudinal_speed_command,
-  double  /*angular_speed*/,
+  double /*angular_speed*/,
   double lateral_slip,
   double angular_slip,
-  double  /*courbe1*/,
-  double  /*courbe2*/,
-  double  /*lambda*/,
+  double /*courbe1*/,
+  double /*courbe2*/,
+  double /*lambda*/,
   double & omega_d,
   double & pred_command,
   double & curv_pred,
@@ -283,19 +284,17 @@ double FollowTrajectoryDesbosGenericPredictive::compute_angular_speed_lmpc1(
   if (adaptive_gains_) {
     kd_ = kd_ + 1. / 5. * (-1. / (1.0 * tau) - kd_);
     kd_ = std::min(-0.02, std::max(-5., kd_));
+
+    double N = 3;  //std::min( std::max(2*std::abs(lateral_deviation)+3, 3.),4. );
+    kp_ = kd_ / (N * longitudinal_speed_command);  // HARD CODED COMMANDED SPEED (0.5)
+    kp_ = std::min(-0.02, std::max(-4., kp_));
   }
 
-  double N = 3;  //std::min( std::max(2*std::abs(lateral_deviation)+3, 3.),4. );
-  kp_ = kd_ / (N * longitudinal_speed_command);  // HARD CODED COMMANDED SPEED (0.5)
-  kp_ = std::min(-0.02, std::max(-4., kp_));
-  std::cout << "LMPC1" << std::endl;
   double activ_obs = 0;
 
   if (fabs(future_curvature) > 0.1) {
     activ_obs = 0;
   }
-
-  //  omega_d = std::atan2(kp_*(lateral_deviation-desired_lat_dev_)-lateral_slip*activ_obs,1-courbure*lateral_deviation);
 
   omega_d = std::atan2(
     kp_ * (lateral_deviation - desired_lat_dev_) - lateral_slip * activ_obs,
@@ -307,8 +306,6 @@ double FollowTrajectoryDesbosGenericPredictive::compute_angular_speed_lmpc1(
 
   double error = atan2(sin(course_deviation - omega_d), cos(course_deviation - omega_d));
 
-  std::cout << " future_curvature:" << future_curvature << std::endl;
-  std::cout << " speed:" << speed << std::endl;
   curv_pred = longitudinal_speed_command * future_curvature * cos(course_deviation) /
               (1 - curvature * lateral_deviation);
 
@@ -330,6 +327,11 @@ double FollowTrajectoryDesbosGenericPredictive::compute_angular_speed_lmpc1(
         angular_speed_first_order_ + dt * (pred_command - angular_speed_first_order_) / tau;
     }
   }
+
+  // std::cout << "LMPC1 -----------------\n";
+  // std::cout << " future_curvature:" << future_curvature << "\n";
+  // std::cout << " ang speed cmd:" << angular_speed_command << std::endl;
+
   return angular_speed_command;
 }
 
@@ -351,11 +353,11 @@ GenericCommandsData FollowTrajectoryDesbosGenericPredictive::compute_commands(
   // skid slip
   double speed_slip,
   double beta,
-  double  /*angular_skid_slip*/,
+  double /*angular_skid_slip*/,
   // approx traj
   double courbe1,
   double courbe2,
-  double  /*lambda*/,
+  double /*lambda*/,
   double & omega_d,
   double & theta_consigne,
   double tau,
@@ -412,14 +414,13 @@ double FollowTrajectoryDesbosGenericPredictive::compute_velocity(
 
 //------------------------------------------------------------------------------
 double FollowTrajectoryDesbosGenericPredictive::command_pred1(
-  double CommFutur, double angular_speed, double tau, double  /*dt*/)
+  double CommFutur, double angular_speed, double tau, double /*dt*/)
 {
   double u;
   double DT = 0.1, TAU = tau;
   double R1 = 0., R2 = 0., Ai = 0., di = 0.;
 
   std::vector<double> Ref(horizon_ + 3);
-  std::cout << "LMPC Model Order 1" << std::endl;
   Ref = reference(CommFutur, alpha_, angular_speed);
 
   for (int i = 1; i < (horizon_ + 1); i++) {
@@ -473,8 +474,6 @@ double FollowTrajectoryDesbosGenericPredictive::command_pred(double CommFutur, d
   Ident = Eigen::Matrix3d::Identity();
   mult2 = Eigen::Matrix3d::Zero();
 
-  std::cout << "LMPC Model Order 2" << std::endl;
-
   Etat(0, 0) = angular_speed;
   Etat(1, 0) = angular_speed_2_;
   Etat(2, 0) = angular_speed_command_2_;
@@ -524,10 +523,8 @@ std::vector<double> FollowTrajectoryDesbosGenericPredictive::reference(
   std::vector<double> delta(horizon_ + 3);
 
   // delta[1] = feinte1;
-  for (
-    int j = 1; j < (horizon_ + 2);
-    j++)  // indice de départ modifié au 22 mars (before j=2 now j=1) ne change absoluement rien normalement
-  {
+  // indice de départ modifié au 22 mars (before j=2 now j=1) ne change absoluement rien normalement
+  for (int j = 1; j < (horizon_ + 2); j++) {
     delta[j] = CommFutur - (pow(alpha, j - 1)) * (CommFutur - feinte1);
   }
 

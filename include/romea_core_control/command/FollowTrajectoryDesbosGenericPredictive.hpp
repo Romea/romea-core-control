@@ -57,6 +57,7 @@ public:
   [[nodiscard]] double get_horizon() const { return horizon_; }
 
   void set_gains(double kp, double kd, double ks);
+  void set_lmpc(bool lmpc) { lmpc_ = lmpc; }
 
   double compute_angular_speed(
     double lateral_deviation,
