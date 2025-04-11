@@ -55,27 +55,27 @@ void FollowTrajectoryDesbosGeneric::set_gains(double kp, double kd, double ks)
 }
 
 double FollowTrajectoryDesbosGeneric::compute_angular_speed(
-  const double & lateral_deviation,
-  const double & course_deviation,
-  const double & maximal_angular_speed,
-  const double & courbure,
-  const double & future_courbure,
-  const double & speed,
-  const double & longitudinal_speed_command,
+  double lateral_deviation,
+  double course_deviation,
+  double  /*maximal_angular_speed*/,
+  double courbure,
+  double future_courbure,
+  double speed,
+  double  /*longitudinal_speed_command*/,
   // generic slip
-  const double & lateral_slip,
-  const double & angular_slip,
+  double  /*lateral_slip*/,
+  double  /*angular_slip*/,
   // skid slip
-  const double & speed_slip,
-  const double & beta,
-  const double & angular_skid_slip,
-  double & omega_d,
-  double & theta_error,
-  double & tau,
-  double & osc_eta,
-  double & osc_amp)
+  double  /*speed_slip*/,
+  double beta,
+  double  /*angular_skid_slip*/,
+  double tau,
+  double &  /*omega_d*/,
+  double &  /*theta_error*/,
+  double &  /*osc_eta*/,
+  double &  /*osc_amp*/)
 {
-  double error;
+  // double error;
 
   // if(stop_lcp == 1){
   //   kp_ = 0;
@@ -116,10 +116,10 @@ double FollowTrajectoryDesbosGeneric::compute_angular_speed(
   // kp_ = kd_ / (N*longitudinal_speed_command); // HARD CODED COMMANDED SPEED (0.5)
   // kp_ = std::min(-0.02,std::max(-4.,kp_));
 
-  double activ_obs = 0;
-  if (fabs(future_courbure) > 0.1) {
-    activ_obs = 0;
-  }
+  // double activ_obs = 0;
+  // if (fabs(future_courbure) > 0.1) {
+  //   activ_obs = 0;
+  // }
 
   // omega_d = std::atan2(kp_*(lateral_deviation-desired_lat_dev_)-lateral_slip*activ_obs,1-courbure*lateral_deviation) - beta;
   // // omega_d = std::atan2(kp_*copysign(sqrt(abs(lateral_deviation-desired_lat_dev_)),lateral_deviation-desired_lat_dev_)-lateral_slip*activ_obs,1-courbure*lateral_deviation) - beta;
@@ -166,26 +166,26 @@ double FollowTrajectoryDesbosGeneric::compute_angular_speed(
 
 //-----------------------------------------------------------------------------
 GenericCommandsData FollowTrajectoryDesbosGeneric::compute_commands(
-  const double & lateral_deviation,
-  const double & course_deviation,
-  const double & longitudinal_deviation,
-  const double & desired_speed,
-  const double & maximal_angular_speed,
-  const double & courbure,
-  const double & future_courbure,
-  const double & speed,
-  const double & longitudinal_speed_command,
+  double lateral_deviation,
+  double course_deviation,
+  double longitudinal_deviation,
+  double desired_speed,
+  double  /*maximal_angular_speed*/,
+  double courbure,
+  double future_courbure,
+  double speed,
+  double longitudinal_speed_command,
   // generic slip
-  const double & lateral_slip,
-  const double & angular_slip,
-  const double & longitudinal_slip,
+  double lateral_slip,
+  double angular_slip,
+  double longitudinal_slip,
   // skid slip
-  const double & speed_slip,
-  const double & beta,
-  const double & angular_skid_slip,
+  double speed_slip,
+  double beta,
+  double angular_skid_slip,
+  double tau,
   double & omega_d,
   double & theta_error,
-  double & tau,
   double & osc_eta,
   double & osc_amp)
 {
@@ -223,14 +223,14 @@ GenericCommandsData FollowTrajectoryDesbosGeneric::compute_commands(
 
 //-----------------------------------------------------------------------------
 double FollowTrajectoryDesbosGeneric::compute_velocity(
-  const double & lateral_deviation,
-  const double & course_deviation,
-  const double & longitudinal_deviation,
-  const double & desired_speed,
-  const double & courbure,
-  const double & longitudinal_slip,
-  const double & speed_slip,
-  const double & beta)
+  double lateral_deviation,
+  double course_deviation,
+  double longitudinal_deviation,
+  double desired_speed,
+  double courbure,
+  double longitudinal_slip,
+  double speed_slip,
+  double beta)
 {
   return (ks_ * longitudinal_deviation + desired_speed - longitudinal_slip) *
            (1 - courbure * lateral_deviation) / cos(course_deviation + beta) -

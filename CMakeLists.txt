@@ -28,6 +28,7 @@ add_library(${PROJECT_NAME} SHARED
   src/command/FollowTrajectoryPredictiveSliding.cpp
   src/command/FollowTrajectorySkidBackstepping.cpp
   src/command/FollowTrajectoryDesbosGeneric.cpp
+  src/command/FollowTrajectoryDesbosGenericPredictive.cpp
   src/command/KeepInterdistance.cpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
