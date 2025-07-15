@@ -55,6 +55,9 @@ public:
   [[nodiscard]] double getBetaR() const;
   [[nodiscard]] double getDotThetaP() const;
   [[nodiscard]] double getDotEpsilonSP() const;
+  [[nodiscard]] double getLateralEstim() const;
+  [[nodiscard]] double getAngularEstime() const;
+
 
 private:
   Parameters params_;

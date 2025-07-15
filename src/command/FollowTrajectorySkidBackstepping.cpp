@@ -64,7 +64,7 @@ double computeSkidBacksteppingAngularSpeed(
   }
 
   double course_disturb = course_deviation + sliding_angle;
-  double sum_lin_speed = linear_speed + linear_speed_disturbance;
+  double sum_lin_speed = linear_speed - linear_speed_disturbance;
 
   double ang_speed_course = sign(linear_speed) * gain_course_kp * (course_disturb - target_course);
   double ang_speed_curvature = curvature * sum_lin_speed * std::cos(course_disturb) / alpha;
