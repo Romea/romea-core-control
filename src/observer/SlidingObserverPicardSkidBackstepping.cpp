@@ -176,7 +176,7 @@ void SlidingObserversPicardSkidBackstepping::update(
         curvature * ((longi_speed_adapt + dot_epsilon_s_p_estime) *
                      cos(epsilon_theta + beta_r_estime) / (1 - curvature * epsilon_y));
 
-      double dt = 0.1;
+      double dt = step_time_;
       epsilon_s_estime_ +=
         dot_epsilon_s_estime * dt / N + 0*(dot_epsilon_s_estime - dot_epsilon_s_estime_n1_) * dt/2 ;
       epsilon_y_estime_ +=

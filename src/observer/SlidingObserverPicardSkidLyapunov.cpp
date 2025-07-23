@@ -46,10 +46,10 @@ void SlidingObserversPicardSkidLyapunov::update(
   } else {
     double u_theta = angular_speed;
 
-    int N = 1;
+    int N = 10;
     for (int i = 1; i < N + 1; i++) {
-      double longi_speed_adapt = longi_speed / cos(beta_r_estime_);
-      // double longi_speed_adapt = longi_speed;
+      // double longi_speed_adapt = longi_speed / cos(beta_r_estime_);
+      double longi_speed_adapt = longi_speed;
 
       //calcul des erreurs
       double ex = (epsilon_x_estime_ - epsilon_x);
@@ -74,33 +74,15 @@ void SlidingObserversPicardSkidLyapunov::update(
         params_.key * ey;
       double dot_epsilon_theta_estime = u_theta + dot_theta_p_estime_ + params_.ketheta * e_theta;
 
-      /*cout<<"Skid L dot_epsilon_x_estime : "<<dot_epsilon_x_estime<<endl;
-            cout<<"Skid L dot_epsilon_y_estime : "<<dot_epsilon_y_estime<<endl;
-            cout<<"Skid L dot_epsilon_theta_estime : "<<dot_epsilon_theta_estime<<endl;*/
-
-      double h11 = 0.5 * -sin(epsilon_theta + beta_r_estime_) * ey;
-      double h12 = 0.5 * (-sin(epsilon_theta + beta_r_estime_) * ex -
-                          (longi_speed_adapt + dot_epsilon_s_p_estime_) *
-                            cos(epsilon_theta + beta_r_estime_) * ey);
-      double h21 = 0.5 * cos(epsilon_theta + beta_r_estime_) * ey;
-      double h22 = 0.5 * (cos(epsilon_theta + beta_r_estime_) * ex -
-                          (longi_speed_adapt + dot_epsilon_s_p_estime_) *
-                            sin(epsilon_theta + beta_r_estime_) * ey);
-
-      /*cout<<"Skid L h11 : "<<h11<<endl;
-            cout<<"Skid L h12 : "<<h12<<endl;
-            cout<<"Skid L h21 : "<<h21<<endl;
-            cout<<"Skid L h22 : "<<h22<<endl;*/
-
+    
       double dot_beta =
         params_.kbeta *
         (-(longi_speed_adapt + dot_epsilon_s_p_estime_) * sin(epsilon_theta + beta_r_estime_) * ex +
-         (longi_speed_adapt + dot_epsilon_s_p_estime_) * cos(epsilon_theta + beta_r_estime_) * ey +
-         h12 * ex * 0 + h22 * ey * 0);
+         (longi_speed_adapt + dot_epsilon_s_p_estime_) * cos(epsilon_theta + beta_r_estime_) * ey );
 
       double dot_dot_vg =
         params_.kdotsp * (cos(epsilon_theta + beta_r_estime_) * ex +
-                          sin(epsilon_theta + beta_r_estime_) * ey + h11 * 0 * ex + h21 * 0 * ey);
+                          sin(epsilon_theta + beta_r_estime_) * ey );
 
       double dot_dot_epsilon_theta_p = params_.kdotthetap * e_theta;
 
@@ -114,24 +96,25 @@ void SlidingObserversPicardSkidLyapunov::update(
       double dt = step_time_;
       // cout  <<"Step_Time_ : "<< step_time_ << std::endl;
       epsilon_x_estime_ += dot_epsilon_x_estime * dt / N +
-                           0*((dot_epsilon_x_estime - dot_epsilon_x_estime_n1_) / dt) * (dt * dt / 2);
+                           1*((dot_epsilon_x_estime - dot_epsilon_x_estime_n1_) / dt) * (dt * dt / 2);
       epsilon_y_estime_ += dot_epsilon_y_estime * dt / N +
-                           0*((dot_epsilon_y_estime - dot_epsilon_y_estime_n1_) / dt) * (dt * dt / 2);
+                           1*((dot_epsilon_y_estime - dot_epsilon_y_estime_n1_) / dt) * (dt * dt / 2);
       epsilon_theta_estime_ +=
         dot_epsilon_theta_estime * dt / N +
-        0*((dot_epsilon_theta_estime - dot_epsilon_theta_estime_n1_) / dt) * (dt * dt / 2);
+        1*((dot_epsilon_theta_estime - dot_epsilon_theta_estime_n1_) / dt) * (dt * dt / 2);
       epsilon_theta_estime_ = atan2(sin(epsilon_theta_estime_), cos(epsilon_theta_estime_));
 
       /*cout<<"Skid L epsilon_x_estime_ : "<<epsilon_x_estime_<<endl;
             cout<<"Skid L epsilon_y_estime_ : "<<epsilon_y_estime_<<endl;
             cout<<"Skid L epsilon_theta_estime_ : "<<epsilon_theta_estime_<<endl;*/
 
+            
       dot_theta_p_estime_ +=
-        dot_dot_epsilon_theta_p * dt / N + 0*((dot_beta - dot_beta_n1_) / dt) * (dt * dt / 2);
-      beta_r_estime_ += dot_beta * dt / N + 0*((dot_dot_vg - dot_dot_vg_n1_) / dt) * (dt * dt / 2);
+        dot_dot_epsilon_theta_p * dt / N + 1*((dot_dot_epsilon_theta_p - dot_dot_epsilon_theta_p_n1_) / dt) * (dt * dt / 2);
+      beta_r_estime_ += dot_beta * dt / N + 1*((dot_beta - dot_beta_n1_) / dt) * (dt * dt / 2);
       dot_epsilon_s_p_estime_ +=
         dot_dot_vg * dt / N +
-        0*((dot_dot_epsilon_theta_p - dot_dot_epsilon_theta_p_n1_) / dt) * (dt * dt / 2);
+        1*((dot_dot_vg - dot_dot_vg_n1_) / dt) * (dt * dt / 2);
 
       dot_epsilon_x_estime_n1_ = dot_epsilon_x_estime;
       dot_epsilon_y_estime_n1_ = dot_epsilon_y_estime;
@@ -167,7 +150,7 @@ void SlidingObserversPicardSkidLyapunov::reset()
 
 double SlidingObserversPicardSkidLyapunov::getBetaR() const
 {
-  return counter_ >= end_counter_ ? -beta_r_estime_ : 0;
+  return counter_ >= end_counter_ ? beta_r_estime_ : 0;
 }
 
 double SlidingObserversPicardSkidLyapunov::getDotThetaP() const

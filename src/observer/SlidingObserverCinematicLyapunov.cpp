@@ -123,7 +123,7 @@ void SlidingObserverCinematicLyapunov::updateObserverHandbooks_(
     if (fabs(vitesse) > vbas) {
       alpha_v = a * vitesse + b;
     } else {
-      alpha_v = 10;
+      alpha_v = alpha_max;
     }
   }
 
