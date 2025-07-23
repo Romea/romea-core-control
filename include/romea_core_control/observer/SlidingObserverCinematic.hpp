@@ -12,30 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #ifndef ROMEA_CORE_CONTROL__OBSERVER__SLIDINGOBSERVERCINEMATIC_HPP_
 #define ROMEA_CORE_CONTROL__OBSERVER__SLIDINGOBSERVERCINEMATIC_HPP_
-
-// std
-#include <iostream>
 
 // romea
 #include "romea_core_control/FrontRearData.hpp"
 
-namespace romea
-{
-namespace core
+namespace romea::core
 {
 
 class SlidingObserverCinematic
 {
 public:
-  explicit SlidingObserverCinematic(const double & samplingPeriod);
+  explicit SlidingObserverCinematic(double samplingPeriod);
 
   virtual ~SlidingObserverCinematic() = default;
 
 public:
-  FrontRearData getSlidingAngles()const;
+  FrontRearData getSlidingAngles() const;
 
   virtual double getFrontSlidingAngle() const = 0;
 
@@ -48,7 +42,6 @@ protected:
   bool is_initialized_;
 };
 
-}  // namespace core
-}  // namespace romea
+}  // namespace romea::core
 
-#endif   // ROMEA_CORE_CONTROL__OBSERVER__SLIDINGOBSERVERCINEMATIC_HPP_
+#endif  // ROMEA_CORE_CONTROL__OBSERVER__SLIDINGOBSERVERCINEMATIC_HPP_

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #ifndef ROMEA_CORE_CONTROL__COMMAND__FOLLOWTRAJECTORYPREDICTIVESLIDING_HPP_
 #define ROMEA_CORE_CONTROL__COMMAND__FOLLOWTRAJECTORYPREDICTIVESLIDING_HPP_
 
@@ -23,11 +22,8 @@
 // romea
 #include "romea_core_control/FrontRearData.hpp"
 
-namespace romea
+namespace romea::core
 {
-namespace core
-{
-
 
 class FollowTrajectoryPredictiveSliding
 {
@@ -44,10 +40,7 @@ public:
   };
 
 public:
-  FollowTrajectoryPredictiveSliding(
-    double wheel_base,
-    const Parameters & parameters);
-
+  FollowTrajectoryPredictiveSliding(double wheel_base, const Parameters & parameters);
 
   FrontRearData computeSteeringAngles(
     double lateral_deviation,
@@ -79,7 +72,6 @@ private:
     double desired_lateral_deviation,
     double future_desired_lateral_deviation);
 
-
   double computeRearSteeringAngle_(
     double lateral_deviation,
     double course_deviation,
@@ -90,10 +82,7 @@ private:
 
   double commandPred_(double CommFutur);
 
-  std::vector<double> reference_(
-    double CommFutur,
-    double alpha,
-    double feinte1);
+  std::vector<double> reference_(double CommFutur, double alpha, double feinte1);
 
 private:
   double wheelbase_;
@@ -112,7 +101,6 @@ private:
   double DeltaEcartAV;
 };
 
-}  // namespace core
-}  // namespace romea
+}  // namespace romea::core
 
 #endif  // ROMEA_CORE_CONTROL__COMMAND__FOLLOWTRAJECTORYPREDICTIVESLIDING_HPP_

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 // Eigen
 #include <Eigen/Dense>
 
@@ -26,23 +25,18 @@
 // local
 #include "romea_core_control/command/FollowTrajectoryClassicSliding.hpp"
 
-
 // namespace {
 // const double DEFAULT_KD = 0.7;
 // const double DEFAULT_KP =DEFAULT_KD*DEFAULT_KD/4;
 // const double DEFAULT_KD2 = 0.5;
 // }
 
-namespace romea
+namespace romea::core
 {
-namespace core
-{
-
 
 //-----------------------------------------------------------------------------
 FollowTrajectoryClassicSliding::FollowTrajectoryClassicSliding(
-  double whee_base,
-  const Parameters & parameters)
+  double whee_base, const Parameters & parameters)
 : wheelbase_(whee_base),
   KD_(parameters.front_kp),
   KP_(KD_ * KD_ / 4),
@@ -79,10 +73,8 @@ FrontRearData FollowTrajectoryClassicSliding::computeSteeringAngles(
     rear_sliding_angle + rear_steering_angle,
     desired_lateral_deviation);
 
-  front_steering_angle_ = clamp(
-    front_steering_angle_,
-    -front_maximal_steering_angle,
-    front_maximal_steering_angle);
+  front_steering_angle_ =
+    clamp(front_steering_angle_, -front_maximal_steering_angle, front_maximal_steering_angle);
 
   // compute rear steering angle
   double rear_steering_angle_ = computeRearSteeringAngle_(
@@ -93,11 +85,8 @@ FrontRearData FollowTrajectoryClassicSliding::computeSteeringAngles(
     desired_lateral_deviation,
     desired_course_deviation);
 
-
-  rear_steering_angle_ = clamp(
-    rear_steering_angle_,
-    -rear_maximal_steering_angle,
-    rear_maximal_steering_angle);
+  rear_steering_angle_ =
+    clamp(rear_steering_angle_, -rear_maximal_steering_angle, rear_maximal_steering_angle);
 
   return {front_steering_angle_, rear_steering_angle_};
 }
@@ -114,12 +103,14 @@ double FollowTrajectoryClassicSliding::computeFrontSteeringAngle_(
   double a1 = course_deviation + rear_sliding_angle + DeltaM_ar;
   double a2 = 1 - curvature * lateral_deviation;
   double a3 = -KD_ * a2 * std::tan(a1) - KP_ * (lateral_deviation - desired_lateral_deviation) +
-    curvature * a2 * ((std::tan(a1)) * (std::tan(a1)));
+              curvature * a2 * ((std::tan(a1)) * (std::tan(a1)));
 
   return std::atan(
-    (wheelbase_ / std::cos(rear_sliding_angle + DeltaM_ar)) *
-    (curvature * std::cos(a1) / a2 + a3 * ( (std::cos(a1)) * (std::cos(a1)) * (std::cos(a1))) /
-    (a2 * a2)) + std::tan(rear_sliding_angle)) + front_sliding_angle;
+           (wheelbase_ / std::cos(rear_sliding_angle + DeltaM_ar)) *
+             (curvature * std::cos(a1) / a2 +
+              a3 * ((std::cos(a1)) * (std::cos(a1)) * (std::cos(a1))) / (a2 * a2)) +
+           std::tan(rear_sliding_angle)) +
+         front_sliding_angle;
 }
 
 //------------------------------------------------------------------------------
@@ -145,17 +136,16 @@ double FollowTrajectoryClassicSliding::computeRearSteeringAngle_(
       KD2_ * (course_deviation - desired_course_deviation) / KD_);
   } else {
     double alpha = 1 - curvature * (lateral_deviation - desired_lateral_deviation);
-    double delta = KD_ * KD_ / alpha - 4 * curvature * KD2_ *
-      (course_deviation - desired_course_deviation);
+    double delta =
+      KD_ * KD_ / alpha - 4 * curvature * KD2_ * (course_deviation - desired_course_deviation);
     rear_steering_angle_ += std::atan((KD_ - std::sqrt(delta)) / (2 * curvature));
   }
 
-  if (std::abs(rear_steering_angle_) > M_PI_4) { // ???
+  if (std::abs(rear_steering_angle_) > M_PI_4) {  // ???
     rear_steering_angle_ += std::copysign(M_PI_2, -rear_steering_angle_);
   }
 
   return -rear_steering_angle_;
 }
 
-}  // namespace core
-}  // namespace romea
+}  // namespace romea::core

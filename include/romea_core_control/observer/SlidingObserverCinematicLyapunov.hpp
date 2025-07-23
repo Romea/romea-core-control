@@ -12,16 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #ifndef ROMEA_CORE_CONTROL__OBSERVER__SLIDINGOBSERVERCINEMATICLYAPUNOV_HPP_
 #define ROMEA_CORE_CONTROL__OBSERVER__SLIDINGOBSERVERCINEMATICLYAPUNOV_HPP_
 
 // romea
 #include "SlidingObserverCinematic.hpp"
 
-namespace romea
-{
-namespace core
+namespace romea::core
 {
 
 class SlidingObserverCinematicLyapunov : public SlidingObserverCinematic
@@ -38,9 +35,7 @@ public:
 
 public:
   SlidingObserverCinematicLyapunov(
-    const double & samplingPeriod,
-    const double & wheelBase,
-    const Parameters & parameters);
+    double samplingPeriod, double wheelBase, const Parameters & parameters);
 
   virtual ~SlidingObserverCinematicLyapunov() = default;
 
@@ -57,25 +52,17 @@ public:
 
   double getRearSlidingAngle() const override;
 
-  const double & getX() const;
+  double getX() const;
 
-  const double & getY() const;
+  double getY() const;
 
-  const double & getTheta() const;
+  double getTheta() const;
 
-  void initObserverHandbooks_(
-    double X,
-    double Y,
-    double Theta);
+  void initObserverHandbooks_(double X, double Y, double Theta);
 
 private:
   void updateObserverHandbooks_(
-    double X,
-    double Y,
-    double Theta,
-    double deltaF,
-    double deltaR,
-    double vitesse);
+    double X, double Y, double Theta, double deltaF, double deltaR, double vitesse);
 
 private:
   double wheelBase_;
@@ -94,7 +81,7 @@ private:
   double Ktwo2_;
 };
 
-}  // namespace core
-}  // namespace romea
+} // namespace romea::core
+
 
 #endif  //  ROMEA_CORE_CONTROL__OBSERVER__SLIDINGOBSERVERCINEMATICLYAPUNOV_HPP_

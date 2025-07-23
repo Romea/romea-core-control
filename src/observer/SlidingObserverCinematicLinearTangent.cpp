@@ -12,23 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 // std
 #include <cmath>
 
 // romea
 #include "romea_core_control/observer/SlidingObserverCinematicLinearTangent.hpp"
 
-namespace romea
-{
-namespace core
+namespace romea::core
 {
 
 //-----------------------------------------------------------------------------
 SlidingObserverCinematicLinearTangent::SlidingObserverCinematicLinearTangent(
-  const double & samplingPeriod,
-  const double & wheelBase,
-  const Parameters & parameters)
+  double samplingPeriod, double wheelBase, const Parameters & parameters)
 : SlidingObserverCinematic(samplingPeriod),
   wheelBase_(wheelBase),
   betaR(0),
@@ -58,15 +53,14 @@ SlidingObserverCinematicLinearTangent::SlidingObserverCinematicLinearTangent(
   G_(1, 1) = parameters.courseDeviationGain;
 }
 
-
 //-----------------------------------------------------------------------------
 void SlidingObserverCinematicLinearTangent::update(
-  const double & lateralDeviation,
-  const double & courseDeviation,
-  const double & curvature,
-  const double & linearSpeed,
-  const double & frontSteeringAngle,
-  const double & rearSteeringAngle)
+  double lateralDeviation,
+  double courseDeviation,
+  double curvature,
+  double linearSpeed,
+  double frontSteeringAngle,
+  double rearSteeringAngle)
 {
   if (!is_initialized_ || std::abs(linearSpeed) < 0.2) {
     initObserver_(lateralDeviation, courseDeviation);
@@ -94,7 +88,6 @@ void SlidingObserverCinematicLinearTangent::update(
   }
 }
 
-
 //-----------------------------------------------------------------------------
 double SlidingObserverCinematicLinearTangent::getFrontSlidingAngle() const
 {
@@ -108,9 +101,7 @@ double SlidingObserverCinematicLinearTangent::getRearSlidingAngle() const
 }
 
 //-----------------------------------------------------------------------------
-void SlidingObserverCinematicLinearTangent::initObserver_(
-  const double & ElatM,
-  const double & EcapM)
+void SlidingObserverCinematicLinearTangent::initObserver_(double ElatM, double EcapM)
 {
   Elat4 = Elat_av = ElatM;
   Ecap4 = Ecap_av = EcapM;
@@ -124,15 +115,10 @@ void SlidingObserverCinematicLinearTangent::initObserver_(
 
 //-----------------------------------------------------------------------------
 bool SlidingObserverCinematicLinearTangent::computeSliding_(
-  const double & ElatM,
-  const double & EcapM,
-  const double & vitesse,
-  const double & delta,
-  const double & courb,
-  const double & d_AR)
+  double ElatM, double EcapM, double vitesse, double delta, double courb, double d_AR)
 {
-  const double & wheelbase_ = wheelBase_;
-  const double & sampling_period_ = samplingPeriod_;
+  double wheelbase_ = wheelBase_;
+  double sampling_period_ = samplingPeriod_;
 
   //  Eigen::Matrix2d G,B,invB;
   //  Eigen::Vector2d A,Y,K,X;
@@ -147,15 +133,13 @@ bool SlidingObserverCinematicLinearTangent::computeSliding_(
     G(1,1) = -5;*/
 
   A_(0) = vitesse * std::sin(Ecap4 + d_AR);
-  A_(1) = vitesse * std::cos(d_AR) * (std::tan(delta) - std::tan(d_AR)) / wheelbase_ - vitesse *
-    (courb * std::cos(Ecap4 + d_AR) / (1 - courb * (Elat4)));
+  A_(1) = vitesse * std::cos(d_AR) * (std::tan(delta) - std::tan(d_AR)) / wheelbase_ -
+          vitesse * (courb * std::cos(Ecap4 + d_AR) / (1 - courb * (Elat4)));
 
   B_(0, 0) = vitesse * std::cos(Ecap4 + d_AR);
   B_(0, 1) = 0;
-  B_(
-    1,
-    0) = vitesse * (courb * std::sin(Ecap4 + d_AR) / (1 - courb * Elat4)) - vitesse * (std::cos(
-      d_AR) + std::tan(delta) * std::sin(d_AR)) / wheelbase_;
+  B_(1, 0) = vitesse * (courb * std::sin(Ecap4 + d_AR) / (1 - courb * Elat4)) -
+             vitesse * (std::cos(d_AR) + std::tan(delta) * std::sin(d_AR)) / wheelbase_;
   B_(1, 1) = (vitesse * std::cos(d_AR) / wheelbase_) * (1 + pow(std::tan(delta), 2));
 
   // Derivation Ecart lateral et angulaire & Filtrage
@@ -188,7 +172,6 @@ bool SlidingObserverCinematicLinearTangent::computeSliding_(
     betaF = 0;
   }
 
-
   if (betaR > 40 * M_PI / 180) {
     betaR = 40 * M_PI / 180;
   }
@@ -211,16 +194,10 @@ bool SlidingObserverCinematicLinearTangent::computeSliding_(
 
 //-----------------------------------------------------------------------------
 bool SlidingObserverCinematicLinearTangent::computeSliding2_(
-  const double & ElatM,
-  const double & EcapM,
-  const double & vitesse,
-  const double & delta,
-  const double & courb,
-  const double & /*d_AR*/)
+  double ElatM, double EcapM, double vitesse, double delta, double courb, double /*d_AR*/)
 {
-  const double & wheelbase_ = wheelBase_;
-  const double & sampling_period_ = samplingPeriod_;
-
+  double wheelbase_ = wheelBase_;
+  double sampling_period_ = samplingPeriod_;
 
   //  Eigen::Matrix2d G,B;
   //  Eigen::Vector2d Y,X;
@@ -237,10 +214,10 @@ bool SlidingObserverCinematicLinearTangent::computeSliding2_(
   B_(0, 0) = 0;
   B_(1, 0) = vitesse * std::cos(EcapM + betaR);
   B_(0, 1) = vitesse * std::cos(betaR) * (1 + std::tan(delta + betaF) * std::tan(delta + betaF)) /
-    wheelbase_;
+             wheelbase_;
   B_(1, 1) = vitesse * (courb * std::sin(EcapM + betaR) / (1 - courb * ElatM)) -
-    vitesse * std::sin(betaR) * (std::tan(delta + betaF) - std::tan(betaR)) / wheelbase_ -
-    vitesse * std::cos(betaR) * (1 + std::tan(betaR) * std::tan(betaR)) / wheelbase_;
+             vitesse * std::sin(betaR) * (std::tan(delta + betaF) - std::tan(betaR)) / wheelbase_ -
+             vitesse * std::cos(betaR) * (1 + std::tan(betaR) * std::tan(betaR)) / wheelbase_;
 
   // B(2,1) = vitesse*std::cos(Ecap4+d_AR);
   // B(1,1) = 0;
@@ -268,19 +245,15 @@ bool SlidingObserverCinematicLinearTangent::computeSliding2_(
 
 //-----------------------------------------------------------------------------
 void SlidingObserverCinematicLinearTangent::evolution_(
-  const double & ElatM,
-  const double & EcapM,
-  const double & vitesse,
-  const double & delta,
-  const double & courb,
-  const double & d_AR)
+  double ElatM, double EcapM, double vitesse, double delta, double courb, double d_AR)
 {
-  const double & sampling_period_ = samplingPeriod_;
-  const double & wheelbase_ = wheelBase_;
+  double sampling_period_ = samplingPeriod_;
+  double wheelbase_ = wheelBase_;
 
-  Ecap4 += (vitesse * sampling_period_) *
+  Ecap4 +=
+    (vitesse * sampling_period_) *
     (std::cos(betaR + d_AR) * (std::tan(delta + betaF) - std::tan(betaR + d_AR)) / wheelbase_ -
-    (courb * std::cos(Ecap4 + betaR + d_AR)) / (1 - courb * Elat4));
+     (courb * std::cos(Ecap4 + betaR + d_AR)) / (1 - courb * Elat4));
   Elat4 += vitesse * sampling_period_ * std::sin(Ecap4 + betaR + d_AR);
   if (counter_ < 10) {
     Elat4 = ElatM;
@@ -291,24 +264,20 @@ void SlidingObserverCinematicLinearTangent::evolution_(
 
 //-----------------------------------------------------------------------------
 void SlidingObserverCinematicLinearTangent::evolution2_(
-  const double & ElatM,
-  const double & EcapM,
-  const double & vitesse,
-  const double & delta,
-  const double & courb,
-  const double & d_AR)
+  double ElatM, double EcapM, double vitesse, double delta, double courb, double d_AR)
 {
-  const double & sampling_period_ = samplingPeriod_;
-  const double & wheelbase_ = wheelBase_;
+  double sampling_period_ = samplingPeriod_;
+  double wheelbase_ = wheelBase_;
 
   double K11 = 10;
   double K12 = 10;
-  Ecap4 += vitesse * sampling_period_ *
-    (std::cos(betaR + d_AR) * (std::tan(delta + betaF) - std::tan(betaR + d_AR)) / wheelbase_ -
-    (courb * std::cos(EcapM + betaR + d_AR)) / (1 - courb * ElatM) ) -
+  Ecap4 +=
+    vitesse * sampling_period_ *
+      (std::cos(betaR + d_AR) * (std::tan(delta + betaF) - std::tan(betaR + d_AR)) / wheelbase_ -
+       (courb * std::cos(EcapM + betaR + d_AR)) / (1 - courb * ElatM)) -
     K12 * sampling_period_ * (Ecap4 - EcapM);
   Elat4 += vitesse * sampling_period_ * std::sin(EcapM + betaR + d_AR) -
-    K11 * sampling_period_ * (Elat4 - ElatM);
+           K11 * sampling_period_ * (Elat4 - ElatM);
 
   if (counter_ < 10) {
     Elat4 = ElatM;
@@ -318,16 +287,15 @@ void SlidingObserverCinematicLinearTangent::evolution2_(
 }
 
 //-----------------------------------------------------------------------------
-const double & SlidingObserverCinematicLinearTangent::getLateralDeviation()const
+double SlidingObserverCinematicLinearTangent::getLateralDeviation() const
 {
   return Elat4;
 }
 
 //-----------------------------------------------------------------------------
-const double & SlidingObserverCinematicLinearTangent::getCourseDeviation() const
+double SlidingObserverCinematicLinearTangent::getCourseDeviation() const
 {
   return Ecap4;
 }
 
-}  // namespace core
-}  // namespace romea
+}  // namespace romea::core

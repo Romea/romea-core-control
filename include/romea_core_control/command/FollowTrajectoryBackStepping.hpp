@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #ifndef ROMEA_CORE_CONTROL__COMMAND__FOLLOWTRAJECTORYBACKSTEPPING_HPP_
 #define ROMEA_CORE_CONTROL__COMMAND__FOLLOWTRAJECTORYBACKSTEPPING_HPP_
 
@@ -37,9 +36,7 @@ public:
 
 public:
   FollowTrajectoryBackStepping(
-    double sampling_period,
-    double wheelbase,
-    const Parameters & parameters);
+    double sampling_period, double wheelbase, const Parameters & parameters);
 
   double computeAngularSpeed(
     double lateral_deviation,
@@ -66,9 +63,7 @@ public:
   void reset();
 
 private:
-  void update_integral_(
-    double desired_lateral_deviation,
-    double error);
+  void update_integral_(double desired_lateral_deviation, double error);
 
 private:
   double wheelbase_;
@@ -87,7 +82,6 @@ private:
   double last_desired_lateral_deviation_;
 };
 
-} // namespace romea::core
-
+}  // namespace romea::core
 
 #endif  // ROMEA_CORE_CONTROL__COMMAND__FOLLOWME_HPP_

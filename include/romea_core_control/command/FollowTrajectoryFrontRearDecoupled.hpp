@@ -33,20 +33,20 @@ public:
 public:
   FollowTrajectoryFrontRearDecoupled(double wheel_base, Parameters parameters);
 
-FrontRearData computeSteeringAngles(
-  double lateral_deviation,
-  double course_deviation,
-  double curvature,
-  double future_curvature,
-  double linear_speed,
-  double front_steering_angle,
-  double rear_steering_angle,
-  double front_sliding_angle,
-  double rear_sliding_angle,
-  double front_maximal_steering_angle,
-  double rear_maximal_steering_angle,
-  double desired_lateral_deviation,
-  double desired_course_deviation) const;
+  FrontRearData computeSteeringAngles(
+    double lateral_deviation,
+    double course_deviation,
+    double curvature,
+    double future_curvature,
+    double linear_speed,
+    double front_steering_angle,
+    double rear_steering_angle,
+    double front_sliding_angle,
+    double rear_sliding_angle,
+    double front_maximal_steering_angle,
+    double rear_maximal_steering_angle,
+    double desired_lateral_deviation,
+    double desired_course_deviation) const;
 
 private:
   double computeFrontSteeringAngle_(

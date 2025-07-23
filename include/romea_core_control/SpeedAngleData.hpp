@@ -12,13 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #ifndef ROMEA_CORE_CONTROL__SPEEDANGLEDATA_HPP_
 #define ROMEA_CORE_CONTROL__SPEEDANGLEDATA_HPP_
 
-namespace romea
-{
-namespace core
+namespace romea::core
 {
 
 struct SpeedAngleData
@@ -27,8 +24,6 @@ struct SpeedAngleData
   double angle;
 };
 
-}  // namespace core
-}  // namespace romea
-
+}  // namespace romea::core
 
 #endif  // ROMEA_CORE_CONTROL__SPEEDANGLEDATA_HPP_

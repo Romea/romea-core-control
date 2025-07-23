@@ -12,35 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #ifndef ROMEA_CORE_CONTROL__OBSERVER__SPEEDOBSERVERROLAND_HPP_
 #define ROMEA_CORE_CONTROL__OBSERVER__SPEEDOBSERVERROLAND_HPP_
 
-namespace romea
-{
-namespace core
+namespace romea::core
 {
 
 class SpeedObserverRoland
 {
 public:
-  explicit SpeedObserverRoland(const double & sample_period);
+  explicit SpeedObserverRoland(double sample_period);
 
-  SpeedObserverRoland(
-    const double & sample_period,
-    const double & kd);
-
+  SpeedObserverRoland(double sample_period, double kd);
 
   double update(
-    const double & longitudinal_deviation,
-    const double & course_deviation,
-    const double & follower_linear_speed,
-    const double & follower_angular_speed);
+    double longitudinal_deviation,
+    double course_deviation,
+    double follower_linear_speed,
+    double follower_angular_speed);
 
   double update(
-    const double & longitudinal_deviation,
-    const double & course_deviation,
-    const double & follower_linear_speed);
+    double longitudinal_deviation, double course_deviation, double follower_linear_speed);
 
   void reset();
 
@@ -57,7 +49,6 @@ private:
   bool is_initialized_;
 };
 
-}  // namespace core
-}  // namespace romea
+}  // namespace romea::core
 
 #endif  // ROMEA_CORE_CONTROL__OBSERVER__SPEEDOBSERVERROLAND_HPP_

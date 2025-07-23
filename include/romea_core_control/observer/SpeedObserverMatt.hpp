@@ -12,62 +12,45 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #ifndef ROMEA_CORE_CONTROL__OBSERVER__SPEEDOBSERVERMATT_HPP_
 #define ROMEA_CORE_CONTROL__OBSERVER__SPEEDOBSERVERMATT_HPP_
 
 // romea
 #include "SpeedObserver.hpp"
 
-namespace romea
-{
-namespace core
+namespace romea::core
 {
 
 class SpeedObserverMatt : public SpeedObserver
 {
 public:
-  explicit SpeedObserverMatt(const double & samplingPeriod);
+  explicit SpeedObserverMatt(double samplingPeriod);
 
-  SpeedObserverMatt(
-    const double & samplingPeriod,
-    const double & wheelBase);
+  SpeedObserverMatt(double samplingPeriod, double wheelBase);
 
   virtual ~SpeedObserverMatt();
 
-  void setWheelBase(const double & wheelBase);
+  void setWheelBase(double wheelBase);
 
-  const double & getWheelBase()const;
+  double getWheelBase() const;
 
 public:
-  void init(
-    double x,
-    double y);
+  void init(double x, double y);
 
-  void update(
-    double x,
-    double y,
-    double linearSpeed,
-    double angularSpeed);
+  void update(double x, double y, double linearSpeed, double angularSpeed);
 
-  const double & getSpeed() const override;
+  double getSpeed() const override;
 
-  const double & getAngle() const override;
+  double getAngle() const override;
 
-  const double & getX() const;
+  double getX() const;
 
-  const double & getY() const;
+  double getY() const;
 
 private:
-  void initObserverMatt_(
-    double X,
-    double Y);
+  void initObserverMatt_(double X, double Y);
 
-  void updateObserverMatt_(
-    double X,
-    double Y,
-    double vitesse,
-    double omega);
+  void updateObserverMatt_(double X, double Y, double vitesse, double omega);
 
 private:
   double wheelBase_;
@@ -79,7 +62,6 @@ private:
   unsigned int counter_hand_;
 };
 
-}  // namespace core
-}  // namespace romea
+}  // namespace romea::core
 
 #endif  // ROMEA_CORE_CONTROL__OBSERVER__SPEEDOBSERVERMATT_HPP_

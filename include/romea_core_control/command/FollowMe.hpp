@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #ifndef ROMEA_CORE_CONTROL__COMMAND__FOLLOWME_HPP_
 #define ROMEA_CORE_CONTROL__COMMAND__FOLLOWME_HPP_
 
@@ -22,9 +21,7 @@
 // romea
 #include "romea_core_control/FrontRearData.hpp"
 
-namespace romea
-{
-namespace core
+namespace romea::core
 {
 
 class FollowMe
@@ -39,13 +36,11 @@ public:
   };
 
 public:
-  FollowMe(
-    double sampling_period,
-    const Parameters & parameters);
+  FollowMe(double sampling_period, const Parameters & parameters);
 
   void setDesiredLateralDeviation(double desired_lat_dev);
 
-  double getDesiredLateralDeviation()const;
+  double getDesiredLateralDeviation() const;
 
   double computeAngularSpeed(
     double lateral_deviation,
@@ -83,7 +78,6 @@ public:
     double & omega_d,
     double & theta_consigne);
 
-
   FrontRearData computeSteeringAngles(
     double wheelbase,
     double lateral_deviation,
@@ -104,7 +98,6 @@ public:
     double & omega_d,
     double & theta_consigne);
 
-
   void reset();
 
 private:
@@ -119,7 +112,6 @@ private:
   double integrated_omega_;
 };
 
-}  // namespace core
-}  // namespace romea
+}  // namespace romea::core
 
 #endif  // ROMEA_CORE_CONTROL__COMMAND__FOLLOWME_HPP_

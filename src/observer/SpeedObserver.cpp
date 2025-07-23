@@ -12,18 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #include "romea_core_control/observer/SpeedObserver.hpp"
 
-namespace romea
-{
-namespace core
+namespace romea::core
 {
 
 //-----------------------------------------------------------------------------
-SpeedObserver::SpeedObserver(const double & samplingPeriod)
-: samplingPeriod_(samplingPeriod),
-  is_initialized_(false)
+SpeedObserver::SpeedObserver(double samplingPeriod)
+: samplingPeriod_(samplingPeriod), is_initialized_(false)
 {
 }
 
@@ -33,7 +29,7 @@ SpeedObserver::~SpeedObserver()
 }
 
 //-----------------------------------------------------------------------------
-SpeedAngleData SpeedObserver::getSpeedAngle()const
+SpeedAngleData SpeedObserver::getSpeedAngle() const
 {
   return {getSpeed(), getAngle()};
 }
@@ -44,5 +40,4 @@ void SpeedObserver::reset()
   is_initialized_ = false;
 }
 
-}  // namespace core
-}  // namespace romea
+}  // namespace romea::core

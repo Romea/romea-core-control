@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 // Mathieu Deremetz // Coordonnées polaires
 // romea
 #include "romea_core_control/observer/SpeedObserverMatt.hpp"
@@ -20,22 +19,16 @@
 // std
 #include <cmath>
 
-namespace romea
-{
-
-namespace core
+namespace romea::core
 {
 
 //-----------------------------------------------------------------------------
-SpeedObserverMatt::SpeedObserverMatt(const double & samplingPeriod)
-: SpeedObserverMatt(samplingPeriod, 0.)
+SpeedObserverMatt::SpeedObserverMatt(double samplingPeriod) : SpeedObserverMatt(samplingPeriod, 0.)
 {
 }
 
 //-----------------------------------------------------------------------------
-SpeedObserverMatt::SpeedObserverMatt(
-  const double & samplingPeriod,
-  const double & wheelBase)
+SpeedObserverMatt::SpeedObserverMatt(double samplingPeriod, double wheelBase)
 : SpeedObserver(samplingPeriod),
   wheelBase_(wheelBase),
   XObs(0),
@@ -52,23 +45,19 @@ SpeedObserverMatt::~SpeedObserverMatt()
 }
 
 //-----------------------------------------------------------------------------
-void SpeedObserverMatt::setWheelBase(const double & wheelBase)
+void SpeedObserverMatt::setWheelBase(double wheelBase)
 {
   wheelBase_ = wheelBase;
 }
 
 //-----------------------------------------------------------------------------
-const double & SpeedObserverMatt::getWheelBase()const
+double SpeedObserverMatt::getWheelBase() const
 {
   return wheelBase_;
 }
 
 //-----------------------------------------------------------------------------
-void SpeedObserverMatt::update(
-  double x,
-  double y,
-  double linearSpeed,
-  double angularspeed)
+void SpeedObserverMatt::update(double x, double y, double linearSpeed, double angularspeed)
 {
   if (!is_initialized_) {
     is_initialized_ = true;
@@ -78,11 +67,8 @@ void SpeedObserverMatt::update(
   }
 }
 
-
 //-----------------------------------------------------------------------------
-void SpeedObserverMatt::initObserverMatt_(
-  double X,
-  double Y)
+void SpeedObserverMatt::initObserverMatt_(double X, double Y)
 {
   XObs = X;
   YObs = Y;
@@ -91,27 +77,22 @@ void SpeedObserverMatt::initObserverMatt_(
 }
 
 //-----------------------------------------------------------------------------
-const double & SpeedObserverMatt::getSpeed() const
+double SpeedObserverMatt::getSpeed() const
 {
   return SpeedMatt;
 }
 
 //-----------------------------------------------------------------------------
-const double & SpeedObserverMatt::getAngle() const
+double SpeedObserverMatt::getAngle() const
 {
   return AngleMatt;
 }
 
-
 //-----------------------------------------------------------------------------
-void SpeedObserverMatt::updateObserverMatt_(
-  double X,
-  double Y,
-  double vitesse,
-  double omega)
+void SpeedObserverMatt::updateObserverMatt_(double X, double Y, double vitesse, double omega)
 {
-  // const double &wheelbase_= wheelBase_;
-  const double & sampling_period_ = samplingPeriod_;
+  // doublewheelbase_= wheelBase_;
+  double sampling_period_ = samplingPeriod_;
 
   // std::cout << "var" << " " << X <<" "<< Y <<" "<< vitesse <<" "<< omega <<std::endl;
   double rho = X;
@@ -125,8 +106,8 @@ void SpeedObserverMatt::updateObserverMatt_(
 
   double Kvitesse1 = 50;  //
   double Kvitesse2 = 50;  //
-  double Kangle1 = 500;  // 100
-  double Kangle2 = 500;  // 100
+  double Kangle1 = 500;   // 100
+  double Kangle2 = 500;   // 100
 
   // Definition matrices
 
@@ -160,15 +141,16 @@ void SpeedObserverMatt::updateObserverMatt_(
     SpeedMatt += sampling_period_ / N * dotSpeedMatt;
     AngleMatt += sampling_period_ / N * dotAngleMatt;
 
-    if (SpeedMatt < 0.2) {AngleMatt = 0;}
+    if (SpeedMatt < 0.2) {
+      AngleMatt = 0;
+    }
   }
-//  std::cout << "pos-reel" << " " << X <<" "<< Y <<std::endl;
-//  std::cout << "pos-esti" << " " << XObs <<" "<< YObs <<std::endl;
+  //  std::cout << "pos-reel" << " " << X <<" "<< Y <<std::endl;
+  //  std::cout << "pos-esti" << " " << XObs <<" "<< YObs <<std::endl;
 
   if (SpeedMatt > 2) {
     SpeedMatt = 2;
   }
-
 
   //  if (SpeedMatt<0.3 || vitesse==0)
   //  {
@@ -185,16 +167,15 @@ void SpeedObserverMatt::updateObserverMatt_(
 }
 
 //-----------------------------------------------------------------------------
-const double & SpeedObserverMatt::getX() const
+double SpeedObserverMatt::getX() const
 {
   return XObs;
 }
 
 //-----------------------------------------------------------------------------
-const double & SpeedObserverMatt::getY() const
+double SpeedObserverMatt::getY() const
 {
   return YObs;
 }
 
-}  // namespace core
-}  // namespace romea
+}  // namespace romea::core

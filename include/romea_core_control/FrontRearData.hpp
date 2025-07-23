@@ -12,13 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #ifndef ROMEA_CORE_CONTROL__FRONTREARDATA_HPP_
 #define ROMEA_CORE_CONTROL__FRONTREARDATA_HPP_
 
-namespace romea
-{
-namespace core
+namespace romea::core
 {
 
 struct FrontRearData
@@ -27,7 +24,6 @@ struct FrontRearData
   double rear;
 };
 
-}  // namespace core
-}  // namespace romea
+}  // namespace romea::core
 
 #endif  // ROMEA_CORE_CONTROL__FRONTREARDATA_HPP_

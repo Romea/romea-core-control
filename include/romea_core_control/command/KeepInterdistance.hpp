@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #ifndef ROMEA_CORE_CONTROL__COMMAND__KEEPINTERDISTANCE_HPP_
 #define ROMEA_CORE_CONTROL__COMMAND__KEEPINTERDISTANCE_HPP_
 
@@ -20,15 +19,11 @@
 #include <vector>
 
 // romea
-#include "romea_core_common/signal/FirstOrderButterworth.hpp"
 #include "romea_core_common/math/Algorithm.hpp"
+#include "romea_core_common/signal/FirstOrderButterworth.hpp"
 
-
-namespace romea
+namespace romea::core
 {
-namespace core
-{
-
 
 class KeepInterdistance
 {
@@ -41,7 +36,6 @@ public:
     double leader_linear_speed,
     double follower_maximal_linear_speed);
 
-
   double computeFollowerSpeed(
     double desired_interdistance,
     double interdistance,
@@ -51,7 +45,6 @@ public:
     double follower_ang_dev,
     double courbure,
     double follower_linear_speed);
-
 
   double computeFollowerSpeed(
     double desired_interdistance,
@@ -93,15 +86,13 @@ public:
   void reset();
 
 private:
-//  double clampLinearSpeed_(double linear_speed,
-//                           double maximal_linear_speed);
+  //  double clampLinearSpeed_(double linear_speed,
+  //                           double maximal_linear_speed);
 
   double offsetFreeLinearSpeed_(double linear_speed);
 
   void updateLongitudinalDeviation_(
-    double interdistance,
-    double desired_interdistance,
-    double follower_linear_speed);
+    double interdistance, double desired_interdistance, double follower_linear_speed);
 
 private:
   double sampling_period_;
@@ -111,7 +102,6 @@ private:
   double integrated_longitudinal_deviation_;
 };
 
-}  // namespace core
-}  // namespace romea
+}  // namespace romea::core
 
 #endif  // ROMEA_CORE_CONTROL__COMMAND__KEEPINTERDISTANCE_HPP_

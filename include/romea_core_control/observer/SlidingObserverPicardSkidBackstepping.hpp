@@ -48,7 +48,6 @@ public:
 
   void reset();
 
-
   // VectorXd getEstime();
   // VectorXd getAllEstime();
 
@@ -57,7 +56,6 @@ public:
   [[nodiscard]] double getDotEpsilonSP() const;
   [[nodiscard]] double getLateralEstim() const;
   [[nodiscard]] double getAngularEstime() const;
-
 
 private:
   Parameters params_;

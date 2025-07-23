@@ -56,8 +56,9 @@ public:
   [[nodiscard]] double getYEstime() const;
   [[nodiscard]] double getThetaEstime() const;
   [[nodiscard]] double getXR() const;
-  [[nodiscard]] double getYR() const;    
+  [[nodiscard]] double getYR() const;
   [[nodiscard]] double getThetaR() const;
+
 private:
   static constexpr int end_counter_ = 10;
 
@@ -84,7 +85,7 @@ private:
   double dot_dot_epsilon_theta_p_n1_ = 0;
 
   // Output check
-  double X_R= 0.0;
+  double X_R = 0.0;
   double Y_R = 0.0;
   double Theta_R = 0.0;
 };

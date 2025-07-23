@@ -12,21 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #ifndef ROMEA_CORE_CONTROL__OBSERVER__SLIDINGOBSERVERCINEMATICLINEARTANGENT_HPP_
 #define ROMEA_CORE_CONTROL__OBSERVER__SLIDINGOBSERVERCINEMATICLINEARTANGENT_HPP_
 
 // eigen
 #include <Eigen/Dense>
 
-
 // romea
 #include "romea_core_common/signal/FirstOrderButterworth.hpp"
 #include "romea_core_control/observer/SlidingObserverCinematic.hpp"
 
-namespace romea
-{
-namespace core
+namespace romea::core
 {
 
 class SlidingObserverCinematicLinearTangent : public SlidingObserverCinematic
@@ -44,32 +40,28 @@ public:
 
 public:
   SlidingObserverCinematicLinearTangent(
-    const double & samplingPeriod,
-    const double & wheelBase,
-    const Parameters & parameters);
+    double samplingPeriod, double wheelBase, const Parameters & parameters);
 
   virtual ~SlidingObserverCinematicLinearTangent() = default;
 
 public:
   void update(
-    const double & lateralDeviation,
-    const double & courseDeviation,
-    const double & curvature,
-    const double & linearSpeed,
-    const double & frontSteeringAngle,
-    const double & rearSteeringAngle);
+    double lateralDeviation,
+    double courseDeviation,
+    double curvature,
+    double linearSpeed,
+    double frontSteeringAngle,
+    double rearSteeringAngle);
 
   double getFrontSlidingAngle() const override;
 
   double getRearSlidingAngle() const override;
 
-  const double & getLateralDeviation()const;
+  double getLateralDeviation() const;
 
-  const double & getCourseDeviation()const;
+  double getCourseDeviation() const;
 
-  void initObserver_(
-    const double & ElatM,
-    const double & EcapM);
+  void initObserver_(double ElatM, double EcapM);
 
 private:
   /**
@@ -82,20 +74,20 @@ private:
    * @param[in] rear_steering : in radian, counterclockwise
   **/
   bool computeSliding_(
-    const double & lateral_deviation,
-    const double & cap_deviation,
-    const double & speed,
-    const double & front_steering,
-    const double & curvature,
-    const double & rear_steering);
+    double lateral_deviation,
+    double cap_deviation,
+    double speed,
+    double front_steering,
+    double curvature,
+    double rear_steering);
 
   bool computeSliding2_(
-    const double & lateral_deviation,
-    const double & cap_deviation,
-    const double & speed,
-    const double & front_steering,
-    const double & curvature,
-    const double & rear_steering);
+    double lateral_deviation,
+    double cap_deviation,
+    double speed,
+    double front_steering,
+    double curvature,
+    double rear_steering);
 
   /**
    * evolution of sliding observer
@@ -107,20 +99,20 @@ private:
    * @param[in] rear_steering : in radian, counterclockwise
   **/
   void evolution_(
-    const double & lateral_deviation,
-    const double & cap_deviation,
-    const double & speed,
-    const double & front_steering,
-    const double & curvature,
-    const double & rear_steering);
+    double lateral_deviation,
+    double cap_deviation,
+    double speed,
+    double front_steering,
+    double curvature,
+    double rear_steering);
 
   void evolution2_(
-    const double & lateral_deviation,
-    const double & cap_deviation,
-    const double & speed,
-    const double & front_steering,
-    const double & curvature,
-    const double & rear_steering);
+    double lateral_deviation,
+    double cap_deviation,
+    double speed,
+    double front_steering,
+    double curvature,
+    double rear_steering);
 
 private:
   double wheelBase_;
@@ -145,7 +137,6 @@ private:
   FirstOrderButterworth betaF_f_;
 };
 
-}  // namespace core
-}  // namespace romea
+}  // namespace romea::core
 
 #endif  // ROMEA_CORE_CONTROL__OBSERVER__SLIDINGOBSERVERCINEMATICLINEARTANGENT_HPP_

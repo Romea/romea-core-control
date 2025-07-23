@@ -12,23 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #include "romea_core_control/observer/SlidingObserverCinematic.hpp"
 
-namespace romea
-{
-namespace core
+namespace romea::core
 {
 
 //-----------------------------------------------------------------------------
-SlidingObserverCinematic::SlidingObserverCinematic(const double & samplingPeriod)
-: samplingPeriod_(samplingPeriod),
-  is_initialized_(false)
+SlidingObserverCinematic::SlidingObserverCinematic(double samplingPeriod)
+: samplingPeriod_(samplingPeriod), is_initialized_(false)
 {
 }
 
 //-----------------------------------------------------------------------------
-FrontRearData SlidingObserverCinematic::getSlidingAngles()const
+FrontRearData SlidingObserverCinematic::getSlidingAngles() const
 {
   return {getFrontSlidingAngle(), getRearSlidingAngle()};
 }
@@ -39,5 +35,4 @@ void SlidingObserverCinematic::reset()
   is_initialized_ = false;
 }
 
-}  // namespace core
-}  // namespace romea
+}  // namespace romea::core

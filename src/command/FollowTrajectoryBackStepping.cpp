@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 // std
 #include <cmath>
 #include <iostream>
@@ -23,24 +22,18 @@
 // local
 #include "romea_core_control/command/FollowTrajectoryBackStepping.hpp"
 
-
 // namespace
 // {
 // const double SKID_STEERING_MAXIMAL_OMEGA_D = std::tan(50 * M_PI / 180);
 // const double SKID_STEERING_MAXIMAL_INTEDRATED_OMEGA_D = 0.75;
 // }
 
-namespace romea
+namespace romea::core
 {
-namespace core
-{
-
 
 //-----------------------------------------------------------------------------
 FollowTrajectoryBackStepping::FollowTrajectoryBackStepping(
-  double sampling_period,
-  double wheelbase,
-  const Parameters & parameters)
+  double sampling_period, double wheelbase, const Parameters & parameters)
 : wheelbase_(wheelbase),
   sampling_period_(sampling_period),
   kp_(parameters.kp),
@@ -70,7 +63,6 @@ double FollowTrajectoryBackStepping::computeAngularSpeed(
   double desired_lateral_deviation,
   double & omega_d)
 {
-
   double alpha = 1 - curvature * lateral_deviation;
   omega_d = std::atan2(kp_ * (lateral_deviation - desired_lateral_deviation), alpha);
 
@@ -82,7 +74,7 @@ double FollowTrajectoryBackStepping::computeAngularSpeed(
   update_integral_(lateral_deviation, error);
 
   double angular_speed_command = sign(linear_speed) * (kd_ * error + ki_ * i_) +
-    (linear_speed * curvature * std::cos(course_deviation)) / alpha;
+                                 (linear_speed * curvature * std::cos(course_deviation)) / alpha;
 
   if (std::abs(angular_speed_command) > maximal_angular_speed) {
     angular_speed_command = std::copysign(maximal_angular_speed, angular_speed_command);
@@ -90,7 +82,6 @@ double FollowTrajectoryBackStepping::computeAngularSpeed(
 
   return angular_speed_command;
 }
-
 
 //-----------------------------------------------------------------------------
 FrontRearData FollowTrajectoryBackStepping::computeSteeringAngles(
@@ -117,10 +108,12 @@ FrontRearData FollowTrajectoryBackStepping::computeSteeringAngles(
   double Thet2 = course_deviation + rear_steering_angle + rear_sliding_angle;
   double EpsThet = -(Thet2 - omega_d);
 
-  double front_steering_angle_command = std::atan(
-    (kd_ * EpsThet + curvature) * wheelbase_ * std::cos(Thet2) /
-    std::cos(rear_steering_angle + rear_sliding_angle) +
-    std::tan(rear_steering_angle + rear_sliding_angle)) - front_sliding_angle;
+  double front_steering_angle_command =
+    std::atan(
+      (kd_ * EpsThet + curvature) * wheelbase_ * std::cos(Thet2) /
+        std::cos(rear_steering_angle + rear_sliding_angle) +
+      std::tan(rear_steering_angle + rear_sliding_angle)) -
+    front_sliding_angle;
 
   theta_consigne = 0;
   if ((fabs(omega_d) > 5 * M_PI / 180) || (fabs(EpsThet) > 7.5 * M_PI / 180)) {
@@ -128,32 +121,28 @@ FrontRearData FollowTrajectoryBackStepping::computeSteeringAngles(
   }
 
   double ThetaError2 = theta_consigne - course_deviation;
-  double rear_steering_angle_command = -course_deviation - rear_sliding_angle -
-    (1 / kd_) * (kdd_ * ThetaError2 - kd_ * omega_d);
+  double rear_steering_angle_command =
+    -course_deviation - rear_sliding_angle - (1 / kd_) * (kdd_ * ThetaError2 - kd_ * omega_d);
 
   if (std::abs(rear_steering_angle_command) > maximal_rear_steering_angle) {
-    rear_steering_angle_command = copysign(
-      maximal_rear_steering_angle,
-      rear_steering_angle_command);
+    rear_steering_angle_command =
+      copysign(maximal_rear_steering_angle, rear_steering_angle_command);
   }
 
   if (std::abs(front_steering_angle_command) > maximal_front_steering_angle) {
-    front_steering_angle_command = copysign(
-      maximal_front_steering_angle,
-      front_steering_angle_command);
+    front_steering_angle_command =
+      copysign(maximal_front_steering_angle, front_steering_angle_command);
   }
 
   return {front_steering_angle_command, rear_steering_angle_command};
 }
 
 //-----------------------------------------------------------------------------
-void FollowTrajectoryBackStepping::update_integral_(
-  double desired_lateral_deviation,
-  double error)
+void FollowTrajectoryBackStepping::update_integral_(double desired_lateral_deviation, double error)
 {
-  if (std::abs(desired_lateral_deviation - last_desired_lateral_deviation_) >
-    std::numeric_limits<double>::epsilon())
-  {
+  if (
+    std::abs(desired_lateral_deviation - last_desired_lateral_deviation_) >
+    std::numeric_limits<double>::epsilon()) {
     i_ += sampling_period_ * error;
 
     if (std::abs(i_) > iclamp_) {
@@ -165,6 +154,4 @@ void FollowTrajectoryBackStepping::update_integral_(
   }
 }
 
-
-}  // namespace core
-}  // namespace romea
+}  // namespace romea::core

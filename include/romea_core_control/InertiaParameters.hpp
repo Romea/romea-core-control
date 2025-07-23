@@ -12,15 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #ifndef ROMEA_CORE_CONTROL__INERTIAPARAMETERS_HPP_
 #define ROMEA_CORE_CONTROL__INERTIAPARAMETERS_HPP_
 
 #include <Eigen/Core>
 
-namespace romea
-{
-namespace core
+namespace romea::core
 {
 
 struct InertiaParameters
@@ -30,7 +27,6 @@ struct InertiaParameters
   double zInertialMoment;
 };
 
-}  // namespace core
-}  // namespace romea
+}  // namespace romea::core
 
 #endif  // ROMEA_CORE_CONTROL__INERTIAPARAMETERS_HPP_

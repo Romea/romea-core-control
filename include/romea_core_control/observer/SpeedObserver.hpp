@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #ifndef ROMEA_CORE_CONTROL__OBSERVER__SPEEDOBSERVER_HPP_
 #define ROMEA_CORE_CONTROL__OBSERVER__SPEEDOBSERVER_HPP_
 
@@ -22,24 +21,22 @@
 // romea
 #include "romea_core_control/SpeedAngleData.hpp"
 
-namespace romea
-{
-namespace core
+namespace romea::core
 {
 
 class SpeedObserver
 {
 public:
-  explicit SpeedObserver(const double & samplingPeriod);
+  explicit SpeedObserver(double samplingPeriod);
 
   virtual ~SpeedObserver();
 
 public:
-  SpeedAngleData getSpeedAngle()const;
+  SpeedAngleData getSpeedAngle() const;
 
-  virtual const double & getSpeed() const = 0;
+  virtual double getSpeed() const = 0;
 
-  virtual const double & getAngle() const = 0;
+  virtual double getAngle() const = 0;
 
   virtual void reset();
 
@@ -50,7 +47,6 @@ protected:
 
 std::ostream & operator<<(std::ostream & os, const SpeedObserver & observer);
 
-}  // namespace core
-}  // namespace romea
+}  // namespace romea::core
 
 #endif  // ROMEA_CORE_CONTROL__OBSERVER__SPEEDOBSERVER_HPP_
