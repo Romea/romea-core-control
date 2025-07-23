@@ -24,9 +24,8 @@ namespace romea::core
 
 //-----------------------------------------------------------------------------
 SlidingObserverCinematicLyapunov::SlidingObserverCinematicLyapunov(
-  double samplingPeriod, double wheelBase, const Parameters & parameters)
-: SlidingObserverCinematic(samplingPeriod),
-  wheelBase_(wheelBase),
+  double wheelBase, const Parameters & parameters)
+: wheelBase_(wheelBase),
   XObs(0),
   YObs(0),
   ThetaObs(0),
@@ -43,6 +42,7 @@ SlidingObserverCinematicLyapunov::SlidingObserverCinematicLyapunov(
 
 //-----------------------------------------------------------------------------
 void SlidingObserverCinematicLyapunov::update(
+  double deltaTime,
   double x,
   double y,
   double course,
@@ -54,7 +54,8 @@ void SlidingObserverCinematicLyapunov::update(
     is_initialized_ = true;
     initObserverHandbooks_(x, y, course);
   } else {
-    updateObserverHandbooks_(x, y, course, frontSteeringAngle, rearSteeringAngle, linearSpeed);
+    updateObserverHandbooks_(
+      deltaTime, x, y, course, frontSteeringAngle, rearSteeringAngle, linearSpeed);
   }
 }
 
@@ -82,10 +83,9 @@ double SlidingObserverCinematicLyapunov::getRearSlidingAngle() const
 
 //-----------------------------------------------------------------------------
 void SlidingObserverCinematicLyapunov::updateObserverHandbooks_(
-  double X, double Y, double Theta, double deltaF, double deltaR, double vitesse)
+  double deltaTime, double X, double Y, double Theta, double deltaF, double deltaR, double vitesse)
 {
   double wheelbase_ = wheelBase_;
-  double sampling_period_ = samplingPeriod_;
 
   if ((ThetaObs - Theta) > M_PI / 2) {
     ThetaObs -= 2 * M_PI;
@@ -112,8 +112,8 @@ void SlidingObserverCinematicLyapunov::updateObserverHandbooks_(
     }
   }
 
-  std::cout << " * ***************** * vitesse =  " << vitesse << std::endl;
-  std::cout << " * ***************** * Alpha =  " << alpha_v << std::endl;
+  // std::cout << " * ***************** * vitesse =  " << vitesse << std::endl;
+  // std::cout << " * ***************** * Alpha =  " << alpha_v << std::endl;
   // Definition gin observation
   // double Kone1=-7;
   // double Kone2=-7;
@@ -157,9 +157,9 @@ void SlidingObserverCinematicLyapunov::updateObserverHandbooks_(
     double F3 = vitesse * std::cos(BetaRHand + deltaR) *
                 (std::tan(deltaF + BetaFHand) - std::tan(deltaR + BetaRHand)) / wheelbase_;
 
-    XObs += sampling_period_ / N * (F1 + Kone1_ * (XObs - X));
-    YObs += sampling_period_ / N * (F2 + Kone2_ * (YObs - Y));
-    ThetaObs += sampling_period_ / N * (F3 + Kone3_ * (ThetaObs - Theta));
+    XObs += deltaTime / N * (F1 + Kone1_ * (XObs - X));
+    YObs += deltaTime / N * (F2 + Kone2_ * (YObs - Y));
+    ThetaObs += deltaTime / N * (F3 + Kone3_ * (ThetaObs - Theta));
 
     // MaJ Beta:
     double dotBetaR, dotBetaF;
@@ -175,8 +175,8 @@ void SlidingObserverCinematicLyapunov::updateObserverHandbooks_(
     // else
     // {dotBetaR=Ktwo2*(B12*(XObs-X)+B22*(YObs-Y)+B32*(ThetaObs-Theta));}
 
-    BetaFHand += sampling_period_ / N * dotBetaF;
-    BetaRHand += sampling_period_ / N * dotBetaR;
+    BetaFHand += deltaTime / N * dotBetaF;
+    BetaRHand += deltaTime / N * dotBetaR;
   }
 
   if (counter_hand_ < 10) {
@@ -184,7 +184,7 @@ void SlidingObserverCinematicLyapunov::updateObserverHandbooks_(
     YObs = Y;
     ThetaObs = Theta;
     BetaFHand = BetaRHand = 0;
-    std::cout << "INIT Obs ***************** " << counter_hand_ << std::endl;
+    // std::cout << "INIT Obs ***************** " << counter_hand_ << std::endl;
   }
   counter_hand_++;
 }

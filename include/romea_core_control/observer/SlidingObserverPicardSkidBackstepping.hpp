@@ -36,9 +36,10 @@ public:
   };
 
 public:
-  SlidingObserversPicardSkidBackstepping(double step_time, const Parameters & parameters);
+  SlidingObserversPicardSkidBackstepping(const Parameters & parameters);
 
   void update(
+    double delta_time,
     double epsilon_y,
     double epsilon_theta,
     double curvature,
@@ -59,7 +60,6 @@ public:
 
 private:
   Parameters params_;
-  double step_time_;
 
   double beta_r_estime_ = 0;
   double dot_theta_p_estime_ = 0;

@@ -21,18 +21,22 @@ namespace romea::core
 class SpeedObserverRoland
 {
 public:
-  explicit SpeedObserverRoland(double sample_period);
+  explicit SpeedObserverRoland();
 
-  SpeedObserverRoland(double sample_period, double kd);
+  SpeedObserverRoland(double kd);
 
   double update(
+    double delta_time,
     double longitudinal_deviation,
     double course_deviation,
     double follower_linear_speed,
     double follower_angular_speed);
 
   double update(
-    double longitudinal_deviation, double course_deviation, double follower_linear_speed);
+    double delta_time,
+    double longitudinal_deviation,
+    double course_deviation,
+    double follower_linear_speed);
 
   void reset();
 
@@ -40,7 +44,6 @@ public:
   static const double DEFAULT_KD;
 
 private:
-  double sampling_period_;
   double kd_;
 
   double longitudinal_deviation_obs_;

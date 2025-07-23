@@ -18,8 +18,7 @@ namespace romea::core
 {
 
 //-----------------------------------------------------------------------------
-SlidingObserverCinematic::SlidingObserverCinematic(double samplingPeriod)
-: samplingPeriod_(samplingPeriod), is_initialized_(false)
+SlidingObserverCinematic::SlidingObserverCinematic() : is_initialized_(false)
 {
 }
 

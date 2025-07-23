@@ -34,13 +34,13 @@ public:
   };
 
 public:
-  SlidingObserverCinematicLyapunov(
-    double samplingPeriod, double wheelBase, const Parameters & parameters);
+  SlidingObserverCinematicLyapunov(double wheelBase, const Parameters & parameters);
 
   virtual ~SlidingObserverCinematicLyapunov() = default;
 
 public:
   void update(
+    double deltaTime,
     double x,
     double y,
     double course,
@@ -48,21 +48,23 @@ public:
     double frontSteeringAngle,
     double rearSteeringAngle);
 
-  double getFrontSlidingAngle() const override;
-
-  double getRearSlidingAngle() const override;
-
-  double getX() const;
-
-  double getY() const;
-
-  double getTheta() const;
+  [[nodiscard]] double getFrontSlidingAngle() const override;
+  [[nodiscard]] double getRearSlidingAngle() const override;
+  [[nodiscard]] double getX() const;
+  [[nodiscard]] double getY() const;
+  [[nodiscard]] double getTheta() const;
 
   void initObserverHandbooks_(double X, double Y, double Theta);
 
 private:
   void updateObserverHandbooks_(
-    double X, double Y, double Theta, double deltaF, double deltaR, double vitesse);
+    double deltaTime,
+    double X,
+    double Y,
+    double Theta,
+    double deltaF,
+    double deltaR,
+    double vitesse);
 
 private:
   double wheelBase_;

@@ -24,23 +24,19 @@ namespace romea::core
 const double SpeedObserverRoland::DEFAULT_KD = -2.2;
 
 //-----------------------------------------------------------------------------
-SpeedObserverRoland::SpeedObserverRoland(double sample_period)
-: SpeedObserverRoland(sample_period, DEFAULT_KD)
+SpeedObserverRoland::SpeedObserverRoland() : SpeedObserverRoland(DEFAULT_KD)
 {
 }
 
 //-----------------------------------------------------------------------------
-SpeedObserverRoland::SpeedObserverRoland(double sample_period, double kd)
-: sampling_period_(sample_period),
-  kd_(kd),
-  longitudinal_deviation_obs_(0),
-  leader_linear_speed_obs_(0),
-  is_initialized_(false)
+SpeedObserverRoland::SpeedObserverRoland(double kd)
+: kd_(kd), longitudinal_deviation_obs_(0), leader_linear_speed_obs_(0), is_initialized_(false)
 {
 }
 
 //-----------------------------------------------------------------------------
 double SpeedObserverRoland::update(
+  double delta_time,
   double longitudinal_deviation,
   double course_deviation,
   double follower_linear_speed,
@@ -57,7 +53,7 @@ double SpeedObserverRoland::update(
       leader_linear_speed_obs_ - follower_linear_speed * std::cos(course_deviation) -
       0 * longitudinal_deviation * follower_angular_speed * std::sin(course_deviation);
 
-    longitudinal_deviation_obs_ += sampling_period_ * longitudinal_deviation_obs_dot;
+    longitudinal_deviation_obs_ += delta_time * longitudinal_deviation_obs_dot;
   } else {
     longitudinal_deviation_obs_ = longitudinal_deviation;
     is_initialized_ = true;
@@ -65,16 +61,18 @@ double SpeedObserverRoland::update(
 
   if (leader_linear_speed_obs_ > 0) {
     return leader_linear_speed_obs_;
-  } else {
-    return 0.0;
   }
+  return 0.0;
 }
 
 //-----------------------------------------------------------------------------
 double SpeedObserverRoland::update(
-  double longitudinal_deviation, double course_deviation, double follower_linear_speed)
+  double delta_time,
+  double longitudinal_deviation,
+  double course_deviation,
+  double follower_linear_speed)
 {
-  return update(longitudinal_deviation, course_deviation, follower_linear_speed, 0.);
+  return update(delta_time, longitudinal_deviation, course_deviation, follower_linear_speed, 0.);
 }
 
 //-----------------------------------------------------------------------------

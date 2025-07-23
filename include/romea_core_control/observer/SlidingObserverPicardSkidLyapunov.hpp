@@ -38,9 +38,10 @@ public:
   };
 
 public:
-  SlidingObserversPicardSkidLyapunov(double step_time, const Parameters & parameters);
+  SlidingObserversPicardSkidLyapunov(const Parameters & parameters);
 
   void update(
+    double delta_time,
     double epsilon_x,
     double epsilon_y,
     double epsilon_theta,
@@ -63,7 +64,6 @@ private:
   static constexpr int end_counter_ = 10;
 
   Parameters params_;
-  double step_time_;
 
   double beta_r_estime_ = 0;
   double dot_theta_p_estime_ = 0;

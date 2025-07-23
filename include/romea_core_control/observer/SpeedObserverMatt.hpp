@@ -24,33 +24,30 @@ namespace romea::core
 class SpeedObserverMatt : public SpeedObserver
 {
 public:
-  explicit SpeedObserverMatt(double samplingPeriod);
+  explicit SpeedObserverMatt();
 
-  SpeedObserverMatt(double samplingPeriod, double wheelBase);
+  SpeedObserverMatt(double wheelBase);
 
-  virtual ~SpeedObserverMatt();
+  ~SpeedObserverMatt() override;
 
   void setWheelBase(double wheelBase);
 
-  double getWheelBase() const;
+  [[nodiscard]] double getWheelBase() const;
 
 public:
   void init(double x, double y);
 
-  void update(double x, double y, double linearSpeed, double angularSpeed);
+  void update(double deltaTime, double x, double y, double linearSpeed, double angularSpeed);
 
-  double getSpeed() const override;
-
-  double getAngle() const override;
-
-  double getX() const;
-
-  double getY() const;
+  [[nodiscard]] double getSpeed() const override;
+  [[nodiscard]] double getAngle() const override;
+  [[nodiscard]] double getX() const;
+  [[nodiscard]] double getY() const;
 
 private:
   void initObserverMatt_(double X, double Y);
 
-  void updateObserverMatt_(double X, double Y, double vitesse, double omega);
+  void updateObserverMatt_(double delta_time, double X, double Y, double vitesse, double omega);
 
 private:
   double wheelBase_;

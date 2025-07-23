@@ -46,7 +46,7 @@ public:
   {
     using Observer = romea::core::SlidingObserverCinematicLyapunov;
     observer = std::make_unique<Observer>(
-      0.1, 1.6, Observer::Parameters{-3., -3., -3., -1.8, -1.22});
+      1.6, Observer::Parameters{-3., -3., -3., -1.8, -1.22});
   }
 
   void readOutputData() override
@@ -80,6 +80,7 @@ public:
   void update() override
   {
     observer->update(
+      0.1,
       input_x,
       input_y,
       input_course,

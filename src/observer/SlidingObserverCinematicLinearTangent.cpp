@@ -13,6 +13,7 @@
 // limitations under the License.
 
 // std
+#include <algorithm>
 #include <cmath>
 
 // romea
@@ -23,9 +24,8 @@ namespace romea::core
 
 //-----------------------------------------------------------------------------
 SlidingObserverCinematicLinearTangent::SlidingObserverCinematicLinearTangent(
-  double samplingPeriod, double wheelBase, const Parameters & parameters)
-: SlidingObserverCinematic(samplingPeriod),
-  wheelBase_(wheelBase),
+  double wheelBase, const Parameters & parameters)
+: wheelBase_(wheelBase),
   betaR(0),
   betaF(0),
   betaRF(0),
@@ -55,6 +55,7 @@ SlidingObserverCinematicLinearTangent::SlidingObserverCinematicLinearTangent(
 
 //-----------------------------------------------------------------------------
 void SlidingObserverCinematicLinearTangent::update(
+  double deltaTime,
   double lateralDeviation,
   double courseDeviation,
   double curvature,
@@ -71,6 +72,7 @@ void SlidingObserverCinematicLinearTangent::update(
     is_initialized_ = true;
   } else {
     computeSliding_(
+      deltaTime,
       lateralDeviation,
       courseDeviation,
       linearSpeed,
@@ -79,6 +81,7 @@ void SlidingObserverCinematicLinearTangent::update(
       rearSteeringAngle);
 
     evolution_(
+      deltaTime,
       lateralDeviation,
       courseDeviation,
       linearSpeed,
@@ -115,10 +118,15 @@ void SlidingObserverCinematicLinearTangent::initObserver_(double ElatM, double E
 
 //-----------------------------------------------------------------------------
 bool SlidingObserverCinematicLinearTangent::computeSliding_(
-  double ElatM, double EcapM, double vitesse, double delta, double courb, double d_AR)
+  double delta_time,
+  double ElatM,
+  double EcapM,
+  double vitesse,
+  double delta,
+  double courb,
+  double d_AR)
 {
   double wheelbase_ = wheelBase_;
-  double sampling_period_ = samplingPeriod_;
 
   //  Eigen::Matrix2d G,B,invB;
   //  Eigen::Vector2d A,Y,K,X;
@@ -143,8 +151,8 @@ bool SlidingObserverCinematicLinearTangent::computeSliding_(
   B_(1, 1) = (vitesse * std::cos(d_AR) / wheelbase_) * (1 + pow(std::tan(delta), 2));
 
   // Derivation Ecart lateral et angulaire & Filtrage
-  ElatDeriv = (ElatM - Elat_av) / sampling_period_;
-  EcapDeriv = (EcapM - Ecap_av) / sampling_period_;
+  ElatDeriv = (ElatM - Elat_av) / delta_time;
+  EcapDeriv = (EcapM - Ecap_av) / delta_time;
 
   ElatDeriv = lateral_deviation_drift_f_.update(ElatDeriv);
   EcapDeriv = cap_deviation_drift_f_.update(EcapDeriv);
@@ -172,18 +180,11 @@ bool SlidingObserverCinematicLinearTangent::computeSliding_(
     betaF = 0;
   }
 
-  if (betaR > 40 * M_PI / 180) {
-    betaR = 40 * M_PI / 180;
-  }
-  if (betaR < -40 * M_PI / 180) {
-    betaR = -40 * M_PI / 180;
-  }
-  if (betaF > 40 * M_PI / 180) {
-    betaF = 40 * M_PI / 180;
-  }
-  if (betaF < -40 * M_PI / 180) {
-    betaF = -40 * M_PI / 180;
-  }
+  // clamp values
+  betaR = std::min(betaR, 40 * M_PI / 180);
+  betaR = std::max(betaR, -40 * M_PI / 180);
+  betaF = std::min(betaF, 40 * M_PI / 180);
+  betaF = std::max(betaF, -40 * M_PI / 180);
 
   // Filtrage derive cinematique
   betaRF = betaR_f_.update(betaR);
@@ -194,10 +195,15 @@ bool SlidingObserverCinematicLinearTangent::computeSliding_(
 
 //-----------------------------------------------------------------------------
 bool SlidingObserverCinematicLinearTangent::computeSliding2_(
-  double ElatM, double EcapM, double vitesse, double delta, double courb, double /*d_AR*/)
+  double delta_time,
+  double ElatM,
+  double EcapM,
+  double vitesse,
+  double delta,
+  double courb,
+  double /*d_AR*/)
 {
   double wheelbase_ = wheelBase_;
-  double sampling_period_ = samplingPeriod_;
 
   //  Eigen::Matrix2d G,B;
   //  Eigen::Vector2d Y,X;
@@ -230,8 +236,8 @@ bool SlidingObserverCinematicLinearTangent::computeSliding2_(
   X_ = B_ * G_ * Y_;
 
   // Mise sous forme beta
-  betaF += sampling_period_ * X_(0);
-  betaR += sampling_period_ * X_(1);
+  betaF += X_(0) * delta_time;
+  betaR += X_(1) * delta_time;
   if (counter_ < 2) {
     betaR = 0;
     betaF = 0;
@@ -245,16 +251,21 @@ bool SlidingObserverCinematicLinearTangent::computeSliding2_(
 
 //-----------------------------------------------------------------------------
 void SlidingObserverCinematicLinearTangent::evolution_(
-  double ElatM, double EcapM, double vitesse, double delta, double courb, double d_AR)
+  double delta_time,
+  double ElatM,
+  double EcapM,
+  double vitesse,
+  double delta,
+  double courb,
+  double d_AR)
 {
-  double sampling_period_ = samplingPeriod_;
   double wheelbase_ = wheelBase_;
 
   Ecap4 +=
-    (vitesse * sampling_period_) *
+    (vitesse * delta_time) *
     (std::cos(betaR + d_AR) * (std::tan(delta + betaF) - std::tan(betaR + d_AR)) / wheelbase_ -
      (courb * std::cos(Ecap4 + betaR + d_AR)) / (1 - courb * Elat4));
-  Elat4 += vitesse * sampling_period_ * std::sin(Ecap4 + betaR + d_AR);
+  Elat4 += vitesse * delta_time * std::sin(Ecap4 + betaR + d_AR);
   if (counter_ < 10) {
     Elat4 = ElatM;
     Ecap4 = EcapM;
@@ -264,20 +275,25 @@ void SlidingObserverCinematicLinearTangent::evolution_(
 
 //-----------------------------------------------------------------------------
 void SlidingObserverCinematicLinearTangent::evolution2_(
-  double ElatM, double EcapM, double vitesse, double delta, double courb, double d_AR)
+  double delta_time,
+  double ElatM,
+  double EcapM,
+  double vitesse,
+  double delta,
+  double courb,
+  double d_AR)
 {
-  double sampling_period_ = samplingPeriod_;
   double wheelbase_ = wheelBase_;
 
   double K11 = 10;
   double K12 = 10;
   Ecap4 +=
-    vitesse * sampling_period_ *
+    vitesse * delta_time *
       (std::cos(betaR + d_AR) * (std::tan(delta + betaF) - std::tan(betaR + d_AR)) / wheelbase_ -
        (courb * std::cos(EcapM + betaR + d_AR)) / (1 - courb * ElatM)) -
-    K12 * sampling_period_ * (Ecap4 - EcapM);
-  Elat4 += vitesse * sampling_period_ * std::sin(EcapM + betaR + d_AR) -
-           K11 * sampling_period_ * (Elat4 - ElatM);
+    K12 * delta_time * (Ecap4 - EcapM);
+  Elat4 +=
+    vitesse * delta_time * std::sin(EcapM + betaR + d_AR) - K11 * delta_time * (Elat4 - ElatM);
 
   if (counter_ < 10) {
     Elat4 = ElatM;

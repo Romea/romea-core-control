@@ -57,7 +57,7 @@ public:
     using Observer = romea::core::SlidingObserverCinematicLinearTangent;
     command = std::make_unique<Command>(1.6, Command::Parameters{0.7, 0.5});
     observer = std::make_unique<Observer>(
-      0.1, 1.6, Observer::Parameters{-4, -2, 0.9, 0.9, 0.98, 0.96});
+      1.6, Observer::Parameters{-4, -2, 0.9, 0.9, 0.98, 0.96});
   }
 
   void readOutputData() override
@@ -82,6 +82,7 @@ public:
   void update() override
   {
     observer->update(
+      0.1,
       input_lateral_deviation,
       input_course_deviation,
       input_curvature,

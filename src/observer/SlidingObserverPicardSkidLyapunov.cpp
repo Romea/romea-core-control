@@ -23,12 +23,13 @@ namespace romea::core
 {
 
 SlidingObserversPicardSkidLyapunov::SlidingObserversPicardSkidLyapunov(
-  double step_time, const Parameters & parameters)
-: params_(parameters), step_time_(step_time)
+  const Parameters & parameters)
+: params_(parameters)
 {
 }
 
 void SlidingObserversPicardSkidLyapunov::update(
+  double delta_time,
   double epsilon_x,
   double epsilon_y,
   double epsilon_theta,
@@ -90,8 +91,8 @@ void SlidingObserversPicardSkidLyapunov::update(
 
       //integration de l'etat estimé
 
-      double dt = step_time_;
-      // cout  <<"Step_Time_ : "<< step_time_ << std::endl;
+      double dt = delta_time;
+      // cout  <<"Step_Time_ : "<< delta_time << std::endl;
       epsilon_x_estime_ +=
         dot_epsilon_x_estime * dt / N +
         1 * ((dot_epsilon_x_estime - dot_epsilon_x_estime_n1_) / dt) * (dt * dt / 2);

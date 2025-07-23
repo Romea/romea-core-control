@@ -39,13 +39,13 @@ public:
   };
 
 public:
-  SlidingObserverCinematicLinearTangent(
-    double samplingPeriod, double wheelBase, const Parameters & parameters);
+  SlidingObserverCinematicLinearTangent(double wheelBase, const Parameters & parameters);
 
   virtual ~SlidingObserverCinematicLinearTangent() = default;
 
 public:
   void update(
+    double deltaTime,
     double lateralDeviation,
     double courseDeviation,
     double curvature,
@@ -74,6 +74,7 @@ private:
    * @param[in] rear_steering : in radian, counterclockwise
   **/
   bool computeSliding_(
+    double delta_time,
     double lateral_deviation,
     double cap_deviation,
     double speed,
@@ -82,6 +83,7 @@ private:
     double rear_steering);
 
   bool computeSliding2_(
+    double delta_time,
     double lateral_deviation,
     double cap_deviation,
     double speed,
@@ -99,6 +101,7 @@ private:
    * @param[in] rear_steering : in radian, counterclockwise
   **/
   void evolution_(
+    double delta_time,
     double lateral_deviation,
     double cap_deviation,
     double speed,
@@ -107,6 +110,7 @@ private:
     double rear_steering);
 
   void evolution2_(
+    double delta_time,
     double lateral_deviation,
     double cap_deviation,
     double speed,

@@ -62,7 +62,7 @@ public:
     command = std::make_unique<Command>(
       1.6, Command::Parameters{0.7, 0.7, 10, 0.1642, 0.1072, 1.0086, -0.2801});
     observer =
-      std::make_unique<Observer>(0.1, 1.6, Observer::Parameters{-3., -3., -3., -1.8, -1.22});
+      std::make_unique<Observer>(1.6, Observer::Parameters{-3., -3., -3., -1.8, -1.22});
   }
 
   void readOutputData() override
@@ -87,6 +87,7 @@ public:
   void update() override
   {
     observer->update(
+      0.1,
       input_x,
       input_y,
       input_course,

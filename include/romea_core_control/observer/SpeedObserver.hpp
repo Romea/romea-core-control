@@ -27,21 +27,19 @@ namespace romea::core
 class SpeedObserver
 {
 public:
-  explicit SpeedObserver(double samplingPeriod);
+  explicit SpeedObserver();
 
-  virtual ~SpeedObserver();
+  virtual ~SpeedObserver() = default;
 
 public:
   SpeedAngleData getSpeedAngle() const;
 
-  virtual double getSpeed() const = 0;
-
-  virtual double getAngle() const = 0;
+  [[nodiscard]] virtual double getSpeed() const = 0;
+  [[nodiscard]] virtual double getAngle() const = 0;
 
   virtual void reset();
 
 protected:
-  double samplingPeriod_;
   bool is_initialized_;
 };
 

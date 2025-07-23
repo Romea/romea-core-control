@@ -24,21 +24,18 @@ namespace romea::core
 class SlidingObserverCinematic
 {
 public:
-  explicit SlidingObserverCinematic(double samplingPeriod);
+  SlidingObserverCinematic();
 
   virtual ~SlidingObserverCinematic() = default;
 
 public:
-  FrontRearData getSlidingAngles() const;
-
-  virtual double getFrontSlidingAngle() const = 0;
-
-  virtual double getRearSlidingAngle() const = 0;
+  [[nodiscard]] FrontRearData getSlidingAngles() const;
+  [[nodiscard]] virtual double getFrontSlidingAngle() const = 0;
+  [[nodiscard]] virtual double getRearSlidingAngle() const = 0;
 
   virtual void reset();
 
 protected:
-  double samplingPeriod_;
   bool is_initialized_;
 };
 

@@ -23,19 +23,13 @@ namespace romea::core
 {
 
 //-----------------------------------------------------------------------------
-SpeedObserverMatt::SpeedObserverMatt(double samplingPeriod) : SpeedObserverMatt(samplingPeriod, 0.)
+SpeedObserverMatt::SpeedObserverMatt() : SpeedObserverMatt(0.)
 {
 }
 
 //-----------------------------------------------------------------------------
-SpeedObserverMatt::SpeedObserverMatt(double samplingPeriod, double wheelBase)
-: SpeedObserver(samplingPeriod),
-  wheelBase_(wheelBase),
-  XObs(0),
-  YObs(0),
-  SpeedMatt(0),
-  AngleMatt(0),
-  counter_hand_(0)
+SpeedObserverMatt::SpeedObserverMatt(double wheelBase)
+: wheelBase_(wheelBase), XObs(0), YObs(0), SpeedMatt(0), AngleMatt(0), counter_hand_(0)
 {
 }
 
@@ -57,13 +51,14 @@ double SpeedObserverMatt::getWheelBase() const
 }
 
 //-----------------------------------------------------------------------------
-void SpeedObserverMatt::update(double x, double y, double linearSpeed, double angularspeed)
+void SpeedObserverMatt::update(
+  double deltaTime, double x, double y, double linearSpeed, double angularspeed)
 {
   if (!is_initialized_) {
     is_initialized_ = true;
     initObserverMatt_(x, y);
   } else {
-    updateObserverMatt_(x, y, linearSpeed, angularspeed);
+    updateObserverMatt_(deltaTime, x, y, linearSpeed, angularspeed);
   }
 }
 
@@ -89,10 +84,10 @@ double SpeedObserverMatt::getAngle() const
 }
 
 //-----------------------------------------------------------------------------
-void SpeedObserverMatt::updateObserverMatt_(double X, double Y, double vitesse, double omega)
+void SpeedObserverMatt::updateObserverMatt_(
+  double deltaTime, double X, double Y, double vitesse, double omega)
 {
   // doublewheelbase_= wheelBase_;
-  double sampling_period_ = samplingPeriod_;
 
   // std::cout << "var" << " " << X <<" "<< Y <<" "<< vitesse <<" "<< omega <<std::endl;
   double rho = X;
@@ -135,11 +130,11 @@ void SpeedObserverMatt::updateObserverMatt_(double X, double Y, double vitesse, 
     dotSpeedMatt = Kvitesse1 * (DXDv * (X - XObs)) + Kvitesse2 * (DYDv * (Y - YObs));
     dotAngleMatt = Kangle1 * (DXDa * (X - XObs)) + Kangle2 * (DYDa * (Y - YObs));
 
-    XObs += sampling_period_ / N * (Xdot + Kx * (X - XObs));
-    YObs += sampling_period_ / N * (Ydot + Ky * (Y - YObs));
+    XObs += deltaTime / N * (Xdot + Kx * (X - XObs));
+    YObs += deltaTime / N * (Ydot + Ky * (Y - YObs));
 
-    SpeedMatt += sampling_period_ / N * dotSpeedMatt;
-    AngleMatt += sampling_period_ / N * dotAngleMatt;
+    SpeedMatt += deltaTime / N * dotSpeedMatt;
+    AngleMatt += deltaTime / N * dotAngleMatt;
 
     if (SpeedMatt < 0.2) {
       AngleMatt = 0;

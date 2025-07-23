@@ -13,18 +13,17 @@
 // limitations under the License.
 
 #include "romea_core_control/observer/SlidingObserverPicardSkidBackstepping.hpp"
-#include <romea_core_common/math/EulerAngles.hpp>
 
 #include <algorithm>
 #include <cmath>
+#include <romea_core_common/math/EulerAngles.hpp>
 
 namespace romea::core
 {
 
 SlidingObserversPicardSkidBackstepping::SlidingObserversPicardSkidBackstepping(
-  double step_time, const Parameters & parameters)
+  const Parameters & parameters)
 : params_(parameters),
-  step_time_(step_time),
   beta_r_estime_f_(params_.weight_slip_angle),
   dot_theta_p_estime_f_(params_.weight_linear_speed_disturb),
   dot_epsilon_s_p_estime_f_(params_.weight_angular_speed_disturb),
@@ -34,6 +33,7 @@ SlidingObserversPicardSkidBackstepping::SlidingObserversPicardSkidBackstepping(
 }
 
 void SlidingObserversPicardSkidBackstepping::update(
+  double delta_time,
   double epsilon_y,
   double epsilon_theta,
   double curvature,
@@ -44,7 +44,6 @@ void SlidingObserversPicardSkidBackstepping::update(
   double beta_r_estime = 0;
   double dot_theta_p_estime = 0;
   double dot_epsilon_s_p_estime = 0;
-
 
   // detect if there is a jump in the trajectory (of at least 2 meters) and reset this observer
   if (std::abs(curv_abscissa - epsilon_s_old_) > 2.) {
@@ -59,7 +58,7 @@ void SlidingObserversPicardSkidBackstepping::update(
 
     double theta_diff = betweenMinusPiAndPi(epsilon_theta - epsilon_theta_old_);
     theta_diff = 0.0;
-    epsilon_theta_point_f_.update(theta_diff / step_time_);
+    epsilon_theta_point_f_.update(theta_diff / delta_time);
 
     is_initialized_ = true;
 
@@ -75,11 +74,11 @@ void SlidingObserversPicardSkidBackstepping::update(
 
     epsilon_s = curv_abscissa;
 
-    double epsilon_s_point = epsilon_s_point_f_.update((epsilon_s - epsilon_s_old_) / step_time_);
+    double epsilon_s_point = epsilon_s_point_f_.update((epsilon_s - epsilon_s_old_) / delta_time);
     epsilon_s_point = 0.0;
     double epsilon_theta_point = epsilon_theta_point_f_.update(
       atan2(sin(epsilon_theta - epsilon_theta_old_), cos(epsilon_theta - epsilon_theta_old_)) /
-      step_time_);
+      delta_time);
     epsilon_theta_point = 0.0;
     epsilon_theta_old_ = epsilon_theta;
     epsilon_s_old_ = epsilon_s;
@@ -152,7 +151,7 @@ void SlidingObserversPicardSkidBackstepping::update(
                                  (1 - curvature * epsilon_y) / cos(epsilon_theta + beta_r_estime) -
                                longi_speed_adapt;
 
-      dot_epsilon_s_p_estime =0.0;
+      dot_epsilon_s_p_estime = 0.0;
 
       // std::cout << "Skid BS dot_epsilon_s_p_estime : " << dot_epsilon_s_p_estime << std::endl;
 
@@ -176,13 +175,14 @@ void SlidingObserversPicardSkidBackstepping::update(
         curvature * ((longi_speed_adapt + dot_epsilon_s_p_estime) *
                      cos(epsilon_theta + beta_r_estime) / (1 - curvature * epsilon_y));
 
-      double dt = step_time_;
-      epsilon_s_estime_ +=
-        dot_epsilon_s_estime * dt / N + 0*(dot_epsilon_s_estime - dot_epsilon_s_estime_n1_) * dt/2 ;
-      epsilon_y_estime_ +=
-        dot_epsilon_y_estime * dt / N + 0*(dot_epsilon_y_estime - dot_epsilon_y_estime_n1_) * dt/2 ;
-      epsilon_theta_estime_ += dot_epsilon_theta_estime * dt / N +
-                               0*(dot_epsilon_theta_estime - dot_epsilon_theta_estime_n1_) * dt/2 ;
+      double dt = delta_time;
+      epsilon_s_estime_ += dot_epsilon_s_estime * dt / N +
+                           0 * (dot_epsilon_s_estime - dot_epsilon_s_estime_n1_) * dt / 2;
+      epsilon_y_estime_ += dot_epsilon_y_estime * dt / N +
+                           0 * (dot_epsilon_y_estime - dot_epsilon_y_estime_n1_) * dt / 2;
+      epsilon_theta_estime_ +=
+        dot_epsilon_theta_estime * dt / N +
+        0 * (dot_epsilon_theta_estime - dot_epsilon_theta_estime_n1_) * dt / 2;
       epsilon_theta_estime_ = betweenMinusPiAndPi(epsilon_theta_estime_);
 
       beta_r_estime_ = beta_r_estime_f_.update(beta_r_estime);

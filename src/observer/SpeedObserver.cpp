@@ -18,13 +18,8 @@ namespace romea::core
 {
 
 //-----------------------------------------------------------------------------
-SpeedObserver::SpeedObserver(double samplingPeriod)
-: samplingPeriod_(samplingPeriod), is_initialized_(false)
-{
-}
-
-//-----------------------------------------------------------------------------
-SpeedObserver::~SpeedObserver()
+SpeedObserver::SpeedObserver()
+: is_initialized_(false)
 {
 }
 
