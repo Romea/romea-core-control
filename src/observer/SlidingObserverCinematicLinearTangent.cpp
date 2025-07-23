@@ -96,13 +96,13 @@ void SlidingObserverCinematicLinearTangent::update(
 
 
 //-----------------------------------------------------------------------------
-const double & SlidingObserverCinematicLinearTangent::getFrontSlidingAngle() const
+double SlidingObserverCinematicLinearTangent::getFrontSlidingAngle() const
 {
   return betaFF;
 }
 
 //-----------------------------------------------------------------------------
-const double & SlidingObserverCinematicLinearTangent::getRearSlidingAngle() const
+double SlidingObserverCinematicLinearTangent::getRearSlidingAngle() const
 {
   return betaRF;
 }

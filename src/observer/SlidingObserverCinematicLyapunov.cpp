@@ -83,15 +83,15 @@ void SlidingObserverCinematicLyapunov::initObserverHandbooks_(
 }
 
 //-----------------------------------------------------------------------------
-const double & SlidingObserverCinematicLyapunov::getFrontSlidingAngle() const
+double SlidingObserverCinematicLyapunov::getFrontSlidingAngle() const
 {
   return BetaFHand;
 }
 
 //-----------------------------------------------------------------------------
-const double & SlidingObserverCinematicLyapunov::getRearSlidingAngle() const
+double SlidingObserverCinematicLyapunov::getRearSlidingAngle() const
 {
-  return BetaRHand;
+  return -BetaRHand;
 }
 
 //-----------------------------------------------------------------------------

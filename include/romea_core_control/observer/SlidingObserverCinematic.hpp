@@ -37,9 +37,9 @@ public:
 public:
   FrontRearData getSlidingAngles()const;
 
-  virtual const double & getFrontSlidingAngle() const = 0;
+  virtual double getFrontSlidingAngle() const = 0;
 
-  virtual const double & getRearSlidingAngle() const = 0;
+  virtual double getRearSlidingAngle() const = 0;
 
   virtual void reset();
 

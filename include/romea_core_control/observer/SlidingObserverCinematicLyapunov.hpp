@@ -53,9 +53,9 @@ public:
     double frontSteeringAngle,
     double rearSteeringAngle);
 
-  const double & getFrontSlidingAngle() const override;
+  double getFrontSlidingAngle() const override;
 
-  const double & getRearSlidingAngle() const override;
+  double getRearSlidingAngle() const override;
 
   const double & getX() const;
 

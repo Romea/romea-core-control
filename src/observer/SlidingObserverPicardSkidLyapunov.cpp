@@ -167,7 +167,7 @@ void SlidingObserversPicardSkidLyapunov::reset()
 
 double SlidingObserversPicardSkidLyapunov::getBetaR() const
 {
-  return counter_ >= end_counter_ ? beta_r_estime_ : 0;
+  return counter_ >= end_counter_ ? -beta_r_estime_ : 0;
 }
 
 double SlidingObserversPicardSkidLyapunov::getDotThetaP() const
