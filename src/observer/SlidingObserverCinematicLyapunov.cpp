@@ -78,7 +78,7 @@ double SlidingObserverCinematicLyapunov::getFrontSlidingAngle() const
 //-----------------------------------------------------------------------------
 double SlidingObserverCinematicLyapunov::getRearSlidingAngle() const
 {
-  return -BetaRHand;
+  return BetaRHand;
 }
 
 //-----------------------------------------------------------------------------
