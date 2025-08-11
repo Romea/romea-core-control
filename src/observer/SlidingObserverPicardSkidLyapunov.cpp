@@ -47,7 +47,7 @@ void SlidingObserversPicardSkidLyapunov::update(
   } else {
     double u_theta = angular_speed;
 
-    int N = 10;
+    int N = 1;
     for (int i = 1; i < N + 1; i++) {
       // double longi_speed_adapt = longi_speed / cos(beta_r_estime_);
       double longi_speed_adapt = longi_speed;
@@ -95,13 +95,13 @@ void SlidingObserversPicardSkidLyapunov::update(
       // cout  <<"Step_Time_ : "<< delta_time << std::endl;
       epsilon_x_estime_ +=
         dot_epsilon_x_estime * dt / N +
-        1 * ((dot_epsilon_x_estime - dot_epsilon_x_estime_n1_) / dt) * (dt * dt / 2);
+        0 * ((dot_epsilon_x_estime - dot_epsilon_x_estime_n1_) / dt) * (dt * dt / 2);
       epsilon_y_estime_ +=
         dot_epsilon_y_estime * dt / N +
-        1 * ((dot_epsilon_y_estime - dot_epsilon_y_estime_n1_) / dt) * (dt * dt / 2);
+        0 * ((dot_epsilon_y_estime - dot_epsilon_y_estime_n1_) / dt) * (dt * dt / 2);
       epsilon_theta_estime_ +=
         dot_epsilon_theta_estime * dt / N +
-        1 * ((dot_epsilon_theta_estime - dot_epsilon_theta_estime_n1_) / dt) * (dt * dt / 2);
+        0 * ((dot_epsilon_theta_estime - dot_epsilon_theta_estime_n1_) / dt) * (dt * dt / 2);
       epsilon_theta_estime_ = atan2(sin(epsilon_theta_estime_), cos(epsilon_theta_estime_));
 
       /*cout<<"Skid L epsilon_x_estime_ : "<<epsilon_x_estime_<<endl;
@@ -110,10 +110,10 @@ void SlidingObserversPicardSkidLyapunov::update(
 
       dot_theta_p_estime_ +=
         dot_dot_epsilon_theta_p * dt / N +
-        1 * ((dot_dot_epsilon_theta_p - dot_dot_epsilon_theta_p_n1_) / dt) * (dt * dt / 2);
-      beta_r_estime_ += dot_beta * dt / N + 1 * ((dot_beta - dot_beta_n1_) / dt) * (dt * dt / 2);
+        0 * ((dot_dot_epsilon_theta_p - dot_dot_epsilon_theta_p_n1_) / dt) * (dt * dt / 2);
+      beta_r_estime_ += dot_beta * dt / N + 0 * ((dot_beta - dot_beta_n1_) / dt) * (dt * dt / 2);
       dot_epsilon_s_p_estime_ +=
-        dot_dot_vg * dt / N + 1 * ((dot_dot_vg - dot_dot_vg_n1_) / dt) * (dt * dt / 2);
+        dot_dot_vg * dt / N + 0 * ((dot_dot_vg - dot_dot_vg_n1_) / dt) * (dt * dt / 2);
 
       dot_epsilon_x_estime_n1_ = dot_epsilon_x_estime;
       dot_epsilon_y_estime_n1_ = dot_epsilon_y_estime;
