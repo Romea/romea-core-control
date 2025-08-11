@@ -32,7 +32,7 @@ public:
   };
 
 public:
-  FollowTrajectoryDesbosGeneric(double sampling_period, const Parameters & parameters);
+  FollowTrajectoryDesbosGeneric(const Parameters & parameters);
 
   void reset();
 
@@ -101,7 +101,6 @@ public:
     double beta);
 
 private:
-  double sampling_period_;
   double kp_;
   double kd_;
   double ks_;

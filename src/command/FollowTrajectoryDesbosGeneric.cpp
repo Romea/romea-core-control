@@ -24,10 +24,8 @@
 namespace romea::core
 {
 
-FollowTrajectoryDesbosGeneric::FollowTrajectoryDesbosGeneric(
-  double sampling_period, const Parameters & parameters)
-: sampling_period_(sampling_period),
-  kp_(parameters.kp),
+FollowTrajectoryDesbosGeneric::FollowTrajectoryDesbosGeneric(const Parameters & parameters)
+: kp_(parameters.kp),
   kd_(parameters.kd),
   ks_(parameters.ks),
   adaptive_gains_(parameters.adaptive_gains)
@@ -57,23 +55,23 @@ void FollowTrajectoryDesbosGeneric::set_gains(double kp, double kd, double ks)
 double FollowTrajectoryDesbosGeneric::compute_angular_speed(
   double lateral_deviation,
   double course_deviation,
-  double  /*maximal_angular_speed*/,
+  double /*maximal_angular_speed*/,
   double courbure,
   double future_courbure,
   double speed,
-  double  /*longitudinal_speed_command*/,
+  double /*longitudinal_speed_command*/,
   // generic slip
-  double  /*lateral_slip*/,
-  double  /*angular_slip*/,
+  double /*lateral_slip*/,
+  double /*angular_slip*/,
   // skid slip
-  double  /*speed_slip*/,
+  double /*speed_slip*/,
   double beta,
-  double  /*angular_skid_slip*/,
+  double /*angular_skid_slip*/,
   double tau,
-  double &  /*omega_d*/,
-  double &  /*theta_error*/,
-  double &  /*osc_eta*/,
-  double &  /*osc_amp*/)
+  double & /*omega_d*/,
+  double & /*theta_error*/,
+  double & /*osc_eta*/,
+  double & /*osc_amp*/)
 {
   // double error;
 
@@ -170,7 +168,7 @@ GenericCommandsData FollowTrajectoryDesbosGeneric::compute_commands(
   double course_deviation,
   double longitudinal_deviation,
   double desired_speed,
-  double  /*maximal_angular_speed*/,
+  double /*maximal_angular_speed*/,
   double courbure,
   double future_courbure,
   double speed,

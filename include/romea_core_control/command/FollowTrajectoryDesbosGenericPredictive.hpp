@@ -44,7 +44,7 @@ public:
   };
 
 public:
-  FollowTrajectoryDesbosGenericPredictive(double sampling_period, const Parameters & parameters);
+  FollowTrajectoryDesbosGenericPredictive(const Parameters & parameters);
 
   void reset();
 
@@ -177,7 +177,6 @@ public:
     double CommFutur, double alpha, double feinte1);
 
 private:
-  double sampling_period_;
   double kp_;
   double kd_;
   double ks_;

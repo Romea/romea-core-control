@@ -28,9 +28,8 @@ namespace romea::core
 
 //-----------------------------------------------------------------------------
 FollowTrajectoryDesbosGenericPredictive::FollowTrajectoryDesbosGenericPredictive(
-  double sampling_period, const Parameters & parameters)
-: sampling_period_(sampling_period),
-  kp_(parameters.kp),
+  const Parameters & parameters)
+: kp_(parameters.kp),
   kd_(parameters.kd),
   ks_(parameters.ks),
   alpha_(parameters.alpha),
