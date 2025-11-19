@@ -87,24 +87,24 @@ double FollowMe::computeAngularSpeed(
   //  if(fabs(linear_speed) < 0.1)
   //    integrated_omega_ = 0;
 
-  std::cout << kd_ * (std::tan(course_deviation) - omega_d) << " " << ki_ * integrated_omega_
-            << std::endl;
+  // std::cout << kd_ * (std::tan(course_deviation) - omega_d) << " " << ki_ * integrated_omega_
+  //           << std::endl;
   double angular_speed_command = kd_ * ((course_deviation)-omega_d) + ki_ * integrated_omega_;
 
-  std::cout << " kp_" << kp_;
-  std::cout << " ki_" << ki_;
-  std::cout << " kd_" << kd_;
-  std::cout << " lateral_deviation " << lateral_deviation;
-  std::cout << " course_deviation " << course_deviation * 180 / M_PI;
-  std::cout << " omega_d " << omega_d;
-  std::cout << " integrated_omega_d " << integrated_omega_;
-  std::cout << " angular_speed " << angular_speed_command << std::endl;
+  // std::cout << " kp_" << kp_;
+  // std::cout << " ki_" << ki_;
+  // std::cout << " kd_" << kd_;
+  // std::cout << " lateral_deviation " << lateral_deviation;
+  // std::cout << " course_deviation " << course_deviation * 180 / M_PI;
+  // std::cout << " omega_d " << omega_d;
+  // std::cout << " integrated_omega_d " << integrated_omega_;
+  // std::cout << " angular_speed " << angular_speed_command << std::endl;
 
   if (std::abs(angular_speed_command) > maximal_angular_speed) {
     angular_speed_command = std::copysign(maximal_angular_speed, angular_speed_command);
   }
 
-  std::cout << " angular_speed " << angular_speed_command << std::endl;
+  // std::cout << " angular_speed " << angular_speed_command << std::endl;
 
   return angular_speed_command;
 }
@@ -191,16 +191,16 @@ FrontRearData FollowMe::computeSteeringAngles(
       std::copysign(maximal_rear_steering_angle, rear_steering_angle_command);
   }
 
-  std::cout << " kp_" << kp_;
-  std::cout << " ki_" << ki_;
-  std::cout << " kd_" << kd_;
-  std::cout << " lateral_deviation " << lateral_deviation;
-  std::cout << " course_deviation " << course_deviation;
-  std::cout << " omega_d " << omega_d;
-  std::cout << " integrated_omega_ " << integrated_omega_;
-  std::cout << " theta_consigne " << theta_consigne;
-  std::cout << " front_steering_angle_command " << front_steering_angle_command;
-  std::cout << " rear_steering_angle_command " << rear_steering_angle_command << std::endl;
+  // std::cout << " kp_" << kp_;
+  // std::cout << " ki_" << ki_;
+  // std::cout << " kd_" << kd_;
+  // std::cout << " lateral_deviation " << lateral_deviation;
+  // std::cout << " course_deviation " << course_deviation;
+  // std::cout << " omega_d " << omega_d;
+  // std::cout << " integrated_omega_ " << integrated_omega_;
+  // std::cout << " theta_consigne " << theta_consigne;
+  // std::cout << " front_steering_angle_command " << front_steering_angle_command;
+  // std::cout << " rear_steering_angle_command " << rear_steering_angle_command << std::endl;
 
   rear_steering_angle_command = 0;
   return {front_steering_angle_command, rear_steering_angle_command};
@@ -237,15 +237,15 @@ FrontRearData FollowMe::computeSteeringAngles(
   assert(std::abs(kd_) > 0);
   assert(std::abs(kdd_) > 0);
 
-  std::cout << " lateral deviation " << lateral_deviation << std::endl;
-  std::cout << " desired_lat_dev_ " << desired_lat_dev_ << std::endl;
+  // std::cout << " lateral deviation " << lateral_deviation << std::endl;
+  // std::cout << " desired_lat_dev_ " << desired_lat_dev_ << std::endl;
 
   //  yd =1.25;
   double alpha = 1 - curvature * (lateral_deviation + 1.35);
   //  omega_d = kp_*(lateral_deviation-desired_lat_dev_);
   omega_d = atan(kp_ * (lateral_deviation - desired_lat_dev_) / alpha);
 
-  std::cout << "new alpha " << alpha << " omega_d" << omega_d << std::endl;
+  // std::cout << "new alpha " << alpha << " omega_d" << omega_d << std::endl;
 
   if (fabs(omega_d) > (40 * M_PI / 180)) {
     omega_d = copysign((40 * M_PI / 180), omega_d);
@@ -287,8 +287,8 @@ FrontRearData FollowMe::computeSteeringAngles(
   double braq_R =
     -course_deviation - rear_sliding_angle - (1 / kd_) * (kdd_ * ThetaError2 - kd_ * omega_d);
 
-  std::cout << " new command " << omega_d << " " << Thet2 << " " << EpsThet << " " << braq_F << " "
-            << theta_consigne << " " << ThetaError2 << " " << braq_R << std::endl;
+  // std::cout << " new command " << omega_d << " " << Thet2 << " " << EpsThet << " " << braq_F << " "
+  //           << theta_consigne << " " << ThetaError2 << " " << braq_R << std::endl;
 
   //    braq_R=0;
   if (std::abs(braq_R) > maximal_rear_steering_angle) {
@@ -376,7 +376,7 @@ FrontRearData FollowMe::computeSteeringAngles(
   }
 
   omega_d = std::asin(commande_inter);
-  std::cout << " ******************************* commande_inter = " << commande_inter << std::endl;
+  // std::cout << " ******************************* commande_inter = " << commande_inter << std::endl;
   omega_d =
     lambda * omega_d + (1 - lambda) * atan(kp_ * (lateral_deviation - desired_lat_dev_) / alpha);
 
