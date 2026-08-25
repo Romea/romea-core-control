@@ -46,11 +46,14 @@ FrontRearData FollowTrajectoryFrontRearDecoupled::computeSteeringAngles(
   double front_maximal_steering_angle,
   double rear_maximal_steering_angle,
   double desired_lateral_deviation,
-  double /*desired_course_deviation*/) const
+  double desired_course_deviation) const
 {
-  double target_lateral_deviation = lateral_deviation - desired_lateral_deviation;
+  double target_rear_lateral_deviation = lateral_deviation - desired_lateral_deviation;
+  double target_front_lateral_deviation =
+    lateral_deviation - wheelbase_ * std::sin(desired_course_deviation) - desired_lateral_deviation;
+
   double front_steering_angle_command = computeFrontSteeringAngle_(
-    -target_lateral_deviation,
+    -target_front_lateral_deviation,
     course_deviation,
     curvature,
     future_curvature,
@@ -61,10 +64,7 @@ FrontRearData FollowTrajectoryFrontRearDecoupled::computeSteeringAngles(
     rear_sliding_angle);
 
   double rear_steering_angle_command = computeRearSteeringAngle_(
-    target_lateral_deviation,
-    course_deviation,
-    linear_speed,
-    rear_sliding_angle);
+    target_rear_lateral_deviation, course_deviation, linear_speed, rear_sliding_angle);
 
   double clamped_front_steering_angle_command = clamp(
     front_steering_angle_command, -front_maximal_steering_angle, front_maximal_steering_angle);
