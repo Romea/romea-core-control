@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.10)
 
 project(
   "romea_core_control"
@@ -7,10 +7,11 @@ project(
   #  HOMEPAGE_URL
   LANGUAGES CXX)
 
+include(GNUInstallDirs)
+
 find_package(romea_core_common REQUIRED)
 
-find_package( PkgConfig )
-pkg_check_modules( EIGEN3 REQUIRED eigen3 )
+find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 
 add_library(${PROJECT_NAME} SHARED
   src/observer/SlidingObserverCinematic.cpp
@@ -37,16 +38,14 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 
 
 target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
-  ${romea_core_common_INCLUDE_DIRS}
-  ${EIGEN3_INCLUDE_DIRS})
+  ${romea_core_common_INCLUDE_DIRS})
 
 target_compile_options(${PROJECT_NAME} PRIVATE
   -Wall -Wextra -O3 -std=c++17)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
+  Eigen3::Eigen
   romea_core_common::romea_core_common)
-
-include(GNUInstallDirs)
 
 install(
   TARGETS ${PROJECT_NAME}
